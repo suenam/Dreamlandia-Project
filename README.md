@@ -18,6 +18,17 @@ npm i
 cd server
 npm i
 ```
+
+Create .env file in client folder with the following content:
+```
+REACT_APP_DEV_URI = localhost:3000
+```
+
+Create .env file in server folder with the following content:
+```
+PORT = 3000
+```
+
 ## Running the project
 - Running the server: 
 ```
