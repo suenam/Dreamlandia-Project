@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 .home-container {
     margin: 0;
-    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.607)), url("https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,h_650,q_75,w_1440/v1/clients/anaheimca/themegdalorian_Instagram_2690_ig_17951967979606270_5c828a56-442f-40c9-84b3-1c4a680e7cd7.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.853)), url("https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,h_650,q_75,w_1440/v1/clients/anaheimca/themegdalorian_Instagram_2690_ig_17951967979606270_5c828a56-442f-40c9-84b3-1c4a680e7cd7.jpg");
     height: 100vh;
+    width:100%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -17,11 +20,28 @@
 
         h1 {
             font-size: 40px;
-            font-family: Montserrat, sans-serif;
+            font-family: Montserrat;
+            font-weight: 650;
             margin-top: 20rem;
             text-align: center;
             color: var(--primary);
-            text-shadow: #03204b49 1px 0 10px;
+            text-shadow: #63635a7c 1px 0 10px;
+        }
+
+        p {
+            margin: 0;
+            font-size: 20px;
+            font-family: sans-serif;
+            
+            .link {
+                font-weight: 650;
+                text-decoration: none;
+                color: var(--primary);
+            }
+
+            .link:hover {
+                color: var(--secondary);
+            }
         }
     }
 }
