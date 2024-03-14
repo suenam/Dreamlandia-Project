@@ -1,7 +1,9 @@
 import './Tickets.css'
+import Attraction1 from '../../assets/attraction_1.jpg';
+import Food1 from '../../assets/whataburger.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import Attraction1 from '../../assets/attraction_1.jpg';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const Tickets = () => {
     return (
@@ -73,9 +75,30 @@ const Tickets = () => {
                 <div className='meal-content'>
                     <div className='select-meals'>
                         <h2>Select your meal vouchers</h2>  
+                        <div className='meal-options'>
+                            <div className='meal-option'>
+                                <img src={Food1} alt="Food1" />
+                                <h3> Whataburger </h3>
+                                <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
+                            </div>
+                            <div className='meal-option'>
+                                <img src={Food1} alt="Food1" />
+                                <h3> Whataburger </h3>
+                                <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
+                            </div>
+                            <div className='meal-option'>
+                                <img src={Food1} alt="Food1" />
+                                <h3> Whataburger </h3>
+                                <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <button className='checkout-button'>
+                <ShoppingCartIcon/> 
+                <h3>Checkout</h3>
+            </button>
         </div>
     );
 }
