@@ -44,8 +44,7 @@
                 color: var(--secondary);
             }
 
-            .link:hover::after,
-            .link:focus::after{
+            .link:hover::after {
                 transform: translate3d(0, 0, 0);
             }
 
