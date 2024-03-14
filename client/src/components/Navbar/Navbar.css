@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.mainnavbar {
+    position: sticky;
+    background-color: var(--primary);
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.112);
+    height: 75px;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: 1000;
+
+    .dreamlandiaLogo {
+        height: 100%;
+        width: 240px;
+        margin-left: 15px;
+    }
+
+    .mainnavbar-right {
+        display: flex;
+
+        .mainnavbar-links {
+            font-family: 'Roboto', sans-serif;
+            letter-spacing: 1px;
+            font-weight: 510;
+            font-style: normal;
+            display: flex;
+            margin-right: 10px;
+    
+            .link {
+                margin-inline: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-decoration: none;
+                color: rgb(255, 255, 255);
+                overflow: hidden;
+                position: relative;
+            }
+
+            .link:hover {
+                color: var(--secondary);
+            }
+
+            .link:hover::after {
+                transform: translate3d(0, 0, 0);
+            }
+
+            .link::after {
+                position: absolute;
+                content: '';
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 0.15em;
+                background-color: var(--secondary);
+                opacity: 1;
+                transform: translate3d(-100%, 0, 0);
+                transition: opacity 300ms, transform 300ms;
+            }
+            
+        }
+    }
+}
