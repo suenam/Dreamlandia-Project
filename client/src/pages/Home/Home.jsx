@@ -7,6 +7,7 @@ const Home = () => {
       <div className="home-text">
         <h1>Dreamlandia, the dreamiest <br /> place on Earth!</h1>
         <Link className="link" to="/tickets">Buy Tickets</Link>
+        <Link className="link" to="/employee">Employee page</Link>
       </div>
     </div>
   );

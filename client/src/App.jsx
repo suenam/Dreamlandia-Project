@@ -1,16 +1,21 @@
 import './App.css'
 import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router-dom';
-import Home from './pages/Home/Home'
+import React, { useState } from 'react';import Home from './pages/Home/Home'
+import Employee from './pages/Employee/Employee'
 import Navbar from './components/Navbar/Navbar';
+import EProfile from './pages/Employee/EProfile/EProfile';
 
 const Layout = () => {
+  const [showNavbar, setShowNavbar] = useState(true);
+
   return (
     <>
-      <Navbar />
-      <Outlet />
+      {showNavbar && <Navbar />}
+      <Outlet context={{ showNavbar, setShowNavbar }} />
     </>
   );
 }
+
 
 const router = createBrowserRouter([
   {
@@ -19,7 +24,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/", 
-        element: <Home/>
+        element: <Home />
+      },
+      {
+        path: "/Employee",
+        element: <Employee />
+      },
+      {
+        path: "/EProfile",
+        element: <EProfile />
       },
       // {
       //   path: "/tickets",
