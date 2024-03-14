@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <>
       <Navbar />
-      <Outlet/>
+      <Outlet />
     </>
   );
 }
@@ -32,19 +32,7 @@ const router = createBrowserRouter([
       // {
       //   path: "/shop",
       //   element: <Shop />
-      // },
-      // {
-      //   path: "/signup",
-      //   element: <Signup />
-      // },
-      // {
-      //   path: "/login", 
-      //   element: <Login/>
-      // },
-      // {
-      //   path: "/signup",
-      //   element: <Signup />
-      // },
+      // }
     ]
   },
   {
