@@ -2,14 +2,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
 import Home from '../../pages/Home/Home';
-import EProfile from '../../pages/Employee/EProfile/EProfile';
+import Dashboard from '../../pages/Employee/Dashboard/Dashboard';
 
 const Sidebar = () => {
     const handleSignOut = () => {
         navigate({Home}); 
     };
-    const handleProfile = () => {
-        navigate('../../pages/Employee/EProfile/EProfile'); 
+    const handleDashboard = () => {
+        navigate({Dashboard}); 
     };
 
   return (
@@ -18,9 +18,9 @@ const Sidebar = () => {
         <h3>Employee Portal</h3>
       </div>
       <nav className="sidebar-links">
-        <NavLink className="sidebar-link" to="/employee/dashboard" >Dashboard</NavLink>
-        <NavLink className="sidebar-link" to="/EProfile" onClick={handleProfile}>Profile</NavLink>
-        <NavLink className="sidebar-link" to="/employee/attendance" >Attendance</NavLink>
+        <NavLink className="sidebar-link" to="/Dashboard" onClick={handleDashboard} >Dashboard</NavLink>
+        <NavLink className="sidebar-link" to="/EProfile">Edit Profile</NavLink>
+        <NavLink className="sidebar-link" to="/Maintenance" >Maintenance Requests</NavLink>
         <NavLink className="sidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
       </nav>
     </div>

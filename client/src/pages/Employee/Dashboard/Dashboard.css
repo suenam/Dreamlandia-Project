@@ -1,0 +1,18 @@
+.hours-worked{
+    position: relative; 
+    top: 50px;
+    left: 280px;
+}
+.dash-attraction-card{
+    position: relative; 
+    top: -82px;
+    left: 640px;
+}
+.dash-announ-card{
+    position: relative; 
+    top: -214px;
+    left: 1000px;
+}
+h1.h1dash{
+    margin-left:280px;
+}

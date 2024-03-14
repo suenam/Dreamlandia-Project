@@ -1,27 +1,31 @@
-import React from 'react'
-import Card from '../../../components/Card/ECard'
-import Sidebar from '../../../components/Sidebar/Sidebar';
 import { useOutletContext } from 'react-router-dom';
+import React, { useState } from 'react';
+import Sidebar from '../../../components/Sidebar/Sidebar';
+import './EProfile.css'
+import ECard from '../../../components/ECard/ECard';
 
+const Employee = () => {
+  const { setShowNavbar } = useOutletContext();
 
-function EProfile() {
-    const { setShowNavbar } = useOutletContext();
+  setShowNavbar(false);
 
-    setShowNavbar(false);
-    const employeeData = {
-        name: 'John Doe',
-        title: 'Software Engineer',
-        department: 'Engineering',
-    };
-    return (
-        <>
-        <Sidebar />
-        <div className='card-container'>
-                
+  const employeeData = {
+    name: 'John Doe',
+    title: 'Software Engineer',
+    department: 'Engineering',
+    email: 'johndoe@gmail.com',
+    phone: '123-456-7899'
+  };
+
+  return (
+    <div>
+      <Sidebar />
+        <div className='card'>
+            <ECard employeeData ={employeeData} />
         </div>
         
-        </>
-    )
+    </div>
+  );
 }
 
-export default EProfile
+export default Employee;

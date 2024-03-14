@@ -4,6 +4,7 @@ import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
 import Navbar from './components/Navbar/Navbar';
 import EProfile from './pages/Employee/EProfile/EProfile';
+import Dashboard from './pages/Employee/Dashboard/Dashboard';
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/EProfile",
         element: <EProfile />
+      },
+      {
+      path: "/Dashboard",
+      element: <Dashboard />
       },
       // {
       //   path: "/tickets",

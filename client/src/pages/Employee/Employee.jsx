@@ -2,7 +2,7 @@ import { useOutletContext } from 'react-router-dom';
 import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import './Employee.css'
-import EmployeeCard from '../../components/Card/ECard';
+import ECard from '../../components/ECard/ECard';
 
 const Employee = () => {
   const { setShowNavbar } = useOutletContext();
@@ -21,11 +21,10 @@ const Employee = () => {
     <div>
       <h1>Employee Page</h1>
       <Sidebar />
-      <div className='card-container'>
-                <div className='card'>
-                    <EmployeeCard employeeData ={employeeData} />
-                </div>
-            </div>
+        <div className='card'>
+            <ECard employeeData ={employeeData} />
+
+        </div>
         
     </div>
   );
