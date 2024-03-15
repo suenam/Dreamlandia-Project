@@ -1,18 +1,26 @@
+
 .hours-worked{
-    position: relative; 
-    top: 50px;
-    left: 280px;
+    margin-left: 300px;
+    margin-top: 40px;
+
 }
 .dash-attraction-card{
-    position: relative; 
-    top: -82px;
-    left: 640px;
+    margin-left: 300px;
+    margin-top: 20px;
 }
-.dash-announ-card{
-    position: relative; 
-    top: -214px;
-    left: 1000px;
+.active-mr-card{
+    margin-left: 300px;
+    margin-top: 20px;
+
+}
+
+.mr-report-card{
+    margin-left: 850px;
+    margin-top: -470px;
 }
 h1.h1dash{
-    margin-left:280px;
+    margin-left:270px;
+    font-family: Montserrat;
+
+    margin-top: 40px;
 }

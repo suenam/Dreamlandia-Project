@@ -1,7 +1,6 @@
 .employee-profile {
-  width: 1000px; 
+  width: 1090px; 
   height: auto;
-  margin-left: 255px;
   padding: 30px;
   background-color: #fff;
   border-radius: 8px;
@@ -16,8 +15,7 @@
 
 .employee-profile .form-group {
   margin-bottom: 20px;
-  font-family: Montserrat;
-
+  
   text-align: left;
 }
 

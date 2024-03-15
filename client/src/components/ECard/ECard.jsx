@@ -38,14 +38,14 @@ const ECard = () => {
         {isEditing ? 'Save' : 'Edit'}
       </button>
       <div className="form-group">
-        <label htmlFor="staffId">Staff ID:</label>
+        <label>Staff ID:</label>
         <input
           type="text"
           id="staffId"
           name="staffId"
           value={employee.staffId}
-          onChange={handleChange}
-          disabled={!isEditing}
+          readonly="readonly"
+          disabled
         />
       </div>
       <div className="form-group">

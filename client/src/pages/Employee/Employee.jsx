@@ -19,12 +19,12 @@ const Employee = () => {
 
   return (
     <div>
-      <h1>Employee Page</h1>
+      <h1 className='employee-header-welcome'>Welcome {employeeData.name}!</h1>
       <Sidebar />
-        <div className='card'>
-            <ECard employeeData ={employeeData} />
-
+        <div className='ecard-emp-edit'>
+        <ECard employeeData ={employeeData} />
         </div>
+
         
     </div>
   );

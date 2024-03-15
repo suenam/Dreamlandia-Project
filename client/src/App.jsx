@@ -3,8 +3,9 @@ import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router
 import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
 import Navbar from './components/Navbar/Navbar';
-import EProfile from './pages/Employee/EProfile/EProfile';
 import Dashboard from './pages/Employee/Dashboard/Dashboard';
+import Maintenance from './pages/Maintenance/Maintenance';
+import HR from './pages/Employee/HR/HR';
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -31,13 +32,18 @@ const router = createBrowserRouter([
         path: "/Employee",
         element: <Employee />
       },
-      {
-        path: "/EProfile",
-        element: <EProfile />
-      },
+      
       {
       path: "/Dashboard",
       element: <Dashboard />
+      },
+      {
+        path: "/Maintenance",
+        element: <Maintenance />
+      },
+      {
+        path: "/HR",
+        element: <HR />
       },
       // {
       //   path: "/tickets",
