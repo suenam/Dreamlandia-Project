@@ -4,9 +4,12 @@ import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
 import Navbar from './components/Navbar/Navbar';
 import Dashboard from './pages/Employee/Dashboard/Dashboard';
-import Maintenance from './pages/Maintenance/Maintenance';
+import Maintenance from './pages/Employee/Maintenance/Maintenance';
 import HR from './pages/Employee/HR/HR';
-
+import Manager from './pages/Manager/Manager';
+import MDashboard from './pages/Manager/MDashboard/MDashboard';
+import MMaintenance from  './pages/Manager/MMaintenance/MMaintenance';
+import MHR from './pages/Manager/MHR/MHR';
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
 
@@ -38,12 +41,28 @@ const router = createBrowserRouter([
       element: <Dashboard />
       },
       {
+        path: "/MDashboard",
+        element: <MDashboard />
+        },
+      {
         path: "/Maintenance",
         element: <Maintenance />
       },
       {
+        path: "/MMaintenance",
+        element: <MMaintenance />
+      },
+      {
+        path: "/MHR",
+        element: <MHR />
+      },
+      {
         path: "/HR",
         element: <HR />
+      },
+      {
+        path: "/Manager",
+        element: <Manager />
       },
       // {
       //   path: "/tickets",

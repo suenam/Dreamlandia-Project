@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import './Maintenance.css';
-import Sidebar from '../../components/Sidebar/Sidebar';
+import './MMaintenance.css';
+import MSidebar from '../../../components/MSidebar/MSidebar';
 
 function Maintenance() {
   const { setShowNavbar } = useOutletContext();
@@ -80,7 +80,7 @@ function Maintenance() {
 
   return (
     <>
-      <Sidebar />
+      <MSidebar />
       <h1 className='Maintenance-header1'>Maintenance Requests</h1>
       <div>
         <button className="show-submit-mr"onClick={() => setShowSubmitContainer(!showSubmitContainer)}>

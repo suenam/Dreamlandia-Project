@@ -1,0 +1,40 @@
+.container {
+    margin-left: 270px;
+  }
+  
+  .hr-page {
+    padding: 20px;
+  }
+  
+  .hr-page h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .hr-page h2 {
+    font-size: 24px;
+    margin-top: 30px;
+  }
+  
+  .hr-page p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  .hr-page .contact-info {
+    margin-bottom: 20px;
+  }
+  
+  .hr-page .contact-info p {
+    margin: 5px 0;
+  }
+  
+  .hr-page ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+  
+  .hr-page ul li {
+    margin-bottom: 5px;
+  }
+  

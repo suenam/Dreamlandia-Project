@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './Sidebar.css';
 import Home from '../../pages/Home/Home';
-import Maintenance from '../../pages/Maintenance/Maintenance';
+import Maintenance from '../../pages/Employee/Maintenance/Maintenance';
 import Dashboard from '../../pages/Employee/Dashboard/Dashboard';
 import HR from '../../pages/Employee/HR/HR';
 import Employee from '../../pages/Employee/Employee';

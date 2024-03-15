@@ -1,14 +1,14 @@
 import React from 'react';
-import './HR.css';
-import Sidebar from '../../../components/Sidebar/Sidebar';
+import './MHR.css';
+import MSidebar from '../../../components/MSidebar/MSidebar';
 import { useOutletContext } from 'react-router-dom';
 
-const HR = () => {
+const MHR = () => {
   const { setShowNavbar } = useOutletContext();
     setShowNavbar(false);
   return (
     <>
-    <Sidebar />
+    <MSidebar />
     <div className="container">
       <div className="hr-page">
         <h1>Welcome to the HR Portal</h1>
@@ -38,4 +38,4 @@ const HR = () => {
   );
 };
 
-export default HR;
+export default MHR;
