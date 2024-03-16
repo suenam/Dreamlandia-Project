@@ -5,7 +5,9 @@ import FerrisWheel from '../../assets/ferris_wheel.jpg';
 import RollerCoaster from '../../assets/roller_coaster.jpg';
 import ThemedRide from '../../assets/themed_rides.jpg';
 import WaterRide from '../../assets/water_ride.jpg';
-import Food1 from '../../assets/whataburger.jpg';
+import Burger from '../../assets/whataburger.jpg';
+import Steak from '../../assets/steak_restaurant.jpg';
+import MyMelody from '../../assets/themed_restaurant.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -164,9 +166,9 @@ const Tickets = () => {
                         <h2>Select your meal vouchers</h2>  
                         <div className='meal-options'>
                             <div className='meal-option'>
-                                <img src={Food1} />
-                                <h3> Whataburger </h3>
-                                <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
+                                <img src={Burger} />
+                                <h3> Standard </h3>
+                                <span> Grants access to quick eats such as: WhataSandwich, McRonald's, Burger Castle, Pixie Dust Pizzeria, and Rocket Dogs </span>
                                 <div className='remove-add-tickets'>
                                 <RemoveCircleOutlineIcon fontSize='large' pointerEvents={standardFoodTicket === 0? 'none': ''} color={standardFoodTicket === 0? 'action' : ''}
                                     onClick={()=>setStandardFoodTicket(standardFoodTicket-1)}
@@ -178,9 +180,9 @@ const Tickets = () => {
                             </div>
                             </div>
                             <div className='meal-option'>
-                                <img src={Food1} />
-                                <h3> Whataburger </h3>
-                                <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
+                                <img src={Steak} />
+                                <h3> Deluxe </h3>
+                                <span> Grants access to quick eats & fine dining such as: The Velvet Vineyard, Enchanted Garden Bistro, and Silver Spoon Serenade</span>
                                 <div className='remove-add-tickets'>
                                 <RemoveCircleOutlineIcon fontSize='large' pointerEvents={expressFoodTicket === 0? 'none': ''} color={expressFoodTicket === 0? 'action' : ''}
                                     onClick={()=>setExpressFoodTicket(expressFoodTicket-1)}
@@ -192,9 +194,9 @@ const Tickets = () => {
                             </div>
                             </div>
                             <div className='meal-option'>
-                                <img src={Food1} />
-                                <h3> Whataburger </h3>
-                                <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
+                                <img src={MyMelody} />
+                                <h3> Special </h3>
+                                <span> Grants access to quick eats, fine dining, & themed character restaurants such as: HerHarmony Eatery, Fairy Tale Feast, and Pirate's Parley Café</span>
                                 <div className='remove-add-tickets'>
                                 <RemoveCircleOutlineIcon fontSize='large' pointerEvents={deluxeFoodTicket === 0? 'none': ''} color={deluxeFoodTicket === 0? 'action' : ''}
                                     onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket-1)}
