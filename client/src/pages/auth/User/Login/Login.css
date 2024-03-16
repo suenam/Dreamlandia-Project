@@ -60,16 +60,7 @@
 
     &:hover {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
-        background: lighten(#1d3354, 5%); 
-    }
-
-    &:active {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
-        background: darken(#1d3354, 5%); 
-    }
-
-    &:focus {
-        outline: none; 
+        background: #5164a2; 
     }
 }
 
