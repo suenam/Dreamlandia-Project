@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router
 import Home from './pages/Home/Home'
 import Navbar from './components/Navbar/Navbar';
 import Tickets from './pages/Tickets/Tickets';
+import Signup from './pages/auth/Signup/Signup';
 
 const Layout = () => {
   return (
@@ -19,13 +20,17 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/", 
+        path: "/",
         element: <Home/>
       },
       {
         path: "/tickets",
         element: <Tickets />
       },
+      {
+        path: "/auth/signup",
+        element: <Signup />
+      }
       // {
       //   path: "/attractions",
       //   element: <Attractions />
