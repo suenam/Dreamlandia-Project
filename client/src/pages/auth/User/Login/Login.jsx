@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     console.log('Email:', email);
     console.log('Password:', password);
-    // login logic here 
+    // login backend logic here 
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -36,13 +36,11 @@ const Login = () => {
       <div className="login-form">
         <h1>Login</h1>
         <FormControl required sx={{ m: 1, width: '75%', marginTop:'35px'}} variant="outlined">
-        {/* <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel> */}
         <OutlinedInput
           value={email}
           onChange={(e)=>setEmail(e.target.value)} 
           id="outlined-adornment-email"
           type='text'
-        //   label="Email"
           placeholder="Email *"
           startAdornment={
             <InputAdornment position="start"> 
@@ -52,14 +50,12 @@ const Login = () => {
         />
         </FormControl>
         <FormControl required sx={{ m: 1, width: '75%', marginBottom:'8px' }} variant="outlined">
-          {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
           <OutlinedInput
             value={password}
             onChange={(e)=>setPassword(e.target.value)} 
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
             placeholder="Password *"
-            // label="Password"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
