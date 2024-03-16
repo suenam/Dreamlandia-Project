@@ -3,7 +3,8 @@ import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router
 import Home from './pages/Home/Home'
 import Navbar from './components/Navbar/Navbar';
 import Tickets from './pages/Tickets/Tickets';
-import Signup from './pages/auth/Signup/Signup';
+import Signup from './pages/auth/User/Signup/Signup';
+import Login from './pages/auth/User/Login/Login';
 
 const Layout = () => {
   return (
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/tickets",
         element: <Tickets />
+      },
+      {
+        path: "/login",
+        element: <Login />
       },
       {
         path: "/auth/signup",
