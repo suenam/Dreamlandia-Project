@@ -1,6 +1,10 @@
 import './Tickets.css'
 import { useState } from 'react';
-import Attraction1 from '../../assets/attraction_1.jpg';
+import Carousel from '../../assets/carousel.jpg';
+import FerrisWheel from '../../assets/ferris_wheel.jpg';
+import RollerCoaster from '../../assets/roller_coaster.jpg';
+import ThemedRide from '../../assets/themed_rides.jpg';
+import WaterRide from '../../assets/water_ride.jpg';
 import Food1 from '../../assets/whataburger.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -12,9 +16,20 @@ const Tickets = () => {
     const [expressTicket, setExpressTicket] = useState(0);
     const [childTicket, setChildTicket] = useState(0);
 
+    const [attractions, setAttractions] = useState([]);
+
     const [standardFoodTicket, setStandardFoodTicket] = useState(0);
     const [expressFoodTicket, setExpressFoodTicket] = useState(0);
     const [deluxeFoodTicket, setDeluxeFoodTicket] = useState(0);
+
+    const setAttractionFn = (newAttraction) => {
+        if (!attractions.includes(newAttraction)) {
+            setAttractions([...attractions, newAttraction]);
+        }
+        else {
+            setAttractions(attractions.filter((attraction)=>attraction !== newAttraction));
+        }
+    }
     
     return (
         <div className="tickets-container">
@@ -76,33 +91,69 @@ const Tickets = () => {
                         <h2>Select the attractions you're planning to ride</h2>
                         <div className='attractions-options'>
                             <div className='attraction-option'>
-                                <img src={Attraction1} alt="attraction1" />
+                                <img src={RollerCoaster} />
                                 <div className='attraction-desc'>
-                                    <h3>Attraction 1</h3>
-                                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. At aperiam delectus eius doloremque maiores veritatis!</div>
+                                    <h3>Roller Coaster</h3>
+                                    <div>Buckle up for a dreamlike journey on our roller coaster, where you'll soar through clouds and dive into the depths of an enchanted wonderland, feeling the thrill of magic at every twist and turn.</div>
                                 </div>
+                                <button className='add-attraction'
+                                    style = {{backgroundColor: attractions.includes("rollerCoaster") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("rollerCoaster")}
+                                >
+                                    {attractions.includes("rollerCoaster") ? "Added ✔" : 'Add attraction'}
+                                </button>
                             </div>
                             <div className='attraction-option'>
-                                <img src={Attraction1} alt="attraction1" />
+                                <img src={Carousel} />
                                 <div className='attraction-desc'>
-                                    <h3>Attraction 1</h3>
-                                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. At aperiam delectus eius doloremque maiores veritatis!</div>
-
+                                    <h3>Carousel</h3>
+                                    <div>Mount your dream steed on our carousel, a revolving realm of wonder where every gallop and gentle melody transports you to a timeless dance amidst a kaleidoscope of lights and colors.</div>
                                 </div>
+                                <button className='add-attraction'
+                                    style = {{backgroundColor: attractions.includes("carousel") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("carousel")}
+                                >
+                                    {attractions.includes("carousel") ? "Added ✔" : 'Add attraction'}
+                                </button>
                             </div>
                             <div className='attraction-option'>
-                                <img src={Attraction1} alt="attraction1" />
+                                <img src={FerrisWheel} />
                                 <div className='attraction-desc'>
-                                    <h3>Attraction 1</h3>
-                                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. At aperiam delectus eius doloremque maiores veritatis!</div>
+                                    <h3>Ferris Wheel</h3>
+                                    <div> Step into your own floating dream as you ascend the Ferris wheel, offering a serene escape high above, where the world below blends into a tapestry of lights and whimsy under the sky.</div>
                                 </div>
+                                <button className='add-attraction'
+                                    style = {{backgroundColor: attractions.includes("ferrisWheel") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("ferrisWheel")}
+                                >
+                                    {attractions.includes("ferrisWheel") ? "Added ✔" : 'Add attraction'}
+                                </button>
                             </div>
                             <div className='attraction-option'>
-                                <img src={Attraction1} alt="attraction1" />
+                                <img src={ThemedRide} />
                                 <div className='attraction-desc'>
-                                    <h3>Attraction 1</h3>
-                                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. At aperiam delectus eius doloremque maiores veritatis!</div>
+                                    <h3>Themed Rides</h3>
+                                    <div>Embark on a journey through magical realms on our dark themed rides, where each turn unveils a fragment of a dream, weaving stories that dance in the delicate balance between fantasy and mystery.</div>
                                 </div>
+                                <button className='add-attraction'
+                                    style = {{backgroundColor: attractions.includes("themedRide") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("themedRide")}
+                                >
+                                    {attractions.includes("themedRide") ? "Added ✔" : 'Add attraction'}
+                                </button>
+                            </div>
+                            <div className='attraction-option'>
+                                <img src={WaterRide} />
+                                <div className='attraction-desc'>
+                                    <h3>Water Rides</h3>
+                                    <div>Glide through mystical waters on our water rides, where splashes lead to laughter and each drop is a portal to a refreshing adventure in a lush, dream-infused landscape.</div>
+                                </div>
+                                <button className='add-attraction'
+                                    style = {{backgroundColor: attractions.includes("waterRide") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("waterRide")}
+                                >
+                                    {attractions.includes("waterRide") ? "Added ✔" : 'Add attraction'}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -113,7 +164,7 @@ const Tickets = () => {
                         <h2>Select your meal vouchers</h2>  
                         <div className='meal-options'>
                             <div className='meal-option'>
-                                <img src={Food1} alt="Food1" />
+                                <img src={Food1} />
                                 <h3> Whataburger </h3>
                                 <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
                                 <div className='remove-add-tickets'>
@@ -127,7 +178,7 @@ const Tickets = () => {
                             </div>
                             </div>
                             <div className='meal-option'>
-                                <img src={Food1} alt="Food1" />
+                                <img src={Food1} />
                                 <h3> Whataburger </h3>
                                 <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
                                 <div className='remove-add-tickets'>
@@ -141,7 +192,7 @@ const Tickets = () => {
                             </div>
                             </div>
                             <div className='meal-option'>
-                                <img src={Food1} alt="Food1" />
+                                <img src={Food1} />
                                 <h3> Whataburger </h3>
                                 <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, doloremque.</div>
                                 <div className='remove-add-tickets'>

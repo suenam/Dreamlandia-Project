@@ -121,10 +121,11 @@
                 flex-direction: row;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
                 color: var(--primary);
+                position: relative;
 
                 img {
                     height: 100%;
-                    width: 300px;
+                    width: 260px;
                     border-radius: 20px 0 0 20px;
                 }
 
@@ -204,7 +205,12 @@
                             font-size: 30px;
                             font-weight: bold;
                             width: 50px;
-                        }         
+                        }
+                        
+                        > :hover:not(.ticket-count) {
+                            color: rgb(36, 78, 141);
+                            cursor: pointer;
+                        }
                     }
                 }
     
@@ -213,6 +219,36 @@
                 }
     
             }
+        }
+    }
+
+    .add-attraction {
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        bottom: 20px;
+        right: 30px;
+        padding: 10px 30px;  
+        font-size: 16px; 
+        color: white;
+        background: var(--primary); 
+        border: none;
+        border-radius: 25px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+        text-wrap: nowrap;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        &:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+            background: #5164a2; 
+        }
+    
+        &:focus {
+            outline: none; 
         }
     }
 
