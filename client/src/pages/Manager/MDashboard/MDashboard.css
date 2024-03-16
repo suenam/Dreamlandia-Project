@@ -1,26 +1,31 @@
-
-.hours-worked-manager{
-    margin-left: 300px;
-    margin-top: 40px;
-
-}
-.dash-attraction-card-manager{
-    margin-left: 300px;
-    margin-top: 20px;
-}
-.active-mr-card-manager{
-    margin-left: 300px;
-    margin-top: 20px;
+.tickets-total-live{
+    margin-left: 560px;
+    margin-top: 37px;
 
 }
+.rev-tickets-live{
+    margin-left: 300px;
+    margin-top: -114px;
+}
+.standard-ticket-live{
+    margin-left: 820px;
+    margin-top: -105px;
+}
+.express-ticket-live{
+    margin-left: 980px;
+    margin-top: -96px;
+}
+.child-ticket-live{
+    margin-left: 1140px;
+    margin-top: -96px;
+}
 
-.mr-report-card-manager{
-    margin-left: 850px;
-    margin-top: -470px;
+.profit-live{
+    margin-left: 430px;
+    margin-top: 30px;
 }
 h1.h1dash-manager{
     margin-left:270px;
     font-family: Montserrat;
-
     margin-top: 40px;
 }

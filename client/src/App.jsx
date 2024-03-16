@@ -10,6 +10,7 @@ import Manager from './pages/Manager/Manager';
 import MDashboard from './pages/Manager/MDashboard/MDashboard';
 import MMaintenance from  './pages/Manager/MMaintenance/MMaintenance';
 import MHR from './pages/Manager/MHR/MHR';
+import DataReport from './pages/Manager/DataReport/DataReport';
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
 
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
       {
         path: "/MDashboard",
         element: <MDashboard />
-        },
+      },
       {
         path: "/Maintenance",
         element: <Maintenance />
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: "/Manager",
         element: <Manager />
+      },
+      {
+        path: "/DataReport",
+        element: <DataReport />
       },
       // {
       //   path: "/tickets",

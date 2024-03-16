@@ -11,15 +11,7 @@ const Sidebar = () => {
     const handleSignOut = () => {
         navigate({Home}); 
     };
-    const handleMDashboard = () => {
-        navigate({MDashboard}); 
-    };
-    const handleMaintenance = () => {
-        navigate({MMaintenance}); 
-    };
-    const handleHR = () => {
-        navigate({MHR}); 
-    };
+    
 
   return (
     <div className="sidebar">
@@ -27,9 +19,10 @@ const Sidebar = () => {
         <NavLink to='/Manager' style={{textDecoration: 'none'}}><h3>Manager Portal</h3></NavLink>
       </div>
       <nav className="sidebar-links">
-        <NavLink className="sidebar-link" to="/MDashboard" onClick={handleMDashboard} >Dashboard</NavLink>
-        <NavLink className="sidebar-link" to="/MMaintenance" onClick={handleMaintenance}>Maintenance Requests</NavLink>
-        <NavLink className="sidebar-link" to="/MHR" onClick={handleHR}>HR</NavLink>
+        <NavLink className="sidebar-link" to="/MDashboard" >Dashboard</NavLink>
+        <NavLink className="sidebar-link" to="/DataReport" >Data Reports</NavLink>
+        <NavLink className="sidebar-link" to="/MMaintenance">Maintenance Requests</NavLink>
+        <NavLink className="sidebar-link" to="/MHR" >HR</NavLink>
         <NavLink className="sidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
       </nav>
     </div>

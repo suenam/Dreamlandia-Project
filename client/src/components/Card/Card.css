@@ -10,18 +10,18 @@
   
   .card-value {
     font-family: Montserrat;
-    font-size: 48px;
+    font-size: 40px;
     text-wrap: wrap;
     font-weight: bold;
 
-    margin-top: 20px;
+    margin-top: 15px;
     text-align: center;
   }
   
   .card-text {
     font-family: Montserrat;
 
-    font-size: 16px;
+    font-size: 15px;
     align-items: left;
     color: black;
   }

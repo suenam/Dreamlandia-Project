@@ -1,11 +1,11 @@
 import React from 'react';
 import './Card.css';
 
-const Card = ({ value, text, color, textAlign}) => {
+const Card = ({ value, text, color, size, fontsize, vFontsize, borderRadius}) => {
   return (
-    <div className="card" style={{ backgroundColor: color }}>
-      <div className="card-text">{text}</div>
-      <div className="card-value" style={{ textAlign: textAlign}}>
+    <div className="card" style={{ backgroundColor: color, width: size, borderRadius: borderRadius}}>
+      <div className="card-text" style={{fontSize:fontsize}}>{text}</div>
+      <div className="card-value" style={{fontSize:vFontsize}}>
         {value}
       </div>
     </div>
