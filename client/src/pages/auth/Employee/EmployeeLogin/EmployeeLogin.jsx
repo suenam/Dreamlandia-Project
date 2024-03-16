@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import './Login.css';
+import './EmployeeLogin.css';
 import IconButton from '@mui/material/IconButton';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
@@ -9,10 +9,10 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link } from "react-router-dom";
-import Logo from '../../../../assets/dreamlandia_logo.svg';
+import Logo from '../../../../assets/dreamlandia_logo.svg'
 
 
-const Login = () => {
+const EmployeeLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     console.log('Email:', email);
     console.log('Password:', password);
-    // login backend logic here 
+    // employee login backend logic here 
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -33,7 +33,7 @@ const Login = () => {
     <div className="login-container">
         <img src={Logo} />
       <div className="login-form">
-        <h1>Login</h1>
+        <h1>Employee Login</h1>
         <FormControl required sx={{ m: 1, width: '75%', marginTop:'35px'}} variant="outlined">
         <OutlinedInput
           value={email}
@@ -88,6 +88,6 @@ const Login = () => {
     
   );
 }
-export default Login
+export default EmployeeLogin
 
  
