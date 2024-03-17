@@ -1,13 +1,14 @@
 .employee-profile {
-  width: 1090px; 
   height: auto;
   padding: 30px;
-  background-color: #fff;
+  background-color: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
-
+.eprofile-label{
+  padding-left: 1rem;
+}
 .employee-profile h2 {
   margin-bottom: 30px;
   color: #333;
@@ -29,10 +30,9 @@
 }
 
 .employee-profile .form-group input {
-  width: calc(100% - 30px);
+  width: 300px;
   padding: 10px;
   font-family: Montserrat;
-
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -45,11 +45,9 @@
 
 .employee-profile .edit-btn {
   font-family: Montserrat;
-  margin-left: 920px;
   display: inline-block;
-  padding: 10px 20px;
   font-size: 16px;
-  background-color: #4caf50;
+  background-color: #9b9b9b;
   color: #fff;
   border: none;
   border-radius: 4px;

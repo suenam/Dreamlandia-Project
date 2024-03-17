@@ -24,6 +24,11 @@
     margin-left: 430px;
     margin-top: 30px;
 }
+.input-weather{
+    margin-left: 820px;
+    max-width: 450px;
+    margin-top: -265px;
+}
 h1.h1dash-manager{
     margin-left:270px;
     font-family: Montserrat;

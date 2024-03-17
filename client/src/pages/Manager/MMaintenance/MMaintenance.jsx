@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import './MMaintenance.css';
@@ -82,15 +83,14 @@ function Maintenance() {
     <>
       <MSidebar />
       <h1 className='Maintenance-header1'>Maintenance Requests</h1>
-      <div className="button-container">
-        <button className="show-submit-mr" onClick={() => setShowSubmitContainer(!showSubmitContainer)}>
-          {showSubmitContainer ? 'Hide Submit Request' : 'Show Submit Request'}
-        </button>
-        <button className="show-edit-mr" onClick={() => setShowEditContainer(!showEditContainer)}>
-          {showEditContainer ? 'Hide Edit Request' : 'Show Edit Request'}
-        </button>
-      </div>
 
+        
+       
+        
+        <div className='report-sec-maintenace'>
+        <button  onClick={() => setShowSubmitContainer(!showSubmitContainer)}>
+          {showSubmitContainer ? '▲ Submit Request' : '▼ Submit Request'}
+        </button>
         {showSubmitContainer && (
           <div className="submit-request-container">
             
@@ -153,10 +153,16 @@ function Maintenance() {
             </form>
           </div>
         )}
-
+        </div>
+        <div className='report-sec-maintenace'>
+        <button  onClick={() => setShowEditContainer(!showEditContainer)}>
+          {showEditContainer ? '▲ Edit Request' : '▼ Edit Request'}
+        </button>
         {showEditContainer && (
           <div className="edit-container">
-            <h2 className="container-heading">Edit Maintenance Request</h2>
+            <form className='submit-mr' onSubmit={handleSubmit}>
+
+            <h3 className="container-heading">Edit Maintenance Request</h3>
             <div className="edit-details">
               <div className="edit-row">
                 <label>Select Maintenance Request</label>
@@ -207,8 +213,11 @@ function Maintenance() {
                 </>
               )}
             </div>
+            </form>
+
           </div>
         )}
+        </div>
     </>
   );
 }

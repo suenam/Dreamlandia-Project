@@ -11,6 +11,7 @@ import MDashboard from './pages/Manager/MDashboard/MDashboard';
 import MMaintenance from  './pages/Manager/MMaintenance/MMaintenance';
 import MHR from './pages/Manager/MHR/MHR';
 import DataReport from './pages/Manager/DataReport/DataReport';
+import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
 
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "/DataReport",
         element: <DataReport />
+      },
+      {
+        path: "/ManageEmp",
+        element: <ManageEmp />
       },
       // {
       //   path: "/tickets",

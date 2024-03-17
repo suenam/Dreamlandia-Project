@@ -38,7 +38,7 @@ const ECard = () => {
         {isEditing ? 'Save' : 'Edit'}
       </button>
       <div className="form-group">
-        <label>Staff ID:</label>
+        <label className='eprofile-label'>Staff ID:</label>
         <input
           type="text"
           id="staffId"
