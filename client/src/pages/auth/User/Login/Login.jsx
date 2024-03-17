@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import './Login.css';
-import { useAuth } from "../../auth"; 
+import { useAuth } from "../../auth";
 import IconButton from '@mui/material/IconButton';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
@@ -23,13 +23,35 @@ const Login = () => {
 
   const redirectPath = location.state?.path || '/';
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    let user = 'user123'; // user object, set up login logic here
-    auth.login(user);
-    navigate(redirectPath, {replace: true});
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Login successful", data);
+        // handle the logic after successful login here, such as saving tokens, redirecting, etc
+        auth.login(data.user, data.token);
+        navigate(redirectPath, {replace: true});
+      } else {
+        console.error("Login failed", data);
+        // Handling login failures
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
+    // let user = 'user123'; // user object, set up login logic here
+    // auth.login(user);
+    // navigate(redirectPath, {replace: true});
+    // console.log('Email:', email);
+    // console.log('Password:', password);
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -46,12 +68,12 @@ const Login = () => {
         <FormControl required sx={{ m: 1, width: '75%', marginTop:'35px'}} variant="outlined">
         <OutlinedInput
           value={email}
-          onChange={(e)=>setEmail(e.target.value)} 
+          onChange={(e)=>setEmail(e.target.value)}
           id="outlined-adornment-email"
           type='text'
           placeholder="Email *"
           startAdornment={
-            <InputAdornment position="start"> 
+            <InputAdornment position="start">
                 <PersonIcon fontSize="medium"/>
             </InputAdornment>
           }
@@ -60,7 +82,7 @@ const Login = () => {
         <FormControl required sx={{ m: 1, width: '75%', marginBottom:'8px' }} variant="outlined">
           <OutlinedInput
             value={password}
-            onChange={(e)=>setPassword(e.target.value)} 
+            onChange={(e)=>setPassword(e.target.value)}
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
             placeholder="Password *"
@@ -77,7 +99,7 @@ const Login = () => {
               </InputAdornment>
             }
             startAdornment={
-                <InputAdornment position="start"> 
+                <InputAdornment position="start">
                     <LockIcon fontSize="medium"/>
                 </InputAdornment>
               }
@@ -93,10 +115,9 @@ const Login = () => {
           New user? <Link className="link" to='/auth/signup'>Sign up here</Link>
         </div>
       </div>
-    </div>  
-    
+    </div>
+
   );
 }
 export default Login
 
- 
