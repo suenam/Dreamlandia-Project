@@ -12,6 +12,13 @@ import MMaintenance from  './pages/Manager/MMaintenance/MMaintenance';
 import MHR from './pages/Manager/MHR/MHR';
 import DataReport from './pages/Manager/DataReport/DataReport';
 import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
+import Tickets from './pages/Tickets/Tickets';
+import Signup from './pages/auth/User/Signup/Signup';
+import Login from './pages/auth/User/Login/Login';
+import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
+import { AuthProvider } from './pages/auth/auth';
+import { RequireUserAuth } from './pages/auth/requireAuth';
+
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
 
@@ -73,11 +80,21 @@ const router = createBrowserRouter([
       {
         path: "/ManageEmp",
         element: <ManageEmp />
+        path: "/",
+        element: <Home/>
       },
-      // {
-      //   path: "/tickets",
-      //   element: <Tickets />
-      // },
+      {
+        path: "/tickets",
+        element: <RequireUserAuth><Tickets /></RequireUserAuth>
+      },
+      {
+        path: "/login",
+        element: <Login />
+      },
+      {
+        path: "/auth/signup",
+        element: <Signup />
+      }
       // {
       //   path: "/attractions",
       //   element: <Attractions />
@@ -92,12 +109,18 @@ const router = createBrowserRouter([
     path: "*",
     element: <h1>Page Not Found</h1>
   },
+  {
+    path: "/employee/login",
+    element: <EmployeeLogin />
+  }
 ]);
 
 function App() {
 
   return (
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }
 
