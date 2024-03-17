@@ -1,4 +1,5 @@
-import './App.css'
+import ContactUs from './pages/ContactUs/ContactUs';
+import './App.css';
 import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router-dom';
 import Home from './pages/Home/Home'
 import Navbar from './components/Navbar/Navbar';
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/signup",
         element: <Signup />
+      },
+      {
+        path: "/contactUs", // Define route for Contact Us page
+        element: <ContactUs />
       }
       // {
       //   path: "/attractions",
