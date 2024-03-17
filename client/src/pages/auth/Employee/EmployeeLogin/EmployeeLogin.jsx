@@ -80,9 +80,6 @@ const EmployeeLogin = () => {
           <button className="login-button" onClick={handleLogin}>
               Login
           </button>
-        <div className="signup-text">
-          New user? <Link className="link" to='/signup'>Sign up here</Link>
-        </div>
       </div>
     </div>  
     

@@ -1,5 +1,7 @@
 import React, {useState} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import './Login.css';
+import { useAuth } from "../../auth"; 
 import IconButton from '@mui/material/IconButton';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
@@ -15,12 +17,19 @@ import Logo from '../../../../assets/dreamlandia_logo.svg';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirectPath = location.state?.path || '/';
 
   const handleLogin = (e) => {
     e.preventDefault();
+    let user = 'user123'; // user object, set up login logic here
+    auth.login(user);
+    navigate(redirectPath, {replace: true});
     console.log('Email:', email);
     console.log('Password:', password);
-    // login backend logic here 
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -81,7 +90,7 @@ const Login = () => {
               Login
           </button>
         <div className="signup-text">
-          New user? <Link className="link" to='/signup'>Sign up here</Link>
+          New user? <Link className="link" to='/auth/signup'>Sign up here</Link>
         </div>
       </div>
     </div>  

@@ -6,6 +6,8 @@ import Tickets from './pages/Tickets/Tickets';
 import Signup from './pages/auth/User/Signup/Signup';
 import Login from './pages/auth/User/Login/Login';
 import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
+import { AuthProvider } from './pages/auth/auth';
+import { RequireUserAuth } from './pages/auth/requireAuth';
 
 const Layout = () => {
   return (
@@ -27,7 +29,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/tickets",
-        element: <Tickets />
+        element: <RequireUserAuth><Tickets /></RequireUserAuth>
       },
       {
         path: "/login",
@@ -60,7 +62,9 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }
 
