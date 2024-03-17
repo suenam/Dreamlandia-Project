@@ -1,0 +1,66 @@
+.login-container {
+    background-image: url(../../../../assets/sky_bkg.png);
+    background-size: cover; 
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    font-family: Montserrat;
+
+    .login-form{
+        background-color: white;
+        border-radius: 20px;
+        padding-block: 70px;
+        width: 80%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h1 {
+            text-align: center;
+            
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
+
+        .forgotPassword {
+            align-self: flex-end;
+            letter-spacing: 0.5px;
+            margin-right: 12.5%;
+
+            .link {
+                text-decoration: none;
+            }
+        }
+
+        .signup-text {
+            letter-spacing: 0.5px;
+            color: gray;
+        }
+    }
+}
+
+.login-button {
+    padding: 10px 55px; 
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-size: 16px; 
+    color: white;
+    background: var(--primary); 
+    border: none;
+    border-radius: 20px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+
+    &:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+        background: #5164a2; 
+    }
+}
+

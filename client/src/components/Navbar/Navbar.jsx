@@ -1,9 +1,12 @@
 import React from "react";
 import { Link, NavLink } from 'react-router-dom';
 import './Navbar.css';
-// import Search from "../search/Search";
+import { useAuth } from "../../pages/auth/auth";
 import Logo from "../../assets/dreamlandia_logo.svg";
 const Navbar = () => {
+
+    const auth = useAuth();
+
     return (
        <>
        <div className="mainnavbar">
@@ -14,8 +17,12 @@ const Navbar = () => {
                     <NavLink className="link" to='/tickets'>Tickets</NavLink>
                     <NavLink className="link" to='/attractions'>Attractions</NavLink>
                     <NavLink className="link" to= '/events'>Events</NavLink>
-                    <NavLink className="link" to='/shop'>Shop</NavLink>
-                    <NavLink className="link" to= '/login'>Login</NavLink>
+                    {/* <NavLink className="link" to='/shop'>Shop</NavLink> */}
+                    {!auth.user ? 
+                        <NavLink className="link" to= '/login'>Login</NavLink> :
+                        <NavLink className="link" to= '/' onClick={auth.logout}>Logout</NavLink>
+                    }
+                    
                 </nav>
             </div>
        </div>
