@@ -34,6 +34,8 @@
 
 .container-heading {
   margin-top: 0;
+  font-family: Montserrat;
+
 }
 
 .input-container {
@@ -44,7 +46,7 @@
 }
 
 .input-container label {
-  flex-basis: 200px;
+  flex-basis: 150px;
   font-weight: bold;
 }
 
@@ -52,10 +54,10 @@
 .input-container input,
 .input-container textarea {
   padding: 0.5rem;
-  font-size: 1rem;
-  flex-grow: 1;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+    font-size: 1rem;
+    flex-grow: 1;
+    border: 1px solid #000000;
+    border-radius: 4px;
 }
 
 .input-container textarea {
@@ -63,17 +65,13 @@
 }
 
 .employee-list {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 0.5rem;
   margin-top: 0.5rem;
   max-height: 150px;
   overflow-y: auto;
 }
 
 .employee-item {
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 4px;
   cursor: pointer;
   display: flex;
@@ -93,8 +91,9 @@
 }
 .remove-employee {
   background-color: transparent;
-  border: none;
   color: #dc3545;
+  width:25px;
+  margin: auto;
   cursor: pointer;
   font-weight: bold;
 }

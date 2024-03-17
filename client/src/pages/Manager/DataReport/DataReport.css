@@ -64,21 +64,21 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    background-color: #f8f9fa; /* Light gray background color */
+    background-color: #f8f9fa; 
     padding: 1rem;
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   }
   
   .form-row {
     display: flex;
     margin-top: 10px;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
   }
   
   label {
-    flex-basis: 200px;
+    flex-basis: 150px;
     font-weight: bold;
   }
   
@@ -87,7 +87,7 @@
     padding: 0.5rem;
     font-size: 1rem;
     flex-grow: 1;
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
     border-radius: 4px;
   }
   
