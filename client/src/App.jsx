@@ -80,8 +80,6 @@ const router = createBrowserRouter([
       {
         path: "/ManageEmp",
         element: <ManageEmp />
-        path: "/",
-        element: <Home/>
       },
       {
         path: "/tickets",
