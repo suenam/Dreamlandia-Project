@@ -1,11 +1,11 @@
 .login-container {
     background-image: url(../../../../assets/sky_bkg.png);
     background-size: cover; 
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 50px;
+    padding-block: 50px;
     font-family: Montserrat;
 
     .login-form{
