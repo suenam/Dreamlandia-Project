@@ -9,7 +9,7 @@ const MHR = () => {
   return (
     <>
     <MSidebar />
-    <div className="container">
+    <div className="hr-container">
       <div className="hr-page">
         <h1>Welcome to the HR Portal</h1>
         <p>
@@ -30,7 +30,7 @@ const MHR = () => {
           <li>Employee assistance programs</li>
         </ul>
         <p>
-          Our HR team is committed to providing support and resources to help you thrive in your career at OurCompany. Feel free to reach out to us with any questions or concerns.
+          Our HR team is committed to providing support and resources to help you thrive in your career at Dreamlandia. Feel free to reach out to us with any questions or concerns.
         </p>
       </div>
     </div>

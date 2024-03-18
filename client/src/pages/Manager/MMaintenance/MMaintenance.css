@@ -4,12 +4,13 @@
   font-family: Montserrat;
 }
 .report-sec-maintenace{
+.report-sec-maintenace{
   margin-left: 285px;
   margin-right: 20px;
   margin-top: 60px;
   font-family: Montserrat;
 }
-button {
+.report-sec-maintenace button {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   background-color: var(--primary);
@@ -21,6 +22,11 @@ button {
 }
 
 
+.report-sec-maintenace button:hover {
+  background-color: #0056b3;
+  cursor: select;
+  
+}
 
 .request-container {
   font-family: Montserrat;
@@ -89,9 +95,14 @@ button {
   background-color: transparent;
   color: #dc3545;
   width:25px;
-  margin: auto;
+  margin-left: 10px;
+  padding-left: .5rem;
   cursor: pointer;
   font-weight: bold;
+}
+.remove-employee:hover {
+  background-color: #e0e0e0;
+margin-left: 10px;
 }
 
 .submit-actions,
@@ -117,4 +128,5 @@ button {
 
 .edit-row span {
   flex-grow: 1;
+}
 }

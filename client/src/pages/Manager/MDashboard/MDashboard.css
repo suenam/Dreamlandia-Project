@@ -1,11 +1,18 @@
+h1.h1dash-manager{
+    margin-left:270px;
+    font-family: Montserrat;
+    margin-top: 40px;
+}
+
+.mdashboard-class{
 .tickets-total-live{
     margin-left: 560px;
-    margin-top: 37px;
+    margin-top: 43px;
 
 }
 .rev-tickets-live{
     margin-left: 300px;
-    margin-top: -114px;
+    margin-top: -99px;
 }
 .standard-ticket-live{
     margin-left: 820px;
@@ -13,24 +20,26 @@
 }
 .express-ticket-live{
     margin-left: 980px;
-    margin-top: -96px;
+    margin-top: -92px;
 }
 .child-ticket-live{
     margin-left: 1140px;
-    margin-top: -96px;
+    margin-top: -90px;
 }
 
-.profit-live{
-    margin-left: 430px;
-    margin-top: 30px;
+
+.active-req-main{
+    margin-left: 560px;
+    margin-top: 25px;
+}
+.expense-main-card{
+    margin-left: 300px;
+    margin-top: -99px;
+
 }
 .input-weather{
     margin-left: 820px;
     max-width: 450px;
-    margin-top: -265px;
+    margin-top: -245px;
 }
-h1.h1dash-manager{
-    margin-left:270px;
-    font-family: Montserrat;
-    margin-top: 40px;
 }

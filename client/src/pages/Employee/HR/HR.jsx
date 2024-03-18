@@ -9,7 +9,7 @@ const HR = () => {
   return (
     <>
     <Sidebar />
-    <div className="container">
+    <div className="hr-container">
       <div className="hr-page">
         <h1>Welcome to the HR Portal</h1>
         <p>

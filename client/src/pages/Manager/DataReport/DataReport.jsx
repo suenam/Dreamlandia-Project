@@ -46,7 +46,7 @@ function DataReport() {
         <>
         <MSidebar />
         <h1 className='h1-dr-m'>Data Reports</h1>
-        <div className='data-report '>
+        <div className='data-report'>
       <div className="report-section">
         <div className='finance-report-div'>
         <button onClick={() => setShowFinance(!showFinance)}>

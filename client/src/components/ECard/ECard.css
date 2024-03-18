@@ -51,8 +51,11 @@
   background-color: var(--primary);
   color: #fff;
   border: none;
+  margin-bottom: 15px;
   border-radius: 4px;
   cursor: pointer;
+  width: 100px;
+  height: 35px;
   transition: background-color 0.3s ease;
 }
 
