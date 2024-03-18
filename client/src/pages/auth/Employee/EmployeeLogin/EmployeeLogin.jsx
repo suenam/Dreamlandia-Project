@@ -30,9 +30,9 @@ const EmployeeLogin = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="employee-login-container">
         <img src={Logo} />
-      <div className="login-form">
+      <div className="employee-login-form">
         <h1>Employee Login</h1>
         <FormControl required sx={{ m: 1, width: '75%', marginTop:'35px'}} variant="outlined">
         <OutlinedInput
