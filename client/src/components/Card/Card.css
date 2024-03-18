@@ -1,0 +1,27 @@
+.card {
+    background-color: #f0f0f0;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    border-radius: 6%;
+    height: auto;
+  }
+  
+  .card-value {
+    font-family: Montserrat;
+    font-size: 40px;
+    text-wrap: wrap;
+    font-weight: bold;
+
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  .card-text {
+    font-family: Montserrat;
+
+    font-size: 15px;
+    align-items: left;
+    color: black;
+  }
