@@ -1,0 +1,80 @@
+.h1-expense-form{
+    font-family: Montserrat;
+    margin-top: 40px;
+}
+.expense-form {
+    margin-left: 270px;
+    margin-right: 20px;
+    font-family: Montserrat;
+  }
+.expense-section .form-header i {
+    font-size: 1.2rem;
+    color: #666;
+    margin-left: 0.5rem;
+    cursor: help;
+  }
+  
+  .expense-form .expense-section {
+    background-color: #f8f9fa;
+    margin-top: 80px;
+
+  }
+  
+  .expense-form .expense-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .expense-form .expense-section .form-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .expense-form .expense-section .form-header h3 {
+    margin: 0;
+    font-family: Montserrat;
+    margin-right: 0.5rem;
+  }
+  
+  .expense-form .expense-section .form-header i {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .expense-form .expense-section .form-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .expense-form .expense-section .form-row label {
+    flex-basis: 150px;
+    font-weight: bold;
+  }
+  
+  .expense-form .expense-section .form-row input,
+  .expense-form .expense-section .form-row select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    flex-grow: 1;
+    border: 1px solid #000000;
+    border-radius: 4px;
+  }
+  
+  .expense-form .expense-section button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 200px;
+    margin-left: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .expense-form .expense-section button:hover {
+    background-color: #0056b3;
+  }

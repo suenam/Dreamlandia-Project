@@ -19,6 +19,8 @@
   .form-header i {
     font-size: 1.2rem;
     color: #666;
+    cursor: help;
+
   }
   .data-report {
     margin-left: 270px;

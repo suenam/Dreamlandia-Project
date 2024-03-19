@@ -12,6 +12,7 @@ import MMaintenance from  './pages/Manager/MMaintenance/MMaintenance';
 import MHR from './pages/Manager/MHR/MHR';
 import DataReport from './pages/Manager/DataReport/DataReport';
 import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
+import ExpenseForm from  './pages/Manager/ExpenseForm/ExpenseForm';
 import Tickets from './pages/Tickets/Tickets';
 import Signup from './pages/auth/User/Signup/Signup';
 import Login from './pages/auth/User/Login/Login';
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path: "/ManageEmp",
         element: <ManageEmp />
+      },
+      {
+        path: "/ExpenseForm",
+        element: <ExpenseForm />
       },
       {
         path: "/tickets",
