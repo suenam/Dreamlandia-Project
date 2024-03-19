@@ -18,11 +18,14 @@ const Navbar = () => {
                     <NavLink className="link" to='/attractions'>Attractions</NavLink>
                     <NavLink className="link" to= '/events'>Events</NavLink>
                     {/* <NavLink className="link" to='/shop'>Shop</NavLink> */}
-                    {!auth.user ? 
-                        <NavLink className="link" to= '/login'>Login</NavLink> :
-                        <NavLink className="link" to= '/' onClick={auth.logout}>Logout</NavLink>
-                    }
-                    
+                    {!auth.user && !auth.employee ?
+                            <NavLink className="link" to='/login'>Login</NavLink> :
+                            <NavLink className="link" to='/' onClick={async (event) => {
+                                event.preventDefault();
+                                await auth.logout();
+                            }}>Logout</NavLink>
+                        }
+
                 </nav>
             </div>
        </div>
