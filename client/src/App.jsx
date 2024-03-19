@@ -24,8 +24,12 @@ const Layout = () => {
 
   return (
     <>
+    <div className='page-container'>
       {showNavbar && <Navbar />}
-      <Outlet context={{ showNavbar, setShowNavbar }} />
+      <div className='outlet-content'>
+        <Outlet context={{ showNavbar, setShowNavbar }} />
+      </div>
+    </div>
     </>
   );
 }
