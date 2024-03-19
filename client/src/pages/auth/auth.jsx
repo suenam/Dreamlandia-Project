@@ -1,60 +1,88 @@
-// import { createContext, useContext, useState } from "react";
+/*
+login function is ueed to login the user(customer)
+logout function is used to logout the user and employee(logout will logout both user and employee)
+It ensures that we are not logged in as both user and employee at the same time
+employeeLogin function is used to login the employee
 
-// const AuthContext = createContext(null);
+Open inpected in chrome and go to application tab and check the cookies, you will see the cookies for the user or employee
+*/
 
-// export const AuthProvider = ({ children }) => {
-//     const [user, setUser] = useState(null);
-//     const [staff, setStaff] = useState(null);
 
-//     const login = (user) => {
-//         setUser(user);
-//     }
-
-//     const staffLogin = (staff) => {
-//         setStaff(staff);
-//     }
-
-//     const logout = () => {
-//         setUser(null);
-//         setStaff(null);
-//     }
-
-//     return (
-//         <AuthContext.Provider value = {{ user, staff, login, staffLogin, logout}}>
-//             {children}
-//         </AuthContext.Provider>
-//     );
-// }
-
-// export const useAuth = () => {
-//     return useContext(AuthContext);
-// }
-
-// auth.jsx
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
+    const [user, setUser] = useState(null);
+    const [employee, setEmployee] = useState(null);
 
-    const login = (user, token) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('token', token);
-        setUser(user);
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+              const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/user`, { withCredentials: true });
+              if (response.status === 200) {
+                setUser(response.data);
+              } else {
+                setUser(null);
+              }
+            } catch (error) {
+              setUser(null);
+            }
+          };
+        const fetchEmployee = async () => {
+            try {
+              const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/employee`, { withCredentials: true });
+              if (response.status === 200) {
+                setEmployee(response.data);
+              } else {
+                setEmployee(null);
+              }
+            } catch (error) {
+                setEmployee(null);
+            }
+          };
+
+        fetchUser();
+        fetchEmployee();
+    }, []);
+
+    const login = async (credentials) => {
+        try {
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, credentials, { withCredentials: true });
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/user`, { withCredentials: true });
+            console.log('(frontend)response:', response.data);
+            setUser(response.data);
+            setEmployee(null);
+        } catch (error) {
+            console.error('Error logging in:', error);
+        }
     };
 
-    const logout = () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        setUser(null);
+    const logout = async () => {
+        try {
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/logout`, {}, { withCredentials: true });
+            setUser(null);
+            setEmployee(null);
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
     };
+
+    const employeeLogin = async (credentials) => {
+        try {
+          await axios.post(`${import.meta.env.VITE_SERVER_URL}/employee/login`, credentials, { withCredentials: true });
+          const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/employee`, { withCredentials: true });
+          console.log('(frontend)response:', response.data);
+          setEmployee(response.data);
+          setUser(null);
+        } catch (error) {
+          console.error('Error logging in:', error);
+        }
+      };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, employee, login, logout, employeeLogin }}>
             {children}
         </AuthContext.Provider>
     );
@@ -62,4 +90,4 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
     return useContext(AuthContext);
-}
+};
