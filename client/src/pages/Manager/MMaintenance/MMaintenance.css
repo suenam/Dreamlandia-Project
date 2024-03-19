@@ -3,7 +3,7 @@
   margin-top: 40px;
   font-family: Montserrat;
 }
-.report-sec-maintenace{
+
 .report-sec-maintenace{
   margin-left: 285px;
   margin-right: 20px;
@@ -28,32 +28,21 @@
   
 }
 
-.request-container {
-  font-family: Montserrat;
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.container-heading {
-  margin-top: 0;
-  font-family: Montserrat;
 
-}
 
-.input-container {
+.report-sec-maintenace .input-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.input-container label {
+.report-sec-maintenace .input-container label {
   flex-basis: 150px;
   font-weight: bold;
 }
-
+.report-sec-maintenace{
 .input-container select,
 .input-container input,
 .input-container textarea {
@@ -63,54 +52,22 @@
     border: 1px solid #000000;
     border-radius: 4px;
 }
+}
 
-.input-container textarea {
+.report-sec-maintenace .input-container textarea {
   resize: vertical;
 }
 
-.employee-list {
-  margin-top: 0.5rem;
-  max-height: 150px;
-  overflow-y: auto;
-}
 
-.employee-item {
-  padding: 0.5rem 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
-.employee-item.clickable:hover {
-  background-color: #e0e0e0;
-}
-
-.selected-employees {
-  margin-bottom: 1rem;
-}
-
-.remove-employee {
-  background-color: transparent;
-  color: #dc3545;
-  width:25px;
-  margin-left: 10px;
-  padding-left: .5rem;
-  cursor: pointer;
-  font-weight: bold;
-}
-.remove-employee:hover {
-  background-color: #e0e0e0;
-margin-left: 10px;
-}
-
+.report-sec-maintenace{
 .submit-actions,
 .edit-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
 }
+
 
 
 

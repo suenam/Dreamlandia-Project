@@ -41,5 +41,18 @@ h1.h1dash-manager{
     margin-left: 820px;
     max-width: 450px;
     margin-top: -245px;
+    font-family: Montserrat;
+
+    
+}
+.input-weather button{
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 200px;
+    margin-bottom: 1rem;
 }
 }

@@ -1,5 +1,7 @@
 .hr-container {
   margin-left: 270px;
+  font-family: Montserrat;
+
 }
 
 .hr-page {
@@ -9,19 +11,16 @@
 .hr-page h1 {
   font-size: 28px;
   margin-bottom: 20px;
-
 }
 
 .hr-page h2 {
   font-size: 24px;
   margin-top: 30px;
-
 }
 
 .hr-page p {
   font-size: 16px;
   line-height: 1.6;
-
 }
 
 .hr-page .contact-info {
@@ -30,7 +29,6 @@
 
 .hr-page .contact-info p {
   margin: 5px 0;
-  
 }
 
 .hr-page ul {
@@ -39,5 +37,9 @@
 }
 
 .hr-page ul li {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+.hr-page .paragraph-closing-hr{
+  margin-top: 30px;
+
 }

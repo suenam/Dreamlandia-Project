@@ -3,7 +3,7 @@ import './MHR.css';
 import MSidebar from '../../../components/MSidebar/MSidebar';
 import { useOutletContext } from 'react-router-dom';
 
-const MHR = () => {
+const HR = () => {
   const { setShowNavbar } = useOutletContext();
     setShowNavbar(false);
   return (
@@ -29,13 +29,15 @@ const MHR = () => {
           <li>Career development opportunities</li>
           <li>Employee assistance programs</li>
         </ul>
+        <div className='paragraph-closing-hr'>
         <p>
           Our HR team is committed to providing support and resources to help you thrive in your career at Dreamlandia. Feel free to reach out to us with any questions or concerns.
         </p>
+        </div>
       </div>
     </div>
     </>
   );
 };
 
-export default MHR;
+export default HR;

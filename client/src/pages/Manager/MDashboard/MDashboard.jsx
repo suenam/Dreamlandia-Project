@@ -19,8 +19,6 @@ function MDashboard() {
 
     const handleWeatherSubmit = (e) => {
         e.preventDefault();
-        // Handle weather form submission
-        console.log('Weather:', weatherDate, weather);
     };
 
     return (
