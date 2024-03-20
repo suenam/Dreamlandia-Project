@@ -52,10 +52,12 @@ h1.h1dash-manager{
     border: none;
     width: 111px;
     margin-bottom: 1rem;
+    margin-left: 310px;
+
 
 }
 .input-weather button:hover{
-    cursor: select;
+    cursor: pointer;
     background-color:  #0056b3;
 
 }

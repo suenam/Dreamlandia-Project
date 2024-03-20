@@ -21,11 +21,13 @@ function MDashboard() {
           });
     
           if (response.ok) {
-            // Handle success - perhaps redirect to login or home page
-            console.log("Signup successful");
+            // Handle success 
+            alert('Weather input successful!');
+            console.log("Weather input successful");
           } else {
-            // Handle errors - invalid input, user already exists, etc.
-            console.error("Signup failed");
+            // Handle errors 
+            alert('Weather input failed.');
+            console.error("Weather input failed");
           }
         } catch (error) {
           console.error('There was an error:', error);
