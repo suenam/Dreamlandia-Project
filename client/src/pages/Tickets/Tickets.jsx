@@ -8,6 +8,9 @@ import WaterRide from '../../assets/water_ride.jpg';
 import Burger from '../../assets/whataburger.jpg';
 import Steak from '../../assets/steak_restaurant.jpg';
 import MyMelody from '../../assets/themed_restaurant.jpg';
+import SilverSpoon from '../../assets/silverspoonfood.png';
+import WhiteCastle from '../../assets/whitecastle.jpg';
+import BellaFood from '../../assets/bellasfood.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -19,10 +22,6 @@ const Tickets = () => {
     const [childTicket, setChildTicket] = useState(0);
 
     const [attractions, setAttractions] = useState([]);
-
-    const [standardFoodTicket, setStandardFoodTicket] = useState(0);
-    const [expressFoodTicket, setExpressFoodTicket] = useState(0);
-    const [deluxeFoodTicket, setDeluxeFoodTicket] = useState(0);
 
     const [foodTickets, setFoodTickets] = useState({
         standardMeal1: 0,
@@ -200,7 +199,7 @@ const Tickets = () => {
                                 </div>
 
                                 <div className='meal-option'>
-                                    <img src={Burger} />
+                                    <img src={WhiteCastle} />
                                     <h3> Burger Castle </h3>
                                     <span> Embark on a regal journey at Burger Castle, where every bite of our majestic burgers unlocks a kingdom of fresh flavors and unparalleled satisfaction! </span>
                                     <div className='remove-add-tickets'>
@@ -234,7 +233,7 @@ const Tickets = () => {
                                 </div>
 
                                 <div className='meal-option'>
-                                    <img src={Steak} />
+                                    <img src={SilverSpoon} />
                                     <h3> Silver Spoon Serenade </h3>
                                     <span> Experience culinary poetry at Silver Spoon Serenade, where every dish is a masterpiece harmonizing with the symphony of upscale elegance.</span>
                                     <div className='remove-add-tickets'>
@@ -268,7 +267,7 @@ const Tickets = () => {
                                 </div>
 
                                 <div className='meal-option'>
-                                    <img src={MyMelody} />
+                                    <img src={BellaFood} />
                                     <h3> Bella's Fairy Tale Feast </h3>
                                     <span> Dine in enchantment at Bella's Fairy Tale Feast, where beloved tales inspire every magical, themed dish.</span>
                                     <div className='remove-add-tickets'>
