@@ -96,7 +96,7 @@ function MDashboard() {
                             <option value="snowy">Snowy</option>
                         </select>
                     </div>
-                    <button className='generate-but-dr' type="submit">Submit</button>
+                    <button type="submit">Submit</button>
                 </form>
             </div>
             </div>

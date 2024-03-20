@@ -53,7 +53,6 @@
   border: none;
   margin-bottom: 15px;
   border-radius: 4px;
-  cursor: pointer;
   width: 100px;
   height: 35px;
   transition: background-color 0.3s ease;
@@ -61,4 +60,5 @@
 
 .employee-profile .edit-btn:hover {
   background-color: #45a049;
+  cursor: select;
 }

@@ -19,7 +19,6 @@
   .report-section .form-header i {
     font-size: 1.2rem;
     color: #666;
-    cursor: help;
 
   }
   .data-report {
@@ -42,25 +41,24 @@
     background-color: var(--primary);
     color: #fff;
     border: none;
-    cursor: pointer;
     width: 200px;
     margin-left: auto; 
     margin-bottom: 1rem;
   }
-  .data-report button {
+  .report-section button {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     background-color: var(--primary);
     color: #fff;
     border: none;
-    cursor: pointer;
     width: 200px;
     margin-bottom: 1rem;
   }
   
   
-  .data-report button:hover {
+  .finance-report-div button:hover {
     background-color: #0056b3;
+    cursor: select;
   }
   
    form {

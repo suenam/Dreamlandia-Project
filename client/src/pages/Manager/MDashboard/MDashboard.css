@@ -4,7 +4,6 @@ h1.h1dash-manager{
     margin-top: 40px;
 }
 
-.mdashboard-class{
 .tickets-total-live{
     margin-left: 560px;
     margin-top: 43px;
@@ -51,8 +50,12 @@ h1.h1dash-manager{
     background-color: var(--primary);
     color: #fff;
     border: none;
-    cursor: pointer;
-    width: 200px;
+    width: 111px;
     margin-bottom: 1rem;
+
 }
+.input-weather button:hover{
+    cursor: select;
+    background-color:  #0056b3;
+
 }

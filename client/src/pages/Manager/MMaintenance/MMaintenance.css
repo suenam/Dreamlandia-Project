@@ -16,13 +16,14 @@
   background-color: var(--primary);
   color: #fff;
   border: none;
-  cursor: pointer;
   width: 200px;
   margin-bottom: 1rem;
 }
 
 
 .report-sec-maintenace button:hover {
+  font-family: Montserrat;
+
   background-color: #0056b3;
   cursor: select;
   

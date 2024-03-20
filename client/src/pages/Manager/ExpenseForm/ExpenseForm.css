@@ -11,7 +11,6 @@
     font-size: 1.2rem;
     color: #666;
     margin-left: 0.5rem;
-    cursor: select;
 }
   
   .expense-form .expense-section {
@@ -69,7 +68,6 @@
     background-color: var(--primary);
     color: #fff;
     border: none;
-    cursor: pointer;
     width: 200px;
     margin-left: auto;
     margin-bottom: 1rem;
