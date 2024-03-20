@@ -8,18 +8,32 @@ import './MDashboard.css';
 function MDashboard() {
     const { setShowNavbar } = useOutletContext();
     setShowNavbar(false);
-    const maintenanceRequests = [
-        { id: 1, attraction: 'attraction1', status: 'Open', comment: 'Initial request' },
-        { id: 2, attraction: 'attraction2', status: 'In Progress', comment: 'Working on it' },
-        { id: 3, attraction: 'attraction3', status: 'Completed', comment: 'All done' },
-    ];
+    
+    const handleWeatherSubmit = async (event) => {
+        event.preventDefault();
+        try {
+          const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/weather`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ WeatherCondition, WDate }),
+          });
+    
+          if (response.ok) {
+            // Handle success - perhaps redirect to login or home page
+            console.log("Signup successful");
+          } else {
+            // Handle errors - invalid input, user already exists, etc.
+            console.error("Signup failed");
+          }
+        } catch (error) {
+          console.error('There was an error:', error);
+        }
+      };
+    const [WDate, setWeatherDate] = useState('');
+    const [WeatherCondition, setWeather] = useState('');
 
-    const [weatherDate, setWeatherDate] = useState('');
-    const [weather, setWeather] = useState('');
-
-    const handleWeatherSubmit = (e) => {
-        e.preventDefault();
-    };
 
     return (
         <>
@@ -82,13 +96,13 @@ function MDashboard() {
                         <label>Date:</label>
                         <input
                             type="date"
-                            value={weatherDate}
+                            value={WDate}
                             onChange={(e) => setWeatherDate(e.target.value)}
                         />
                     </div>
                     <div className="form-row">
                         <label>Weather:</label>
-                        <select value={weather} onChange={(e) => setWeather(e.target.value)}>
+                        <select value={WeatherCondition} onChange={(e) => setWeather(e.target.value)}>
                             <option value="">Select Weather</option>
                             <option value="sunny">Sunny</option>
                             <option value="cloudy">Cloudy</option>

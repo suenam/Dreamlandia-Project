@@ -21,6 +21,7 @@ const Sidebar = () => {
 
         <NavLink className="sidebar-link" to="/MMaintenance">Maintenance Requests</NavLink>
         <NavLink className="sidebar-link" to="/ManageEmp">Manage Employees</NavLink>
+        <NavLink className="sidebar-link" to="/ViewContact">Contact Us Submissions</NavLink>
 
         <NavLink className="sidebar-link" to="/MHR" >HR</NavLink>
         <NavLink className="sidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>

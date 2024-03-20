@@ -4,6 +4,7 @@ const port = process.env.PORT;
 const signupHandler = require('./signupHandler');
 const loginHandler = require('./loginHandler');
 const authenticateToken = require('./authenticateToken');
+const weatherHandler = require('./weatherHandler');
 
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -31,7 +32,9 @@ const server = http.createServer((req, res) => {
     loginHandler(req, res);
   } else if (req.url === '/auth/signup' && req.method === 'POST') {
     signupHandler(req, res);
-  } else {
+  } else if (req.url === '/weather' && req.method === 'POST') {
+    weatherHandler(req, res);
+  }else {
     res.writeHead(404, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Route not found' }));
   }
