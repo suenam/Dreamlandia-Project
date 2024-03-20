@@ -24,6 +24,22 @@ const Tickets = () => {
     const [expressFoodTicket, setExpressFoodTicket] = useState(0);
     const [deluxeFoodTicket, setDeluxeFoodTicket] = useState(0);
 
+    const [foodTickets, setFoodTickets] = useState({
+        standardMeal1: 0,
+        standardMeal2: 0,
+        deluxeMeal1: 0,
+        deluxeMeal2: 0,
+        specialMeal1: 0,
+        specialMeal2: 0
+    })
+
+    const updateMealTicket = (mealKey, value) => {
+        setFoodTickets(prevFoodTickets => ({
+            ...prevFoodTickets,
+            [mealKey]: prevFoodTickets[mealKey] + value
+        }));
+    };
+
     const setAttractionFn = (newAttraction) => {
         if (!attractions.includes(newAttraction)) {
             setAttractions([...attractions, newAttraction]);
@@ -166,19 +182,19 @@ const Tickets = () => {
                         <h2>Select your meal vouchers (one per person) </h2>  
                         <div className='meal-options'>
                             <div className='meal-options-col'> 
-                                <h4>Standard</h4>
+                                <h4>Standard ($10/ea) </h4>
                                 <i>Quick eats and quick service</i>
                                 <div className='meal-option'>
                                     <img src={Burger} />
                                     <h3> WhataSandwich </h3>
-                                    <span> Grants access to quick eats such as: WhataSandwich, McRonald's, , Pixie Dust Pizzeria, and Rocket Dogs </span>
+                                    <span> Step into WhataSandwich for a burst of flavor with every bite, where fast meets fresh in a celebration of the world's most beloved handheld delight! </span>
                                     <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={standardFoodTicket === 0? 'none': ''} color={standardFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket-1)}
+                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={foodTickets.standardMeal1 === 0? 'none': ''} color={foodTickets.standardMeal1 === 0? 'action' : ''}
+                                            onClick={()=>updateMealTicket('standardMeal1', -1)}
                                         />
-                                        <div className='ticket-count'>{standardFoodTicket}</div>
+                                        <div className='ticket-count'>{foodTickets.standardMeal1}</div>
                                         <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket+1)}
+                                            onClick={()=>updateMealTicket('standardMeal1', 1)}
                                         />
                                     </div>
                                 </div>
@@ -186,33 +202,33 @@ const Tickets = () => {
                                 <div className='meal-option'>
                                     <img src={Burger} />
                                     <h3> Burger Castle </h3>
-                                    <span> Grants access to quick eats such as: WhataSandwich, McRonald's, Burger Castle, Pixie Dust Pizzeria, and Rocket Dogs </span>
+                                    <span> Embark on a regal journey at Burger Castle, where every bite of our majestic burgers unlocks a kingdom of fresh flavors and unparalleled satisfaction! </span>
                                     <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={standardFoodTicket === 0? 'none': ''} color={standardFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket-1)}
+                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={foodTickets.standardMeal2 === 0? 'none': ''} color={foodTickets.standardMeal2 === 0? 'action' : ''}
+                                            onClick={()=>updateMealTicket('standardMeal2', -1)}
                                         />
-                                        <div className='ticket-count'>{standardFoodTicket}</div>
+                                        <div className='ticket-count'>{foodTickets.standardMeal2}</div>
                                         <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket+1)}
+                                            onClick={()=>updateMealTicket('standardMeal2', 1)}
                                         />
                                     </div>
                                 </div>
                             </div>
 
                             <div className='meal-options-col'>
-                                <h4>Deluxe</h4>
-                                <i>Fine dining in luxury</i>
+                                <h4>Deluxe ($35/ea)</h4>
+                                <i>Fine dining in luxury </i>
                                 <div className='meal-option'>
                                     <img src={Steak} />
                                     <h3> The Velvet Vineyard </h3>
-                                    <span> Grants access to quick eats & fine dining such as: , Enchanted Garden Bistro, and </span>
+                                    <span> Discover The Velvet Vineyard, where exquisite dishes meet the artistry of wine in an elegant symphony of flavors. </span>
                                     <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={expressFoodTicket === 0? 'none': ''} color={expressFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket-1)}
+                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={foodTickets.deluxeMeal1 === 0? 'none': ''} color={foodTickets.deluxeMeal1 === 0? 'action' : ''}
+                                            onClick={()=>updateMealTicket('deluxeMeal1', -1)}
                                         />
-                                        <div className='ticket-count'>{expressFoodTicket}</div>
+                                        <div className='ticket-count'>{foodTickets.deluxeMeal1}</div>
                                         <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket+1)}
+                                            onClick={()=>updateMealTicket('deluxeMeal1', 1)}
                                         />
                                     </div>
                                 </div>
@@ -220,33 +236,33 @@ const Tickets = () => {
                                 <div className='meal-option'>
                                     <img src={Steak} />
                                     <h3> Silver Spoon Serenade </h3>
-                                    <span> Grants access to quick eats & fine dining such as: The Velvet Vineyard, Enchanted Garden Bistro, and Silver Spoon Serenade</span>
+                                    <span> Experience culinary poetry at Silver Spoon Serenade, where every dish is a masterpiece harmonizing with the symphony of upscale elegance.</span>
                                     <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={expressFoodTicket === 0? 'none': ''} color={expressFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket-1)}
+                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={foodTickets.deluxeMeal2 === 0? 'none': ''} color={foodTickets.deluxeMeal2 === 0? 'action' : ''}
+                                            onClick={()=>updateMealTicket('deluxeMeal2', -1)}
                                         />
-                                        <div className='ticket-count'>{expressFoodTicket}</div>
+                                        <div className='ticket-count'>{foodTickets.deluxeMeal2}</div>
                                         <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket+1)}
+                                            onClick={()=>updateMealTicket('deluxeMeal2', 1)}
                                         />
                                     </div>
                                 </div>
                             </div>
 
                             <div className='meal-options-col'>
-                                <h4>Special</h4>
+                                <h4>Special ($45/ea)</h4>
                                 <i>Themed character restaurants</i>
                                 <div className='meal-option'>
                                     <img src={MyMelody} />
                                     <h3> HerHarmony Eatery </h3>
-                                    <span> Grants access to quick eats, fine dining, & themed character restaurants such as: , Fairy Tale Feast, and Pirate's Parley Café</span>
+                                    <span> Step into a world of whimsy at HerHarmony Eatery, where HerHarmony invites you to indulge in delightfully themed dishes in a magical setting.</span>
                                     <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={deluxeFoodTicket === 0? 'none': ''} color={deluxeFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket-1)}
+                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={foodTickets.specialMeal1 === 0? 'none': ''} color={foodTickets.specialMeal1 === 0? 'action' : ''}
+                                            onClick={()=>updateMealTicket('specialMeal1', -1)}
                                         />
-                                        <div className='ticket-count'>{deluxeFoodTicket}</div>
+                                        <div className='ticket-count'>{foodTickets.specialMeal1}</div>
                                         <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket+1)}
+                                            onClick={()=>updateMealTicket('specialMeal1', 1)}
                                         />
                                     </div>
                                 </div>
@@ -254,119 +270,19 @@ const Tickets = () => {
                                 <div className='meal-option'>
                                     <img src={MyMelody} />
                                     <h3> Bella's Fairy Tale Feast </h3>
-                                    <span> Grants access to quick eats, fine dining, & themed character restaurants such as: HerHarmony Eatery, Fairy Tale Feast, and Pirate's Parley Café</span>
+                                    <span> Dine in enchantment at Bella's Fairy Tale Feast, where beloved tales inspire every magical, themed dish.</span>
                                     <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={deluxeFoodTicket === 0? 'none': ''} color={deluxeFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket-1)}
+                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={foodTickets.specialMeal2 === 0? 'none': ''} color={foodTickets.specialMeal2 === 0? 'action' : ''}
+                                            onClick={()=>updateMealTicket('specialMeal2', -1)}
                                         />
-                                        <div className='ticket-count'>{deluxeFoodTicket}</div>
+                                        <div className='ticket-count'>{foodTickets.specialMeal2}</div>
                                         <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket+1)}
+                                            onClick={()=>updateMealTicket('specialMeal2', 1)}
                                         />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {/* <div className='meal-options'>
-                            <div className='meal-options-row-1'>
-
-                                <div className='meal-option'>
-                                    <img src={Burger} />
-                                    <h3> WhataSandwich </h3>
-                                    <span> Grants access to quick eats such as: WhataSandwich, McRonald's, , Pixie Dust Pizzeria, and Rocket Dogs </span>
-                                    <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={standardFoodTicket === 0? 'none': ''} color={standardFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket-1)}
-                                        />
-                                        <div className='ticket-count'>{standardFoodTicket}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket+1)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className='meal-option'>
-                                    <img src={Steak} />
-                                    <h3> The Velvet Vineyard </h3>
-                                    <span> Grants access to quick eats & fine dining such as: , Enchanted Garden Bistro, and </span>
-                                    <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={expressFoodTicket === 0? 'none': ''} color={expressFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket-1)}
-                                        />
-                                        <div className='ticket-count'>{expressFoodTicket}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket+1)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className='meal-option'>
-                                    <img src={MyMelody} />
-                                    <h3> HerHarmony Eatery </h3>
-                                    <span> Grants access to quick eats, fine dining, & themed character restaurants such as: , Fairy Tale Feast, and Pirate's Parley Café</span>
-                                    <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={deluxeFoodTicket === 0? 'none': ''} color={deluxeFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket-1)}
-                                        />
-                                        <div className='ticket-count'>{deluxeFoodTicket}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket+1)}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div className='meal-options-row-2'>
-
-                                <div className='meal-option'>
-                                    <img src={Burger} />
-                                    <h3> Burger Castle </h3>
-                                    <span> Grants access to quick eats such as: WhataSandwich, McRonald's, Burger Castle, Pixie Dust Pizzeria, and Rocket Dogs </span>
-                                    <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={standardFoodTicket === 0? 'none': ''} color={standardFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket-1)}
-                                        />
-                                        <div className='ticket-count'>{standardFoodTicket}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setStandardFoodTicket(standardFoodTicket+1)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className='meal-option'>
-                                    <img src={Steak} />
-                                    <h3> Silver Spoon Serenade </h3>
-                                    <span> Grants access to quick eats & fine dining such as: The Velvet Vineyard, Enchanted Garden Bistro, and Silver Spoon Serenade</span>
-                                    <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={expressFoodTicket === 0? 'none': ''} color={expressFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket-1)}
-                                        />
-                                        <div className='ticket-count'>{expressFoodTicket}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setExpressFoodTicket(expressFoodTicket+1)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className='meal-option'>
-                                    <img src={MyMelody} />
-                                    <h3> Bella's Fairy Tale Feast </h3>
-                                    <span> Grants access to quick eats, fine dining, & themed character restaurants such as: HerHarmony Eatery, Fairy Tale Feast, and Pirate's Parley Café</span>
-                                    <div className='remove-add-tickets'>
-                                        <RemoveCircleOutlineIcon fontSize='large' pointerEvents={deluxeFoodTicket === 0? 'none': ''} color={deluxeFoodTicket === 0? 'action' : ''}
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket-1)}
-                                        />
-                                        <div className='ticket-count'>{deluxeFoodTicket}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
-                                            onClick={()=>setDeluxeFoodTicket(deluxeFoodTicket+1)}
-                                        />
-                                    </div>
-                                </div>
-                                
-                            </div>
-
-                        </div> */}
                     </div>
                 </div>
 
