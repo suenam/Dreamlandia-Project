@@ -27,7 +27,7 @@ const Navbar = () => {
                             }}>Logout</NavLink>
                         }
 
-                    <NavLink className="link" to= '/ContactUs'>ContactUs</NavLink>
+                    <NavLink className="link" to= '/ContactUs'>Contact Us</NavLink>
                     
                 </nav>
             </div>
