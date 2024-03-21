@@ -22,8 +22,10 @@
 
 
 .report-sec-maintenace button:hover {
+  font-family: Montserrat;
+
   background-color: #0056b3;
-  cursor: select;
+  cursor: pointer;
   
 }
 

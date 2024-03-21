@@ -1,63 +1,95 @@
-h1.h1dash-manager{
-    margin-left:270px;
-    font-family: Montserrat;
+.h1dash-manager {
+    margin-right: 770px; 
+}
+.current-date-time {
+    font-size: 20px;
+}
+.mdash-header{
+    display: flex;
+    align-items: center;
+    margin-left: 270px;
     margin-top: 40px;
+    margin-bottom: 40px;
+    font-family: Montserrat;
 }
 
-.tickets-total-live{
-    margin-left: 560px;
-    margin-top: 43px;
-
-}
-.rev-tickets-live{
-    margin-left: 300px;
-    margin-top: -99px;
-}
-.standard-ticket-live{
-    margin-left: 820px;
-    margin-top: -105px;
-}
-.express-ticket-live{
-    margin-left: 980px;
-    margin-top: -92px;
-}
-.child-ticket-live{
-    margin-left: 1140px;
-    margin-top: -90px;
-}
-
-
-.active-req-main{
-    margin-left: 560px;
-    margin-top: 25px;
-}
-.expense-main-card{
-    margin-left: 300px;
-    margin-top: -99px;
-
-}
-.input-weather{
-    margin-left: 820px;
-    max-width: 450px;
-    margin-top: -245px;
+.mdashboard-class {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 30px;
+    justify-content: space-around;
+    margin-left: 270px;    
     font-family: Montserrat;
 
     
+    .vertical-box {
+        width: 330px;
+        height: 760px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        h2 {
+            text-align: left;
+            margin-bottom: 50px;
+            
+        }
+
+        .box-content {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+
+            .value-container {
+                display: flex;
+                flex-direction: column;
+                align-items: left;
+                margin-bottom: 50px;
+
+                .big-value {
+                    font-size: 50px;
+                    font-weight: bold;
+                    display: flex;
+                    align-items: center;
+                }
+                .small-text{
+                    font-size: 20px;
+                }
+            }
+
+            .small-value-container {
+                display: flex;
+                width: 100%;
+                align-items: left;
+                margin-bottom: 25px;
+
+                .small-value-item {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: left;
+
+                    .small-value {
+                        font-size: 30px;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
 }
-.input-weather button{
+.exportPdf-mdash-butt{
     padding: 0.5rem 1rem;
-    font-size: 1rem;
-    background-color: var(--primary);
-    color: #fff;
-    border: none;
-    width: 111px;
-    margin-bottom: 1rem;
-    margin-left: 310px;
-
-
+font-size: 1rem;
+background-color: var(--primary);
+color: #fff;
+border: none;
+width: 200px;
+margin-left: 1460px;
+margin-bottom: 1rem;
 }
-.input-weather button:hover{
+.exportPdf-mdash-butt:hover{
+    background-color: #0056b3;
     cursor: pointer;
-    background-color:  #0056b3;
-
 }

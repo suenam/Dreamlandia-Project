@@ -12,6 +12,7 @@ import MMaintenance from  './pages/Manager/MMaintenance/MMaintenance';
 import MHR from './pages/Manager/MHR/MHR';
 import DataReport from './pages/Manager/DataReport/DataReport';
 import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
+import WeatherForm from './pages/Employee/WeatherForm/WeatherForm';
 import ExpenseForm from  './pages/Manager/ExpenseForm/ExpenseForm';
 import ViewContact from  './pages/Manager/ViewContact/ViewContact';
 
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
       {
         path: "/ViewContact",
         element: <ViewContact />
+      },
+      {
+        path: "/WeatherForm",
+        element: <WeatherForm />
       }
       // {
       //   path: "/attractions",

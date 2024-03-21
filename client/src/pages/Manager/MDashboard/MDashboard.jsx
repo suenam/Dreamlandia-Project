@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import Card from '../../../components/Card/Card'
+import React, { useState, useRef } from 'react';
 import MSidebar from '../../../components/MSidebar/MSidebar';
 import { useOutletContext } from 'react-router-dom';
-import  { useEffect } from 'react';
+import { useEffect } from 'react';
+import { PDFExport } from "@progress/kendo-react-pdf";
+
 import './MDashboard.css';
+
 
 function MDashboard() {
     const { setShowNavbar } = useOutletContext();
@@ -35,60 +37,144 @@ function MDashboard() {
       };
     const [WDate, setWeatherDate] = useState('');
     const [WeatherCondition, setWeather] = useState('');
+    const [currentDateTime, setCurrentDateTime] = useState('');
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const now = new Date();
+            const formattedDateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+            setCurrentDateTime(formattedDateTime);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+    const dashboardRef = useRef(null);
+
+    const exportToPDF = () => {
+        if (dashboardRef.current) {
+            dashboardRef.current.save();
+        }
+    };
 
     return (
         <>
             <MSidebar />
-            <h1 className='h1dash-manager'>Manager Dashboard</h1>
-            <div className='mdashboard-class'>
-            <div  className='tickets-total-live'>
-                <Card value="1213" text="TOTAL TICKETS SOLD" color="lightblue" size="225px"fontsize={14} vFontsize={28}/>
-            </div>
-            <div  className='rev-tickets-live'>
-                <Card value="$12,821" text="REVENUE: TICKETS" color="orange" size="225px" fontsize={14} vFontsize={28}/>
-            </div>
-            <div  className='standard-ticket-live'>
-                <Card value="563" text="STANDARD" color="lightgrey"  size="100px" fontsize={13} vFontsize={23} borderRadius="50%"/>
-            </div>
-            <div  className='express-ticket-live'>
-                <Card value="462" text="EXPRESS" color="lightgrey"  size="100px"  fontsize={13} vFontsize={23} borderRadius="50%"/>
-            </div>
-            <div  className='child-ticket-live'>
-                <Card value="252" text="CHILD" color="lightgrey"  size="100px"  fontsize={13} vFontsize={23}borderRadius="50%" />
+            <PDFExport
+                paperSize="auto"
+                fileName="dashboard.pdf"
+                margin={{ top: "1cm", bottom: "1cm" }}
+                ref={dashboardRef}
+            >
+            <div className="mdash-header">
+                <h1 className='h1dash-manager'>Manager Dashboard</h1>
+                <span className="current-date-time">Date: {currentDateTime}</span>
+                
             </div>
 
-            <div  className='tickets-total-live'>
-                <Card value="102" text="TOTAL MEAL PLANS" color="lightblue" size="225px"fontsize={14} vFontsize={28}/>
-            </div>
-            <div  className='rev-tickets-live'>
-                <Card value="$3,471" text="REVENUE: DINING" color="orange" size="225px"fontsize={14} vFontsize={28}/>
-            </div>
-            <div  className='standard-ticket-live'>
-                <Card value="23" text="STANDARD" color="lightgrey"  size="100px"  fontsize={13} vFontsize={23} borderRadius="50%"/>
-            </div>
-            <div  className='express-ticket-live'>
-                <Card value="25" text="DELUXE" color="lightgrey"  size="100px"  fontsize={13} vFontsize={23} borderRadius="50%"/>
-            </div>
-            <div  className='child-ticket-live'>
-                <Card value="32" text="SPECIAL" color="lightgrey"  size="100px"  fontsize={13} vFontsize={23}borderRadius="50%" />
-            </div>
+            
+                <div className='mdashboard-class'>
+            <div className='vertical-box'>
+                    <h2>Tickets</h2>
+                    <div className='box-content'>
+                        <div className='value-container'>
+                            <span className='big-value'>$12,821</span>
+                            <span className='small-text'>REVENUE</span>
+                        </div>
+                        <div className='value-container'>
+                            <span className='big-value'>1213</span>
+                            <span className='small-text'>TRANSACTIONS</span>
+                        </div>
+                        <div className='small-value-container'>
+                            <div className='small-value-item'>
+                                <span className='small-value'>563</span>
+                                <span className='small-text'>STANDARD</span>
+                            </div>
+                        </div>
+                        <div className='small-value-container'>
+                            <div className='small-value-item'>
+                                <span className='small-value'>462</span>
+                                <span className='small-text'>EXPRESS</span>
+                            </div>
+                        </div>
+                        <div className='small-value-container'>
 
-            <div  className='tickets-total-live'>
-                <Card value="125" text="TOTAL TRANSACTIONS" color="lightblue" size="225px"fontsize={14} vFontsize={28}/>
-            </div>
-            <div  className='rev-tickets-live'>
-                <Card value="$4,672" text="REVENUE: SHOP" color="orange" size="225px"fontsize={14} vFontsize={28}/>
-            </div>
+                            <div className='small-value-item'>
+                                <span className='small-value'>252</span>
+                                <span className='small-text'>CHILD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div  className='active-req-main'>
-                <Card value="12" text="ACTIVE REQUESTS" color="lightblue" size="225px"fontsize={14} vFontsize={28}/>
-            </div>
-            <div  className='expense-main-card'>
-                <Card value="$1,421" text="EXPENSE: MAINTENANCE" color="orange" size="225px"fontsize={14} vFontsize={28}/>
-            </div>
+                <div className='vertical-box'>
+                    <h2>Restaurant</h2>
+                    <div className='box-content'>
+                        <div className='value-container'>
+                            <span className='big-value'>$3,471</span>
+                            <span className='small-text'>REVENUE</span>
+                        </div>
+                        <div className='value-container'>
+                            <span className='big-value'>$1,239</span>
+                            <span className='small-text'>EXPENSE</span>
+                        </div>
+                        <div className='value-container'>
+                            <span className='big-value'>102</span>
+                            <span className='small-text'>TRANSACTIONS</span>
+                        </div>
+                        <div className='small-value-container'>
+                            <div className='small-value-item'>
+                                <span className='small-value'>23</span>
+                                <span className='small-text'>STANDARD</span>
+                            </div>
+                        </div>
+                        <div className='small-value-container'>
+                            <div className='small-value-item'>
+                                <span className='small-value'>25</span>
+                                <span className='small-text'>DELUXE</span>
+                            </div>
+                        </div>
+                        <div className='small-value-container'>
+                            <div className='small-value-item'>
+                                <span className='small-value'>32</span>
+                                <span className='small-text'>SPECIAL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div className='input-weather'>
+                <div className='vertical-box'>
+                    <h2>Maintenance Requests</h2>
+                    <div className='box-content'>
+                        <div className='value-container'>
+                            <span className='big-value'>$3,471</span>
+                            <span className='small-text'>EXPENSE</span>
+                        </div>
+                        <div className='value-container'>
+                            <span className='big-value'>12</span>
+                            <span className='small-text'>ACTIVE REQUESTS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className='vertical-box'>
+                    <h2>Shop</h2>
+                    <div className='box-content'>
+                        <div className='value-container'>
+                            <span className='big-value'>$9,136</span>
+                            <span className='small-text'>REVENUE</span>
+                        </div>
+                        <div className='value-container'>
+                            <span className='big-value'>$4,672</span>
+                            <span className='small-text'>EXPENSE</span>
+                        </div>
+                        <div className='value-container'>
+                            <span className='big-value'>292</span>
+                            <span className='small-text'>TRANSACTIONS</span>
+                        </div>
+                    </div>
+                </div>
+
+            {/* <div className='input-weather'>
                 <form onSubmit={handleWeatherSubmit}>
                     <div className="form-header">
                         <h3>Weather Input</h3>
@@ -114,8 +200,11 @@ function MDashboard() {
                     </div>
                     <button type="submit">Submit</button>
                 </form>
+            </div> */}
             </div>
-            </div>
+            </PDFExport>
+            <button onClick={exportToPDF} className='exportPdf-mdash-butt'>Export to PDF</button>
+
         </>
     )
 }

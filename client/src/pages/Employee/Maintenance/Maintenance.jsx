@@ -7,26 +7,32 @@ function Maintenance() {
   const { setShowNavbar } = useOutletContext();
   setShowNavbar(false);
   const maintenanceRequests = [
-    { id: 1, attraction: 'attraction1', status: 'Open', comment: 'Initial request' },
-    { id: 2, attraction: 'attraction2', status: 'In Progress', comment: 'Working on it' },
-    { id: 3, attraction: 'attraction3', status: 'Completed', comment: 'All done' },
+    { id: 1, attraction: 'attraction1', status: 'Open', comment: 'Initial request', cost: 0 },
+    { id: 2, attraction: 'attraction2', status: 'In Progress', comment: 'Working on it', cost: 100 },
+    { id: 3, attraction: 'attraction3', status: 'Completed', comment: 'All done', cost: 200 },
   ];
   const attractions = [
-    { value: '', label: 'Select an Attraction' },
-    { value: 'attraction1', label: 'Attraction 1' },
-    { value: 'attraction2', label: 'Attraction 2' },
-    { value: 'attraction3', label: 'Attraction 3' },
+    { id: '', value: '', label: 'Select an Attraction' },
+    { id: 1, value: 'attraction1', label: 'Attraction 1' },
+    { id: 2, value: 'attraction2', label: 'Attraction 2' },
+    { id: 3, value: 'attraction3', label: 'Attraction 3' },
   ];
 
   const [subject, setSubject] = useState('');
   const [comment, setComment] = useState('');
+  const [date, setDate] = useState('');
+  const [cost, setCost] = useState(0);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [currentStatus, setCurrentStatus] = useState('');
   const [currentComment, setCurrentComment] = useState('');
+  const [currentCost, setCurrentCost] = useState(0);
   const [newStatus, setNewStatus] = useState('');
   const [newComment, setNewComment] = useState('');
+  const [newCost, setNewCost] = useState(0);
+  const [dateResolved, setDateResolved] = useState('');
   const [showSubmitContainer, setShowSubmitContainer] = useState(false);
   const [showEditContainer, setShowEditContainer] = useState(false);
+  const [selectedAttractionId, setSelectedAttractionId] = useState('');
 
   const handleRequestSelect = (requestId) => {
     const request = maintenanceRequests.find((req) => req.id === requestId);
@@ -34,8 +40,11 @@ function Maintenance() {
       setSelectedRequest(request);
       setCurrentStatus(request.status);
       setCurrentComment(request.comment);
+      setCurrentCost(request.cost);
       setNewStatus(request.status);
       setNewComment(request.comment);
+      setNewCost(request.cost);
+      setDateResolved('');
     }
   };
 
@@ -47,8 +56,56 @@ function Maintenance() {
     setSubject(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
+  };
+
+  const handleCostChange = (event) => {
+    setCost(parseFloat(event.target.value));
+  };
+
+  const handleNewCostChange = (event) => {
+    setNewCost(parseFloat(event.target.value));
+  };
+
+  const handleDateResolvedChange = (event) => {
+    setDateResolved(event.target.value);
+  };
+
+  const handleAttractionChange = (event) => {
+    const selectedAttraction = attractions.find(
+      (attraction) => attraction.value === event.target.value
+    );
+    setSelectedAttractionId(selectedAttraction?.id || '');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/maintenance/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attractionId: selectedAttractionId, subject, comment, cost }),
+      });
+
+      if (response.ok) {
+        setSubject('');
+        setComment('');
+        setCost(0);
+        setDate('');
+        setSelectedAttractionId('');
+        alert('Maintenance request submitted successfully!');
+      } else {
+        const error = await response.json();
+        alert(`Error submitting maintenance request: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error submitting maintenance request:', error);
+      alert('An error occurred while submitting the maintenance request.');
+    }
   };
 
   return (
@@ -73,17 +130,26 @@ function Maintenance() {
               </div>
               <div className='input-container'>
                 <label>Select Attraction</label>
-                <select name="attraction">
+                <select
+                  name="attraction"
+                  value={selectedAttractionId}
+                  onChange={handleAttractionChange}
+                >
                   {attractions.map((attraction) => (
-                    <option key={attraction.value} value={attraction.value}>
+                    <option key={attraction.id} value={attraction.value}>
                       {attraction.label}
                     </option>
                   ))}
                 </select>
               </div>
               <div className='input-container'>
+                <label>Date</label>
+                <input type="date" value={date} onChange={handleDateChange} />
               </div>
-
+              <div className='input-container'>
+                <label>Cost</label>
+                <input type="number" value={cost} onChange={handleCostChange} />
+              </div>
               <div className='input-container'>
                 <label>Comment</label>
                 <textarea value={comment} onChange={handleCommentChange} />
@@ -94,7 +160,7 @@ function Maintenance() {
             </form>
           </div>
         )}
-      </div>
+        </div>
       <div className='report-sec-maintenace'>
         <button onClick={() => setShowEditContainer(!showEditContainer)}>
           {showEditContainer ? '▲ Edit Request' : '▼ Edit Request'}
@@ -132,6 +198,10 @@ function Maintenance() {
                       <label>Current Comment:</label>
                       <span>{currentComment}</span>
                     </div>
+                    <div className="edit-row">
+                      <label>Current Cost:</label>
+                      <span>${currentCost.toFixed(2)}</span> {/* Display currentCost */}
+                    </div>
 
                     <div className="input-container">
                       <label>New Status:</label>
@@ -140,6 +210,18 @@ function Maintenance() {
                         <option value="In Progress">In Progress</option>
                         <option value="Completed">Completed</option>
                       </select>
+                    </div>
+
+                    {newStatus === 'Completed' && (
+                      <div className="input-container">
+                        <label>Date Resolved:</label>
+                        <input type="date" value={dateResolved} onChange={handleDateResolvedChange} />
+                      </div>
+                    )}
+
+                    <div className="input-container">
+                      <label>New Cost:</label>
+                      <input type="number" value={newCost} onChange={handleNewCostChange} /> 
                     </div>
 
                     <div className="input-container">
@@ -166,3 +248,5 @@ function Maintenance() {
 }
 
 export default Maintenance;
+
+    
