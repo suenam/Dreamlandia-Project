@@ -47,7 +47,18 @@ const Tickets = () => {
             setAttractions(attractions.filter((attraction)=>attraction !== newAttraction));
         }
     }
-    
+
+    const handleCheckout = async (event) => {
+        event.preventDefault();
+        try {
+          // if cart is NOT empty
+          navigate('/checkout', { replace: true });
+        } catch (error) {
+           // if cart is EMPTY, user CANNOT checkout
+          console.error('Login failed:', error);
+        }
+      };
+
     return (
         <div className="tickets-container">
             <div className='tickets-header'>
@@ -287,9 +298,9 @@ const Tickets = () => {
 
             </div>
 
-            <button className='checkout-button'>
+            <button className='checkout-button' onClick={()=>handleCheckout}>
                 <ShoppingCartIcon/> 
-                <h3>Checkout</h3>
+                <h3>Checkout </h3>
             </button>
         </div>
     );
