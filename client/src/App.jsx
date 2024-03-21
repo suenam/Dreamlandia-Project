@@ -1,4 +1,5 @@
-import './App.css'
+import ContactUs from './pages/ContactUs/ContactUs';
+import './App.css';
 import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router-dom';
 import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
@@ -28,8 +29,12 @@ const Layout = () => {
 
   return (
     <>
+    <div className='page-container'>
       {showNavbar && <Navbar />}
-      <Outlet context={{ showNavbar, setShowNavbar }} />
+      <div className='outlet-content'>
+        <Outlet context={{ showNavbar, setShowNavbar }} />
+      </div>
+    </div>
     </>
   );
 }
@@ -109,6 +114,10 @@ const router = createBrowserRouter([
       {
         path: "/WeatherForm",
         element: <WeatherForm />
+      },
+  {
+        path: "/contactUs", // Define route for Contact Us page
+        element: <ContactUs />
       }
       // {
       //   path: "/attractions",
