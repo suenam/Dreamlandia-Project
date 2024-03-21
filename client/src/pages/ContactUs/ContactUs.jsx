@@ -21,7 +21,7 @@ const ContactUs = () => {
             <div className="home-text">
                 <h1>Contact Us</h1>
                 <h2>Note that only accounts with registered</h2>
-                <h2>emails and at least one purhase order</h2>
+                <h2>emails and at least one purchase order</h2>
                 <h2>actually have their message sent to us</h2>
                 <h2></h2>
                 <form className="contact-form" onSubmit={handleSubmit}>
