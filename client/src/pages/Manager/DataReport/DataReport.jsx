@@ -24,20 +24,15 @@ function DataReport() {
 
   const handleFinanceSubmit = (e) => {
     e.preventDefault();
-    // Handle finance report submission
-    console.log('Finance Report:', financeStartDate, financeEndDate, financeType, financeCategory);
+ 
   };
 
   const handleTicketSubmit = (e) => {
     e.preventDefault();
-    // Handle ticket purchase report submission
-    console.log('Ticket Purchase Report:', ticketStartDate, ticketEndDate, ticketTypes);
   };
 
   const handleVisitSubmit = (e) => {
     e.preventDefault();
-    // Handle visit report submission
-    console.log('Visit Report:', visitStartDate, visitEndDate, visitCategory);
   };
 
 
