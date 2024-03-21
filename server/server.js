@@ -6,6 +6,8 @@ const port = process.env.PORT;
 const signupHandler = require('./signupHandler');
 const loginHandler = require('./loginHandler');
 const authenticateToken = require('./authenticateToken');
+const weatherHandler = require('./weatherHandler');
+
 const employeeLoginHandler = require('./EmployeeLoginControl/employeeHandler');
 const logoutHandler = require('./logoutHandler');
 
@@ -58,25 +60,28 @@ const server = http.createServer((req, res) => {
     }
 
 
-    else if (req.url === '/api/tickets' && req.method === 'GET') {
-      authenticateToken(req, res, () => {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ /* ticket data */ }));
-      });
-    } else if (req.url === '/auth/login' && req.method === 'POST') {
-      loginHandler(req, res);
-    } else if (req.url === '/auth/logout' && req.method === 'POST') {
-      logoutHandler(req, res);
-    } else if (req.url === '/auth/signup' && req.method === 'POST') {
-      signupHandler(req, res);
-    } else if (req.url === '/employee/login' && req.method === 'POST') {
-      employeeLoginHandler(req, res);
-    }
-    else {
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'Route not found' }));
-    }
-  });
+  // if (req.url === '/auth/signup' && req.method === 'POST') {
+  //   signupHandler(req, res);
+  // } else {
+  //   res.writeHead(404, { 'Content-Type': 'application/json' });
+  //   res.end(JSON.stringify({ message: 'Route not found' }));
+  // }
+  if (req.url === '/api/tickets' && req.method === 'GET') {
+    authenticateToken(req, res, () => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ /* ticket data */ }));
+    });
+  } else if (req.url === '/auth/login' && req.method === 'POST') {
+    loginHandler(req, res);
+  } else if (req.url === '/auth/signup' && req.method === 'POST') {
+    signupHandler(req, res);
+  } else if (req.url === '/weather' && req.method === 'POST') {
+    weatherHandler(req, res);
+  }else {
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Route not found' }));
+  }
+
 });
 
 server.listen(port, () => {

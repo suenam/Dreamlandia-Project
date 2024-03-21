@@ -17,8 +17,11 @@ const Sidebar = () => {
       <nav className="sidebar-links">
         <NavLink className="sidebar-link" to="/MDashboard" >Dashboard</NavLink>
         <NavLink className="sidebar-link" to="/DataReport" >Data Reports</NavLink>
+        <NavLink className="sidebar-link" to="/ExpenseForm" >Expense Form</NavLink>
+
         <NavLink className="sidebar-link" to="/MMaintenance">Maintenance Requests</NavLink>
         <NavLink className="sidebar-link" to="/ManageEmp">Manage Employees</NavLink>
+        <NavLink className="sidebar-link" to="/ViewContact">View Contact Forms</NavLink>
 
         <NavLink className="sidebar-link" to="/MHR" >HR</NavLink>
         <NavLink className="sidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
