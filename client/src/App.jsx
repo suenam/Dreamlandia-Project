@@ -98,7 +98,6 @@ const router = createBrowserRouter([
       {
         path: "/tickets",
         // element: <Tickets />
-        element: <RequireUserAuth><Tickets /></RequireUserAuth>
         element: <RequireUserAuth><Tickets /></RequireUserAuth>,
         children: [
           {
