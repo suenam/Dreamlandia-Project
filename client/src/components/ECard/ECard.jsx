@@ -33,7 +33,7 @@ const ECard = () => {
 
   return (
     <div className="employee-profile">
-      <h2>Employee Profile</h2>
+      <h3>Employee Profile</h3>
       <button onClick={isEditing ? saveChanges : toggleEditing} className="edit-btn">
         {isEditing ? 'Save' : 'Edit'}
       </button>

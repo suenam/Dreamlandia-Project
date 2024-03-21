@@ -1,4 +1,5 @@
-import './App.css'
+import ContactUs from './pages/ContactUs/ContactUs';
+import './App.css';
 import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router-dom';
 import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
@@ -12,6 +13,10 @@ import MMaintenance from  './pages/Manager/MMaintenance/MMaintenance';
 import MHR from './pages/Manager/MHR/MHR';
 import DataReport from './pages/Manager/DataReport/DataReport';
 import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
+import WeatherForm from './pages/Employee/WeatherForm/WeatherForm';
+import ExpenseForm from  './pages/Manager/ExpenseForm/ExpenseForm';
+import ViewContact from  './pages/Manager/ViewContact/ViewContact';
+
 import Tickets from './pages/Tickets/Tickets';
 import Signup from './pages/auth/User/Signup/Signup';
 import Login from './pages/auth/User/Login/Login';
@@ -86,7 +91,12 @@ const router = createBrowserRouter([
         element: <ManageEmp />
       },
       {
+        path: "/ExpenseForm",
+        element: <ExpenseForm />
+      },
+      {
         path: "/tickets",
+        // element: <Tickets />
         element: <RequireUserAuth><Tickets /></RequireUserAuth>
       },
       {
@@ -96,6 +106,18 @@ const router = createBrowserRouter([
       {
         path: "/auth/signup",
         element: <Signup />
+      },
+      {
+        path: "/ViewContact",
+        element: <ViewContact />
+      },
+      {
+        path: "/WeatherForm",
+        element: <WeatherForm />
+      },
+  {
+        path: "/contactUs", // Define route for Contact Us page
+        element: <ContactUs />
       }
       // {
       //   path: "/attractions",
