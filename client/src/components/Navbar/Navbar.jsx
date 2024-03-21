@@ -18,7 +18,7 @@ const Navbar = () => {
                     <NavLink className="link" to='/attractions'>Attractions</NavLink>
                     <NavLink className="link" to= '/events'>Events</NavLink>
 
-                    {/* <NavLink className="link" to='/shop'>Shop</NavLink> */}
+                    <NavLink className="link" to='/shop'>Shop</NavLink>
                     {!auth.user && !auth.employee ?
                             <NavLink className="link" to='/login'>Login</NavLink> :
                             <NavLink className="link" to='/' onClick={async (event) => {
