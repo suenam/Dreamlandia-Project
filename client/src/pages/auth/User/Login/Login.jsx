@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import './Login.css';
-import { useAuth } from "../../auth"; 
+import { useAuth } from "../../auth";
 import IconButton from '@mui/material/IconButton';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
@@ -23,13 +23,15 @@ const Login = () => {
 
   const redirectPath = location.state?.path || '/';
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    let user = 'user123'; // user object, set up login logic here
-    auth.login(user);
-    navigate(redirectPath, {replace: true});
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      await auth.login({ email, password });
+      console.log("login.jsx is called");
+      navigate(redirectPath, { replace: true });
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -40,27 +42,27 @@ const Login = () => {
 
   return (
     <div className="login-container">
-        <img src={Logo} />
+      <img src={Logo} />
       <div className="login-form">
         <h1>Login</h1>
-        <FormControl required sx={{ m: 1, width: '75%', marginTop:'35px'}} variant="outlined">
-        <OutlinedInput
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)} 
-          id="outlined-adornment-email"
-          type='text'
-          placeholder="Email *"
-          startAdornment={
-            <InputAdornment position="start"> 
-                <PersonIcon fontSize="medium"/>
-            </InputAdornment>
-          }
-        />
+        <FormControl required sx={{ m: 1, width: '75%', marginTop: '35px' }} variant="outlined">
+          <OutlinedInput
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            id="outlined-adornment-email"
+            type='text'
+            placeholder="Email *"
+            startAdornment={
+              <InputAdornment position="start">
+                <PersonIcon fontSize="medium" />
+              </InputAdornment>
+            }
+          />
         </FormControl>
-        <FormControl required sx={{ m: 1, width: '75%', marginBottom:'8px' }} variant="outlined">
+        <FormControl required sx={{ m: 1, width: '75%', marginBottom: '8px' }} variant="outlined">
           <OutlinedInput
             value={password}
-            onChange={(e)=>setPassword(e.target.value)} 
+            onChange={(e) => setPassword(e.target.value)}
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
             placeholder="Password *"
@@ -68,7 +70,7 @@ const Login = () => {
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={()=>setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword(!showPassword)}
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
@@ -77,26 +79,25 @@ const Login = () => {
               </InputAdornment>
             }
             startAdornment={
-                <InputAdornment position="start"> 
-                    <LockIcon fontSize="medium"/>
-                </InputAdornment>
-              }
+              <InputAdornment position="start">
+                <LockIcon fontSize="medium" />
+              </InputAdornment>
+            }
           />
         </FormControl>
         <div className="forgotPassword">
           <Link className="link" to='/contactus'>Forgot password?</Link>
         </div>
-          <button className="login-button" onClick={handleLogin}>
-              Login
-          </button>
+        <button className="login-button" onClick={handleLogin}>
+          Login
+        </button>
         <div className="signup-text">
           New user? <Link className="link" to='/auth/signup'>Sign up here</Link>
         </div>
       </div>
-    </div>  
-    
+    </div>
+
   );
 }
 export default Login
 
- 

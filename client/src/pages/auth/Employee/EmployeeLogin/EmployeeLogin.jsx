@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../auth";
 import './EmployeeLogin.css';
 import IconButton from '@mui/material/IconButton';
 import PersonIcon from '@mui/icons-material/Person';
@@ -15,12 +17,20 @@ import Logo from '../../../../assets/dreamlandia_logo.svg'
 const EmployeeLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = location.state?.path || '/';
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
-    // employee login backend logic here 
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      await auth.employeeLogin({ email, password });
+      console.log("employeeLogin.jsx is called");
+      navigate(redirectPath, { replace: true });
+    } catch (error) {
+      console.error('employee Login failed:', error);
+    }
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -30,19 +40,19 @@ const EmployeeLogin = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="employee-login-container">
         <img src={Logo} />
-      <div className="login-form">
+      <div className="employee-login-form">
         <h1>Employee Login</h1>
         <FormControl required sx={{ m: 1, width: '75%', marginTop:'35px'}} variant="outlined">
         <OutlinedInput
           value={email}
-          onChange={(e)=>setEmail(e.target.value)} 
+          onChange={(e)=>setEmail(e.target.value)}
           id="outlined-adornment-email"
           type='text'
           placeholder="Email *"
           startAdornment={
-            <InputAdornment position="start"> 
+            <InputAdornment position="start">
                 <PersonIcon fontSize="medium"/>
             </InputAdornment>
           }
@@ -51,7 +61,7 @@ const EmployeeLogin = () => {
         <FormControl required sx={{ m: 1, width: '75%', marginBottom:'8px' }} variant="outlined">
           <OutlinedInput
             value={password}
-            onChange={(e)=>setPassword(e.target.value)} 
+            onChange={(e)=>setPassword(e.target.value)}
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}
             placeholder="Password *"
@@ -68,7 +78,7 @@ const EmployeeLogin = () => {
               </InputAdornment>
             }
             startAdornment={
-                <InputAdornment position="start"> 
+                <InputAdornment position="start">
                     <LockIcon fontSize="medium"/>
                 </InputAdornment>
               }
@@ -81,10 +91,9 @@ const EmployeeLogin = () => {
               Login
           </button>
       </div>
-    </div>  
-    
+    </div>
+
   );
 }
 export default EmployeeLogin
 
- 

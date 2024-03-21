@@ -8,16 +8,16 @@ export const RequireUserAuth = ({children}) => {
     if (!auth.user) {
         return <Navigate to='/login' state={{path: location.pathname}} />
     }
- 
+
     return children;
 }
 
 export const RequireStaffAuth = ({children}) => {
     const auth = useAuth();
 
-    if (!auth.staff) {
+    if (!auth.employee) {
         return <Navigate to='/employee/login' />
     }
- 
+
     return children;
 }
