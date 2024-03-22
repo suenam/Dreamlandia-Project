@@ -29,9 +29,11 @@ const HR = () => {
           <li>Career development opportunities</li>
           <li>Employee assistance programs</li>
         </ul>
+        <div className='paragraph-closing-hr'>
         <p>
-          Our HR team is committed to providing support and resources to help you thrive in your career at OurCompany. Feel free to reach out to us with any questions or concerns.
+          Our HR team is committed to providing support and resources to help you thrive in your career at Dreamlandia. Feel free to reach out to us with any questions or concerns.
         </p>
+        </div>
       </div>
     </div>
     </>

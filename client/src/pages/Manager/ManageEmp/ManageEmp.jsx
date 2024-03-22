@@ -25,16 +25,7 @@ const [employees, setEmployees] = useState([
 
 const handleAddEmployeeSubmit = (e) => {
     e.preventDefault();
-    // Handle adding a new employee
-    console.log(
-      'Add Employee:',
-      newEmployeeName,
-      newEmployeeDOB,
-      newEmployeeAddress,
-      newEmployeeEmail,
-      newEmployeePhone,
-      newEmployeeRole
-    );
+  
   };
 const handleArchiveEmployeeSubmit = (e) => {
   e.preventDefault();

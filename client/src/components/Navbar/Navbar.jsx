@@ -28,6 +28,7 @@ const Navbar = () => {
                     <NavLink className="link" to='/tickets'>Tickets</NavLink>
                     <NavLink className="link" to='/attractions'>Attractions</NavLink>
                     <NavLink className="link" to= '/events'>Events</NavLink>
+
                     {/* <NavLink className="link" to='/shop'>Shop</NavLink> */}
                     {!auth.user && !auth.employee ?
                             <NavLink className="link" to='/login'>Login</NavLink> :
@@ -37,6 +38,8 @@ const Navbar = () => {
                             }}>Logout</NavLink>
                         }
 
+                    <NavLink className="link" to= '/ContactUs'>Contact Us</NavLink>
+                    
                 </nav>
             </div>
        </div>
