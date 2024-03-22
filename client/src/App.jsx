@@ -24,6 +24,7 @@ import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
 import Checkout from './pages/Checkout/Checkout'
 import { AuthProvider } from './pages/auth/auth';
 import { RequireUserAuth } from './pages/auth/requireAuth';
+import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -148,7 +149,9 @@ function App() {
 
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <ShoppingCartProvider>
+        <RouterProvider router={router} />
+      </ShoppingCartProvider>
     </AuthProvider>
   );
 }

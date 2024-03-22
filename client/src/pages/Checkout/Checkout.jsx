@@ -5,8 +5,89 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Logo from '../../assets/logoWhiteBkg.png';
 import Carousel from '../../assets/carousel.jpg'
+import Burger from '../../assets/whataburger.jpg';
+import Steak from '../../assets/steak_restaurant.jpg';
+import MyMelody from '../../assets/themed_restaurant.jpg';
+import SilverSpoon from '../../assets/silverspoonfood.png';
+import WhiteCastle from '../../assets/whitecastle.jpg';
+import BellaFood from '../../assets/bellasfood.jpg';
+import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
 
 const Checkout = () => {
+
+    const shoppingCartContext = useShoppingCart();
+    const tickets = shoppingCartContext.getTickets();
+    const foodTickets = shoppingCartContext.getMealTickets();
+    let total = 0;
+
+    const ticketDetails = {
+        "standardTicket": {
+            "image": Carousel,
+            "name": "Standard Ticket",
+            "price": 65,
+        },
+        "expressTicket": {
+            "image": Carousel,
+            "name": "Express Ticket",
+            "price": 90,
+        },
+        "childTicket": {
+            "image": Carousel,
+            "name": "Child Ticket",
+            "price": 45,
+        }
+    }
+
+    const mealTickets = {
+        standardMeal1: {
+            image: Burger, 
+            name: "WhataSandwich",
+            price: 10,
+            type: "Standard Meal Voucher",
+        },
+        standardMeal2: {
+            image: WhiteCastle, 
+            name: "Burger Castle",
+            price: 10,
+            type: "Standard Meal Voucher",
+        },
+        deluxeMeal1: {
+            image: Steak, 
+            name: "The Velvet Vineyard",
+            price: 35,
+            type: "Deluxe Meal Voucher",
+        },
+        deluxeMeal2: {
+            image: SilverSpoon, 
+            name: "Silver Spoon Serenade",
+            price: 35,
+            type: "Deluxe Meal Voucher",
+        },
+        specialMeal1: {
+            image: MyMelody, 
+            name: "HerHarmony Eatery",
+            price: 45,
+            type: "Special Meal Voucher",
+        },
+        specialMeal2: {
+            image: BellaFood, 
+            name: "Bella's Fairy Tale Feast",
+            price: 45,
+            type: "Special Meal Voucher",
+        },
+    };
+    
+    const getTotal = () => {
+        total = 0;
+        Object.entries(mealTickets).forEach(({mealTicket, mealTicketDetail}) => {
+            total+=mealTicketDetail.price*foodTickets[mealTicket];
+        }) 
+
+        Object.entries(ticketDetails).forEach(({ticket, ticketDetail}) => {
+            total+=ticketDetail.price*tickets[ticket];
+        }) 
+    }
+
     return (
         <>
         <div className="checkout-container">
@@ -107,15 +188,41 @@ const Checkout = () => {
             <div className='item-summary'>
                 <h1>Order Summary</h1>
                 <div className="item-summary-list">
-                    <div className="order-item">
-                        <img src={Carousel} />
-                        <div className='item'>item 1</div>
-                        <div className='price'>$15.99</div>
-                    </div>
-                    <div className="order-item">
-                        item 2
-                    </div>
+                    {Object.entries(ticketDetails).map(([ticket, ticketDetails])=>{
+                        return tickets[ticket]!==0? 
+                        <div className="order-item">
+                            <div className='checkout-item-pic'>
+                                <img src={ticketDetails.image} />
+                            </div>
+                            <div className='item'>
+                                {ticketDetails.name}
+                                <div className="item-quantity">
+                                    Quantity: {tickets[ticket]}
+                                </div>
+                            </div>
+                            <div className='price'>${ticketDetails.price*tickets[ticket]}</div>
+                        </div>
+                    : null;
+                    })}
+                    {Object.entries(mealTickets).map(([mealTicketKey, mealTicketDetails]) => {
+                        return foodTickets[mealTicketKey] !== 0 ? 
+                            <div className="order-item">
+                                <div className='checkout-item-pic'>
+                                    <img src={mealTicketDetails.image} />
+                                </div>
+                                <div className='item'>
+                                    {mealTicketDetails.name}
+                                    <div className="item-quantity">
+                                        {mealTicketDetails.type}<br/>
+                                        Quantity: {foodTickets[mealTicketKey]}
+                                    </div>
+                                </div>
+                                <div className='price'>${mealTicketDetails.price * foodTickets[mealTicketKey]}</div>
+                            </div>
+                        : null;
+                    })}
                 </div>
+                Total: {getTotal()}
             </div>
         </div>
         </>

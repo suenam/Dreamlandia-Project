@@ -126,11 +126,7 @@
                 }
             }
 
-        }
-
-        
-
-        
+        } 
     }
 
     .item-summary {
@@ -142,36 +138,51 @@
         padding-left: 40px;
 
         h1 {
-            padding-block: 30px;
+            padding-top: 30px;
             font-family: Montserrat;
             font-weight: 550;
-            font-size: 28px;
+            font-size: 22px;
             color: var(--primary);
         }
 
         .item-summary-list {
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+            max-height: 80%;
 
             .order-item {
                 display: flex;
                 width: 85%;
-                border: black solid 1px;
+                padding-block: 20px;
+                /* border: black solid 1px; */
+                border-bottom: rgba(137, 136, 136, 0.488) solid 1px;
+                font-family: Montserrat;
                 
-                img {
-                    max-width: 100px;
-                    border-radius: 10px;
-                    flex: 1;
-                }
+                .checkout-item-pic {
+                    padding-right: 20px;
 
-                .item {
-                    flex: 2;
+                    img {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 10px;
+                        flex: 1;
+                    }
+                }
+                
+
+                .item {  
+                    width: 100%;
+
+                    .item-quantity {
+                        font-size: small;
+                    }
                 }
 
                 .price {
-                    flex-basis: 90px;
                 }
             }
         }
     }
+
 }

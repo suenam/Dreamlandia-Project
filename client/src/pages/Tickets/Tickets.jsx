@@ -19,12 +19,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import dayjs from 'dayjs';
-
-
-
-
+import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
+import { useNavigate } from 'react-router-dom';
 
 const Tickets = () => {
+
+    const shoppingCartContext = useShoppingCart();
+    const navigate = useNavigate();
+
     const [visitDate, setVisitDate] = useState(dayjs());
     const today = dayjs().startOf('day');
 
@@ -59,10 +61,17 @@ const Tickets = () => {
         }
     }
 
-    const handleCheckout = async (event) => {
+    const handleCheckout = (event) => {
         event.preventDefault();
         try {
-          // if cart is NOT empty
+          shoppingCartContext.setTickets({
+            standardTicket: standardTicket,
+            expressTicket: expressTicket,
+            childTicket: childTicket
+          }) 
+          shoppingCartContext.setMealTickets({
+            ...foodTickets
+          }) 
           navigate('/checkout', { replace: true });
         } catch (error) {
            // if cart is EMPTY, user CANNOT checkout
@@ -321,7 +330,7 @@ const Tickets = () => {
                 </div>
             </div>
 
-            <button className='checkout-button' onClick={()=>handleCheckout}>
+            <button className='checkout-button' onClick={handleCheckout}>
                 <ShoppingCartIcon/> 
                 <h3> Add to cart</h3>
             </button>
