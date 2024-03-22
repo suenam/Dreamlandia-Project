@@ -82,6 +82,7 @@ const server = http.createServer((req, res) => {
     res.end(JSON.stringify({ message: 'Route not found' }));
   }
 
+  });
 });
 
 server.listen(port, () => {

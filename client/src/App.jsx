@@ -97,14 +97,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/tickets",
-        // element: <Tickets />
-        element: <RequireUserAuth><Tickets /></RequireUserAuth>,
-        children: [
-          {
-            path: "/tickets/checkout",
-            element: <Checkout />
-          },
-        ]
+        element: <Tickets />
+        // element: <RequireUserAuth><Tickets /></RequireUserAuth>
       },
       {
         path: "/login",
@@ -122,7 +116,7 @@ const router = createBrowserRouter([
         path: "/WeatherForm",
         element: <WeatherForm />
       },
-  {
+      {
         path: "/contactUs", // Define route for Contact Us page
         element: <ContactUs />
       }
@@ -143,7 +137,11 @@ const router = createBrowserRouter([
   {
     path: "/employee/login",
     element: <EmployeeLogin />
-  }
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />
+  },
 ]);
 
 function App() {
