@@ -28,6 +28,7 @@ const Navbar = () => {
                     <NavLink className="link" to='/tickets'>Tickets</NavLink>
                     <NavLink className="link" to='/attractions'>Attractions</NavLink>
                     <NavLink className="link" to= '/events'>Events</NavLink>
+                    <NavLink className="link" to= '/profile'>Profile</NavLink>
 
                     {/* <NavLink className="link" to='/shop'>Shop</NavLink> */}
                     {!auth.user && !auth.employee ?
