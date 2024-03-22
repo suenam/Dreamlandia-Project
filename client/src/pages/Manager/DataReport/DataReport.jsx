@@ -27,12 +27,65 @@ function DataReport() {
  
   };
 
-  const handleTicketSubmit = (e) => {
+  const handleTicketSubmit = async (e) => {
     e.preventDefault();
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/ticket-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startDate: ticketStartDate,
+          endDate: ticketEndDate,
+          ticketTypes: ticketTypes,
+        }),
+      });
+  
+      if (response.ok) {
+        const reportData = await response.json();
+        // Handle success, e.g., display report data
+        console.log('Ticket report data:', reportData);
+      } else {
+        // Handle errors
+        const errorData = await response.json();
+        console.error('Failed to generate ticket report:', errorData.message);
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
   };
 
-  const handleVisitSubmit = (e) => {
+  const handleVisitSubmit = async (e) => {
     e.preventDefault();
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/visit-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startDate: visitStartDate,
+          endDate: visitEndDate,
+          category: visitCategory,
+        }),
+      });
+  
+      if (response.ok) {
+        const reportData = await response.json();
+        // Handle success, e.g., display report data
+        console.log('Visit report data:', reportData);
+
+      } else {
+        // Handle errors
+        const errorData = await response.json();
+        console.error('Failed to generate visit report:', errorData.message);
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
   };
 
 

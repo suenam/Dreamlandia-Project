@@ -12,6 +12,8 @@ const employeeLoginHandler = require('./EmployeeLoginControl/employeeHandler');
 const logoutHandler = require('./logoutHandler');
 const maintenanceHandler = require("./maintenanceHandler");
 const restaurantExpenseHandler = require("./restaurantExpenseHandler");
+const visitReportHandler = require("./visitReportHandler");
+const ticketReportHandler = require("./ticketReportHandler");
 
 const corsOptions = {
   origin: 'http://localhost:5173',
@@ -82,7 +84,12 @@ const server = http.createServer((req, res) => {
       maintenanceHandler(req, res);
     }else if (req.url === '/expense-restaurant' && req.method === 'POST') {
       restaurantExpenseHandler(req, res);
-    }else {
+    }else if (req.url === '/visit-report' && req.method === 'POST') {
+      visitReportHandler(req, res);
+    }else if (req.url === '/ticket-report' && req.method === 'POST') {
+      ticketReportHandler(req, res);
+    }
+    else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'Route not found' }));
     }
