@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router
 import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
 import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
 import Dashboard from './pages/Employee/Dashboard/Dashboard';
 import Maintenance from './pages/Employee/Maintenance/Maintenance';
 import HR from './pages/Employee/HR/HR';
@@ -36,6 +37,8 @@ const Layout = () => {
       <div className='outlet-content'>
         <Outlet context={{ showNavbar, setShowNavbar }} />
       </div>
+      <Footer />
+
     </div>
     </>
   );
@@ -128,11 +131,8 @@ const router = createBrowserRouter([
       {
         path: "/attractions",
         element: <Attractions />
-      },
-      // {
-      //   path: "/shop",
-      //   element: <Shop />
-      // }
+      }
+
     ]
   },
   {
