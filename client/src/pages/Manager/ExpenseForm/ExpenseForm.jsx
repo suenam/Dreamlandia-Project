@@ -13,9 +13,38 @@ function ExpenseForm() {
   const [expenseDate, setExpenseDate] = useState('');
   const [expenseType, setExpenseType] = useState('');
 
-  const handleExpenseSubmit = (e) => {
+  const handleExpenseSubmit = async (e) => {
     e.preventDefault();
+  
+     
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/expense-restaurant`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          StaffID: employeeId,
+          RestaurantID: restaurantId,
+          ExpenseAmt: expenseAmount, 
+          ExpenseDate: expenseDate,
+          ExpenseType: expenseType
+        }),
+      });
+  
+      if (response.ok) {
+        // Handle success
+        alert('Maintenance request submitted successfully!');
+        console.log('Maintenance request submitted successfully!');
+      } else {
+        // Handle errors
+        alert('Failed to submit maintenance request.');
+        console.error('Failed to submit maintenance request.');
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
   };
+  
 
   return (
     <div className="expense-form">
@@ -42,10 +71,13 @@ function ExpenseForm() {
               value={restaurantId}
               onChange={(e) => setRestaurantId(e.target.value)}
             >
-              <option value="">Select Restaurant</option>
-              <option value="101">101 - Main Street Diner</option>
-              <option value="202">202 - Uptown Bistro</option>
-              <option value="305">305 - Seaside Café</option>
+             <option value="">Select Restaurant</option>
+              <option value="1">WhataSandwich</option>
+              <option value="2">Burger Castle</option>
+              <option value="3">The Velvet Vineyard</option>
+              <option value="4">Silver Spoon Serenade</option> 
+              <option value="5">HerHarmony Eatery</option>
+              <option value="6">Bella's Fairy Tale Feast</option>
             </select>
           </div>
           <div className="form-row">

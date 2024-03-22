@@ -10,7 +10,7 @@ const WeatherForm = () => {
   const handleWeatherSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/weather`, {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/weatherform`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
