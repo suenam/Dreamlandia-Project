@@ -4,6 +4,7 @@ import { STATES } from '../../constants/stateOptions';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Logo from '../../assets/logoWhiteBkg.png';
+import Carousel from '../../assets/carousel.jpg'
 
 const Checkout = () => {
     return (
@@ -105,6 +106,16 @@ const Checkout = () => {
             </div>
             <div className='item-summary'>
                 <h1>Order Summary</h1>
+                <div className="item-summary-list">
+                    <div className="order-item">
+                        <img src={Carousel} />
+                        <div className='item'>item 1</div>
+                        <div className='price'>$15.99</div>
+                    </div>
+                    <div className="order-item">
+                        item 2
+                    </div>
+                </div>
             </div>
         </div>
         </>

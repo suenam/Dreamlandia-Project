@@ -138,13 +138,40 @@
         width: 40%;
         background-color: rgb(250, 243, 243);
         border-left: 1px solid rgb(209, 208, 208);
-        justify-content: center;
+        flex-direction: column;
+        padding-left: 40px;
 
         h1 {
             padding-block: 30px;
             font-family: Montserrat;
+            font-weight: 550;
             font-size: 28px;
             color: var(--primary);
+        }
+
+        .item-summary-list {
+            display: flex;
+            flex-direction: column;
+
+            .order-item {
+                display: flex;
+                width: 85%;
+                border: black solid 1px;
+                
+                img {
+                    max-width: 100px;
+                    border-radius: 10px;
+                    flex: 1;
+                }
+
+                .item {
+                    flex: 2;
+                }
+
+                .price {
+                    flex-basis: 90px;
+                }
+            }
         }
     }
 }
