@@ -16,12 +16,14 @@ import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
 import WeatherForm from './pages/Employee/WeatherForm/WeatherForm';
 import ExpenseForm from  './pages/Manager/ExpenseForm/ExpenseForm';
 import ViewContact from  './pages/Manager/ViewContact/ViewContact';
-
+import Shop from './pages/Shop/Shop';
+import Attractions from './pages/Attractions/Attractions';
 import Tickets from './pages/Tickets/Tickets';
 import Signup from './pages/auth/User/Signup/Signup';
 import Login from './pages/auth/User/Login/Login';
 import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
 import { AuthProvider } from './pages/auth/auth';
+
 import { RequireUserAuth } from './pages/auth/requireAuth';
 
 const Layout = () => {
@@ -96,8 +98,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/tickets",
-        // element: <Tickets />
-        element: <RequireUserAuth><Tickets /></RequireUserAuth>
+        element: <Tickets />
+        // element: <RequireUserAuth><Tickets /></RequireUserAuth>
       },
       {
         path: "/login",
@@ -115,14 +117,18 @@ const router = createBrowserRouter([
         path: "/WeatherForm",
         element: <WeatherForm />
       },
+      {
+        path: "/Shop",
+        element: <Shop />
+      },
   {
         path: "/contactUs", // Define route for Contact Us page
         element: <ContactUs />
-      }
-      // {
-      //   path: "/attractions",
-      //   element: <Attractions />
-      // },
+      },
+      {
+        path: "/attractions",
+        element: <Attractions />
+      },
       // {
       //   path: "/shop",
       //   element: <Shop />

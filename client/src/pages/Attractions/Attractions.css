@@ -1,0 +1,119 @@
+.attractions-container {
+    display: flex;
+    flex-direction: column;
+    font-family: Montserrat;
+    align-items: center;
+    position: relative;
+  
+    h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+  
+    .attractions-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-image: url('../../assets/sky_bkg.png');
+      color: white;
+      font-family: Montserrat;
+      text-shadow: #ffffffa2 1px 0 10px;
+      width: 100%;
+      height: 170px;
+  
+      p {
+        margin: 0;
+        font-style: italic;
+      }
+    }
+  
+    .attractions-content {
+      margin-inline: 20%;
+      margin-top: 50px;
+      align-items: center;
+      width: 1020px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+  
+      .attraction-option {
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.13);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        color: var(--primary);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        padding-bottom: 10px;
+  
+        &:hover {
+          transform: scale(1.05);
+        }
+  
+        img {
+          width: 100%;
+          height: 200px;
+          border-radius: 20px 20px 0 0;
+          object-fit: cover;
+        }
+  
+        h3 {
+          margin-top: 10px;
+          text-align: center;
+        }
+  
+        p {
+          margin: 5px 10px;
+          text-align: center;
+        }
+      }
+    }
+  
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+  
+      .modal {
+        background-color: white;
+        border-radius: 20px;
+        padding: 20px;
+        max-width: 600px;
+        position: relative;
+  
+        .close-modal {
+          position: absolute;
+          top: 10px;
+          right: 15px;
+          font-size: 24px;
+          cursor: pointer;
+        }
+  
+        .modal-details {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 20px;
+  
+          p {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+          }
+        }
+      }
+    }
+  }

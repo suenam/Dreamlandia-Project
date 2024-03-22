@@ -1,0 +1,206 @@
+.shop-container {
+    display: flex;
+    flex-direction: column;
+    font-family: Montserrat;
+    align-items: center;
+
+    h2 {
+        font-size: 22px;
+        margin-bottom: 10px;
+        color: var(--primary);
+    }
+
+    .shop-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-image: url('../../assets/sky_bkg.png');
+        color: white;
+        font-family: Montserrat;
+        text-shadow: #ffffffa2 1px 0 10px;
+        width: 100%;
+        height: 170px;
+    }
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .view-cart-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #5164a2;
+        }
+    }
+
+    p {
+        margin: 0;
+        font-style: italic;
+    }
+
+    .shop-content {
+        margin-inline: 20%;
+        margin-top: 50px;
+        align-items: center;
+        width: 1020px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .item-container {
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        padding-block: 20px;
+        width: 300px;
+        height: 450px;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.13);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-inline: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+        position: relative;
+
+    .add-to-cart-btn {
+        position: absolute;
+        bottom: 19px;
+        right: 10px; 
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+        background-color: #5164a2;
+    }
+
+    .size-options {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px; 
+
+        button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ddd;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: #ccc;
+            }
+        }
+    }
+        
+        p {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-top: 10px;
+
+        }
+        img {
+            height: 100%;
+            width: 100%;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .size-options {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+
+            button {
+                padding: 5px 10px;
+                margin: 0 5px;
+                border: none;
+                border-radius: 5px;
+                background-color: #ddd;
+                cursor: pointer;
+                outline: none;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: #ccc;
+                }
+            }
+        }
+
+        .quantity-control {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 10px;
+
+            .quantity-count {
+                padding-inline: 10px;
+                font-size: 30px;
+                font-weight: bold;
+                width: 50px;
+            }
+
+            > :hover:not(.quantity-count) {
+                color: rgb(36, 78, 141);
+                cursor: pointer;
+            }
+        }
+    }
+
+    .checkout-button {
+        display: flex;
+        flex-direction: row;
+        width: 200px;
+        padding: 10px 40px;
+        margin-block: 60px;
+        margin-inline: 50px;
+        font-size: 16px;
+        color: white;
+        background: var(--primary);
+        border: none;
+        border-radius: 25px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+        letter-spacing: 1px;
+
+        h3 {
+            font-family: Montserrat;
+            font-weight: 600;
+        }
+
+        &:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            background: #5164a2;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
