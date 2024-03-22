@@ -11,7 +11,7 @@ const Profile = () => {
             </Grid>
             <Grid item xs={12} md={9}>
                 <Paper sx={{ padding: 2, marginTop: 4 }}>
-                    <Typography variant="h6" sx={{ fontFamily: 'Montserrat', fontSize: '36pt', fontWeight: '600', marginBottom: 2, textAlign: 'left' }}>Personal Information</Typography>
+                    <Typography variant="h6" sx={{ fontFamily: 'Montserrat', fontSize: '36pt', fontWeight: '600', marginBottom: 2, textAlign: 'center' }}>Personal Information</Typography>
                     {/* Moved the PersonalInfoForm component inside the Grid container */}
                     <Grid container spacing={2} direction="column" alignItems="flex-start"> {/* Set alignItems to 'flex-start' to left-align items */}
                         <Grid item xs={12}>
