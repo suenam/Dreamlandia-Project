@@ -14,8 +14,19 @@ import BellaFood from '../../assets/bellasfood.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+
+
+
+
 
 const Tickets = () => {
+    const [visitDate, setVisitDate] = useState(dayjs());
+    const today = dayjs().startOf('day');
 
     const [standardTicket, setStandardTicket] = useState(0);
     const [expressTicket, setExpressTicket] = useState(0);
@@ -296,11 +307,23 @@ const Tickets = () => {
                     </div>
                 </div>
 
+                <div className="calendar-container">
+                    <h2>Select your day of visit </h2>  
+                    <div className='calendar-select'>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateCalendar 
+                                value={visitDate} 
+                                onChange={(newVisitDate) => setVisitDate(newVisitDate)} 
+                                minDate={today}  
+                                />
+                        </LocalizationProvider>
+                    </div>
+                </div>
             </div>
 
             <button className='checkout-button' onClick={()=>handleCheckout}>
                 <ShoppingCartIcon/> 
-                <h3>Checkout </h3>
+                <h3> Add to cart</h3>
             </button>
         </div>
     );

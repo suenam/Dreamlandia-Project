@@ -14,6 +14,7 @@ const Checkout = () => {
                     <img src={Logo} /> 
                 </div> 
                 <div className='checkout-nav'>
+                    {/* <Link to='/tickets'>Tickets</Link> */}
                     <span>Tickets </span>
                     <span>{'>'}</span>
                     <span> <b>Shipping</b> </span>

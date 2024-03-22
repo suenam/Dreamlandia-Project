@@ -154,7 +154,6 @@
 
     .meal-content {
         margin-top: 50px;
-        /* margin-inline: 20%; */
     
         .select-meals {
             color: var(--primary);
@@ -167,6 +166,7 @@
                 display: flex;
                 width: 100%;
                 margin-top: 15px;
+                margin-bottom: 20px;
                 flex-direction: row;
                 justify-content: space-between;
 
@@ -288,10 +288,18 @@
         }
     }
 
+    .calendar-select {
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        width: 325px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.13);
+    }
+
     .checkout-button {
         display: flex;
         flex-direction: row;
-        width: 200px;
         padding: 10px 40px; 
         margin-block: 60px;
         margin-inline: 50px;
@@ -305,6 +313,8 @@
         outline: none;
         transition: all 0.3s ease;
         letter-spacing: 1px;
+        text-wrap: nowrap;
+        gap: 3px;
         
         h3 {
             font-family: Montserrat;
