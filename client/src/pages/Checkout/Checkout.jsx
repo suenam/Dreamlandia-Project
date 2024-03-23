@@ -18,23 +18,23 @@ const Checkout = () => {
     const shoppingCartContext = useShoppingCart();
     const tickets = shoppingCartContext.getTickets();
     const foodTickets = shoppingCartContext.getMealTickets();
-    let total = 0;
+    
 
     const ticketDetails = {
         "standardTicket": {
-            "image": Carousel,
-            "name": "Standard Ticket",
-            "price": 65,
+            image: Carousel,
+            name: "Standard Ticket",
+            price: 65,
         },
         "expressTicket": {
-            "image": Carousel,
-            "name": "Express Ticket",
-            "price": 90,
+            image: Carousel,
+            name: "Express Ticket",
+            price: 90,
         },
         "childTicket": {
-            "image": Carousel,
-            "name": "Child Ticket",
-            "price": 45,
+            image: Carousel,
+            name: "Child Ticket",
+            price: 45,
         }
     }
 
@@ -78,15 +78,19 @@ const Checkout = () => {
     };
     
     const getTotal = () => {
-        total = 0;
-        Object.entries(mealTickets).forEach(({mealTicket, mealTicketDetail}) => {
+        let total = 0;
+        Object.entries(mealTickets).forEach(([mealTicket, mealTicketDetail]) => {
             total+=mealTicketDetail.price*foodTickets[mealTicket];
         }) 
 
-        Object.entries(ticketDetails).forEach(({ticket, ticketDetail}) => {
+        Object.entries(ticketDetails).forEach(([ticket, ticketDetail]) => {
             total+=ticketDetail.price*tickets[ticket];
         }) 
+
+        return total;
     }
+
+    let total = getTotal();
 
     return (
         <>
@@ -222,7 +226,20 @@ const Checkout = () => {
                         : null;
                     })}
                 </div>
-                Total: {getTotal()}
+                <div className="total-details">
+                    <div className='line-item'>
+                        <span className='label'>Subtotal:</span> 
+                        <span className='value'>${total.toFixed(2)}</span>
+                    </div>
+                    <div className='line-item'>
+                        <span className='label'>Tax:</span>
+                        <span className='value'>${(total*0.0825).toFixed(2)}</span>
+                    </div>
+                    <div className='line-item total'>
+                        <span className='label'><b>Total:</b></span> 
+                        <span className='value'><b>${(total*1.0825).toFixed(2)}</b></span>
+                    </div>
+                </div>
             </div>
         </div>
         </>
