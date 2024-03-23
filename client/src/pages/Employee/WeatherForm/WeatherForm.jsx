@@ -4,13 +4,13 @@ import Sidebar from '../../../components/Sidebar/Sidebar';
 import './WeatherForm.css'
 
 const WeatherForm = () => {
-  const { setShowNavbar } = useOutletContext();
-
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
   const handleWeatherSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/weather`, {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/weatherform`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

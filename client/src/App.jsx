@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router
 import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
 import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
 import Dashboard from './pages/Employee/Dashboard/Dashboard';
 import Maintenance from './pages/Employee/Maintenance/Maintenance';
 import HR from './pages/Employee/HR/HR';
@@ -16,25 +17,29 @@ import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
 import WeatherForm from './pages/Employee/WeatherForm/WeatherForm';
 import ExpenseForm from  './pages/Manager/ExpenseForm/ExpenseForm';
 import ViewContact from  './pages/Manager/ViewContact/ViewContact';
-
+import Shop from './pages/Shop/Shop';
+import Attractions from './pages/Attractions/Attractions';
 import Tickets from './pages/Tickets/Tickets';
 import Signup from './pages/auth/User/Signup/Signup';
 import Login from './pages/auth/User/Login/Login';
 import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
 import { AuthProvider } from './pages/auth/auth';
+
 import { RequireUserAuth } from './pages/auth/requireAuth';
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
+  const [showFooter, setShowFooter] = useState(true);
 
   return (
     <>
-    <div className='page-container'>
-      {showNavbar && <Navbar />}
-      <div className='outlet-content'>
-        <Outlet context={{ showNavbar, setShowNavbar }} />
+      <div className='page-container'>
+        {showNavbar && <Navbar />}
+        <div className='outlet-content'>
+          <Outlet context={{ showNavbar, setShowNavbar, showFooter, setShowFooter }} />
+        </div>
+        {showFooter && <Footer />}
       </div>
-    </div>
     </>
   );
 }
@@ -96,8 +101,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/tickets",
-        // element: <Tickets />
-        element: <RequireUserAuth><Tickets /></RequireUserAuth>
+        element: <Tickets />
+        // element: <RequireUserAuth><Tickets /></RequireUserAuth>
       },
       {
         path: "/login",
@@ -115,18 +120,19 @@ const router = createBrowserRouter([
         path: "/WeatherForm",
         element: <WeatherForm />
       },
+      {
+        path: "/Shop",
+        element: <Shop />
+      },
   {
         path: "/contactUs", // Define route for Contact Us page
         element: <ContactUs />
+      },
+      {
+        path: "/attractions",
+        element: <Attractions />
       }
-      // {
-      //   path: "/attractions",
-      //   element: <Attractions />
-      // },
-      // {
-      //   path: "/shop",
-      //   element: <Shop />
-      // }
+
     ]
   },
   {

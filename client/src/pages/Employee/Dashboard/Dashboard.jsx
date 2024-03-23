@@ -8,8 +8,9 @@ import './Dashboard.css';
 
 
 function MDashboard() {
-    const { setShowNavbar } = useOutletContext();
-    setShowNavbar(false);
+    const { setShowNavbar, setShowFooter } = useOutletContext();
+  setShowNavbar(false);
+    setShowFooter(false);
     
    
     const [currentDateTime, setCurrentDateTime] = useState('');
