@@ -12,42 +12,43 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton component="a" href="/profile">
       <ListItemIcon>
-        <DashboardIcon />
+        {/* <DashboardIcon /> */}
+        <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Dashboard" />
+      <ListItemText primary="Profile" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component="a" href="/pastorders">
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
       <ListItemText primary="Orders" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component="a" href="/">
       <ListItemIcon>
-        <PeopleIcon />
+        <DashboardIcon/>
       </ListItemIcon>
-      <ListItemText primary="Customers" />
+      <ListItemText primary="Logout" />
     </ListItemButton>
-    <ListItemButton>
+    {/*<ListItemButton>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Reports" />
-    </ListItemButton>
-    <ListItemButton>
+    </ListItemButton>*/}
+    {/*<ListItemButton>
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>
       <ListItemText primary="Integrations" />
-    </ListItemButton>
+    </ListItemButton>*/}
   </React.Fragment>
 );
 
 export const secondaryListItems = (
   <React.Fragment>
-    <ListSubheader component="div" inset>
+    {/* <ListSubheader component="div" inset>
       Saved reports
     </ListSubheader>
     <ListItemButton>
@@ -67,6 +68,6 @@ export const secondaryListItems = (
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Year-end sale" />
-    </ListItemButton>
+    </ListItemButton> */}
   </React.Fragment>
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import './PastOrders.css'
-import Dashboard from '../../components/Dashboard/Dashboard.tsx';
+import Dashboard from '../../components/Dashboard/Dashboard.jsx';
 // import Chart from '../../components/Dashboard/Chart.jsx';
 // import Title from '../../components/Dashboard/Title.jsx';
 // import Deposits from '../../components/Dashboard/Deposits.jsx';
