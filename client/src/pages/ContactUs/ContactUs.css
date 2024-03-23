@@ -1,50 +1,112 @@
+/* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-.contact-container {
+
+/* Define custom variables */
+:root {
+    --primary: #007bff; /* Primary color */
+    --text-red: #ff0000; /* Red color */
+}
+
+/* Body styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat';
+    background-image: url('../../assets/sky_bkg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Container styles */
+.home-container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    margin-top: 50px;
-    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
 }
 
+/* Text styles */
+.home-text {
+    text-align: center;
+}
+
+/* Form styles */
 .contact-form {
-    width: 300px;
     display: flex;
     flex-direction: column;
+    align-items: center; /* Center align items horizontally */
+    gap: 20px; /* Gap between input groups */
+    background-color: #fff; /* Form background color */
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Box shadow */
+    max-width: 400px; /* Limit maximum width of the form */
+    margin: 40px auto; /* Center the form horizontally */
 }
 
+/* Input group styles */
 .input-group {
-    margin-bottom: 20px;
+    width: 100%;
 }
 
 .input-group label {
     margin-bottom: 5px;
     color: var(--primary);
+    font-weight: bold;
 }
 
 .input-group input,
-.input-group textarea {
-    padding: 8px;
-    width: 100%;
+.input-group textarea,
+.input-group select {
+    padding: 0px;
+    width: 350px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat';
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    border-color: var(--primary); /* Highlight border color on focus */
 }
 
 .input-group textarea {
     resize: vertical;
 }
 
+/* Button styles */
 .btn-submit {
-    padding: 10px 20px;
+    padding: 12px;
     background-color: var(--primary);
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .btn-submit:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Darker background color on hover */
+}
+
+/* Link styles */
+.link {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: #0056b3; /* Darker color on hover */
+}
+
+/* Text styles */
+h1, h2 {
+    text-align: center;
+    color: #000000; /* Blue color */
 }
