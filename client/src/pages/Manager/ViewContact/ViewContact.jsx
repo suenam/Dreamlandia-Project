@@ -4,29 +4,42 @@ import MSidebar from '../../../components/MSidebar/MSidebar';
 import './ViewContact.css';
 
 function ViewContact() {
-  const { setShowNavbar } = useOutletContext();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+  setShowFooter(false);
 
   const [viewDate, setViewDate] = useState('');
   const [contactForms, setContactForms] = useState([]);
 
-  const dummyContactForms = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', date: '2023-05-01', message: 'Hello, I have a question...' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', date: '2023-05-02', message: 'I would like to inquire about...' },
-    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', date: '2023-05-01', message: 'Can you please provide more details...' },
-  ];
-
-  const handleViewSubmit = (e) => {
+  const handleViewSubmit = async (e) => {
     e.preventDefault();
-    const formsForDate = dummyContactForms.filter((form) => form.date === viewDate);
-    setContactForms(formsForDate);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/viewContactForms`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ startDate: viewDate, endDate: viewDate }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setContactForms(data);
+      } else {
+        const errorData = await response.json();
+        console.error('Error retrieving contact forms:', errorData.message);
+      }
+    } catch (error) {
+      console.error('Error retrieving contact forms:', error);
+    }
   };
 
   return (
     <>
       <MSidebar />
-      <h1 className='h1-dr-m'>View Contact Forms</h1>
-      <div className='data-report'>
+      <h1 className="h1-dr-m">View Contact Forms</h1>
+      <div className="data-report">
         <div className="report-section">
           <form onSubmit={handleViewSubmit}>
             <div className="form-header">
@@ -35,18 +48,13 @@ function ViewContact() {
             </div>
             <div className="form-row">
               <label>Date:</label>
-              <input
-                type="date"
-                value={viewDate}
-                onChange={(e) => setViewDate(e.target.value)}
-              />
+              <input type="date" value={viewDate} onChange={(e) => setViewDate(e.target.value)} />
             </div>
             <button className="generate-but-dr" type="submit">
               View Contact Forms
             </button>
           </form>
         </div>
-
         <div className="report-section">
           <h3>Contact Forms</h3>
           {contactForms.length > 0 ? (
@@ -55,15 +63,21 @@ function ViewContact() {
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
+                  <th>Date</th>
+                  <th>Type</th>
                   <th>Message</th>
+                  <th>TicketID</th>
                 </tr>
               </thead>
               <tbody>
                 {contactForms.map((form) => (
-                  <tr key={form.id}>
-                    <td>{form.name}</td>
-                    <td>{form.email}</td>
-                    <td>{form.message}</td>
+                  <tr key={form.SubmissionID}>
+                    <td>{form.Cname}</td>
+                    <td>{form.Cemail}</td>
+                    <td>{form.Cdate}</td>
+                    <td>{form.CType}</td>
+                    <td>{form.Content}</td>
+                    <td>{form.TicketID}</td>
                   </tr>
                 ))}
               </tbody>

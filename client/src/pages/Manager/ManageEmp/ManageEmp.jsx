@@ -4,9 +4,9 @@ import MSidebar from '../../../components/MSidebar/MSidebar';
 import './ManageEmp.css';
 
 function ManageEmp() {
-    const { setShowNavbar } = useOutletContext();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
-   
+    setShowFooter(false);
   const [newEmployeeDOB, setNewEmployeeDOB] = useState('');
   const [newEmployeeAddress, setNewEmployeeAddress] = useState('');
   const [newEmployeePhone, setNewEmployeePhone] = useState('');

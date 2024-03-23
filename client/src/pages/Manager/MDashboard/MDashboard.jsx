@@ -8,8 +8,9 @@ import './MDashboard.css';
 
 
 function MDashboard() {
-    const { setShowNavbar } = useOutletContext();
-    setShowNavbar(false);
+    const { setShowNavbar, setShowFooter } = useOutletContext();
+  setShowNavbar(false);
+    setShowFooter(false);
     
     const handleWeatherSubmit = async (event) => {
         event.preventDefault();
