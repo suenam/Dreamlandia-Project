@@ -32,7 +32,7 @@
   
     .attractions-content {
       margin-inline: 20%;
-      margin-top: 50px;
+      margin-block: 50px;
       align-items: center;
       width: 1020px;
       display: grid;

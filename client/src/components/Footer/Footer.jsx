@@ -14,7 +14,7 @@ const Footer = () => {
       <div className="right-container">
       
         <NavLink className="links-footer" to="/ContactUs" >Contact Us</NavLink>
-        <NavLink className="links-footer" to="/ContactUs" >Employee Login</NavLink>
+        <NavLink className="links-footer" to="/employee/login" >Employee Login</NavLink>
         <NavLink className="links-footer" to="https://github.com/suenam/Dreamlandia-Project">
           <GitHubIcon />
         </NavLink>
