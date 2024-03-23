@@ -15,6 +15,7 @@ import SilverSpoon from '../../assets/silverspoonfood.png';
 import WhiteCastle from '../../assets/whitecastle.jpg';
 import BellaFood from '../../assets/bellasfood.jpg';
 import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
+import { color } from '@mui/system';
 
 const Checkout = () => {
 
@@ -26,6 +27,24 @@ const Checkout = () => {
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    const [orderForm, setOrderForm] = useState({
+        email: '',
+        phone: '',
+        firstName: '',
+        lastName: '',
+        address: '',
+        zipcode: '',
+        city: '',
+        state: '',
+    })
+
+    const updateOrderForm = (orderFormKey, value) => {
+        setOrderForm(prevOrderForm => ({
+            ...prevOrderForm,
+            [orderFormKey]: value
+        }));
+    };
 
     const navigate = useNavigate();
 
@@ -100,13 +119,24 @@ const Checkout = () => {
     }
 
     let total = getTotal();
+    const [errorState, setErrorState] = useState(false);
 
     // function that sends information our backend database when you click handle checkout
     const handleCheckout = () => {
+
+       for (const orderKey in orderForm) {
+            if (!orderForm[orderKey]) {
+                setErrorState(true);
+                console.log('ERRORRRRRR');
+                return;
+            }
+        }
+
         setLoading(true);
         setOpen(true);
         setTimeout(()=>setLoading(false), 3000);
-
+        
+        // data is what will be sent to our database
         const data = {
             tickets,
             foodTickets, 
@@ -114,7 +144,8 @@ const Checkout = () => {
             visitDate,
         }
 
-        console.log(data);
+        // console.log(data);
+        console.log(orderForm);
     }
 
     return (
@@ -135,18 +166,22 @@ const Checkout = () => {
                     <h2>Contact information</h2>
                     <div className='checkout-contact-fields'>
                         <TextField
+                            error = {!orderForm.email}
                             required
                             id="outlined-required-email"
                             label="Email"
                             placeholder='Email'
                             sx={{ width: '100%' }}
+                            onChange={(e)=>updateOrderForm('email', e.target.value )}
                         />
                         <TextField
+                            error = {!orderForm.phone}
                             required
                             id="outlined-required-phone"
                             label="Phone"
                             placeholder='Phone'
                             sx={{ width: '100%' }}
+                            onChange={(e)=>updateOrderForm('phone', e.target.value )}
                         />
                     </div>
                 </div>
@@ -155,47 +190,59 @@ const Checkout = () => {
                     <div className='shipping-addr-fields'>
                         <div className='shipping-name-fields'>
                             <TextField
+                                error = {!orderForm.firstName}
                                 required
                                 id="outlined-required-name"
                                 label="First name"
                                 placeholder='First name'
                                 sx={{ width: '100%' }}
+                                onChange={(e)=>updateOrderForm('firstName', e.target.value )}
                             />
                             <TextField
+                                error = {!orderForm.lastName}
                                 required
                                 id="outlined-required-name"
                                 label="Last name"
                                 placeholder='Last name'
                                 sx={{ width: '100%' }}
+                                onChange={(e)=>updateOrderForm('lastName', e.target.value )}
                             />
                         </div>
                         <TextField
+                            error = {!orderForm.address}
                             required
                             id="outlined-required-addr"
                             label="Address"
                             placeholder='Address'
+                            onChange={(e)=>updateOrderForm('address', e.target.value )}
                         />
                         <div className='shipping-location-fields'>
                             <TextField
+                                error = {!orderForm.zipcode}
                                 required
                                 id="outlined-required-zip"
                                 label="Zipcode"
                                 placeholder='Zipcode'
                                 sx={{ width: '80%' }}
+                                onChange={(e)=>updateOrderForm('zipcode', e.target.value )}
                             />
                             <TextField
+                                error = {!orderForm.city}
                                 required
                                 id="outlined-required-city"
                                 label="City"
                                 placeholder='City'
                                 sx={{ width: '100%' }}
+                                onChange={(e)=>updateOrderForm('city', e.target.value )}
                             />
                             <TextField
                                 id="outlined-select-state"
+                                error = {!orderForm.state}
                                 select
                                 label="Select state"
                                 sx={{ width: '60%' }}
                                 defaultValue=""
+                                onChange={(e)=>updateOrderForm('state', e.target.value )}
                                 >
                                 {STATES.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -211,6 +258,7 @@ const Checkout = () => {
                     <button className='checkout-button' onClick={handleCheckout}>
                         <h3>Complete order</h3>
                     </button>
+                    {errorState?? <div style={{color: "red"}}>*Please complete missing fields</div> }
                     <Backdrop
                         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                         open={open}
