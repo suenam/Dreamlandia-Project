@@ -72,6 +72,10 @@ const Tickets = () => {
           shoppingCartContext.setMealTickets({
             ...foodTickets
           }) 
+          shoppingCartContext.setAttractions([
+            ...attractions
+          ])
+          shoppingCartContext.setDate(visitDate.format("YYYY-MM-DD"));
           navigate('/checkout', { replace: true });
         } catch (error) {
            // if cart is EMPTY, user CANNOT checkout

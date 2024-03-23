@@ -1,10 +1,13 @@
 import './Checkout.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {useState} from "react";
 import { STATES } from '../../constants/stateOptions';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import Logo from '../../assets/logoWhiteBkg.png';
-import Carousel from '../../assets/carousel.jpg'
+import RollerCoaster from '../../assets/roller_coaster.jpg'
 import Burger from '../../assets/whataburger.jpg';
 import Steak from '../../assets/steak_restaurant.jpg';
 import MyMelody from '../../assets/themed_restaurant.jpg';
@@ -18,21 +21,27 @@ const Checkout = () => {
     const shoppingCartContext = useShoppingCart();
     const tickets = shoppingCartContext.getTickets();
     const foodTickets = shoppingCartContext.getMealTickets();
-    
+    const attractions = shoppingCartContext.getAttractions();
+    const visitDate = shoppingCartContext.getDate();
+
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     const ticketDetails = {
         "standardTicket": {
-            image: Carousel,
+            image: RollerCoaster,
             name: "Standard Ticket",
             price: 65,
         },
         "expressTicket": {
-            image: Carousel,
+            image: RollerCoaster,
             name: "Express Ticket",
             price: 90,
         },
         "childTicket": {
-            image: Carousel,
+            image: RollerCoaster,
             name: "Child Ticket",
             price: 45,
         }
@@ -92,6 +101,22 @@ const Checkout = () => {
 
     let total = getTotal();
 
+    // function that sends information our backend database when you click handle checkout
+    const handleCheckout = () => {
+        setLoading(true);
+        setOpen(true);
+        setTimeout(()=>setLoading(false), 3000);
+
+        const data = {
+            tickets,
+            foodTickets, 
+            attractions, 
+            visitDate,
+        }
+
+        console.log(data);
+    }
+
     return (
         <>
         <div className="checkout-container">
@@ -100,12 +125,11 @@ const Checkout = () => {
                     <img src={Logo} /> 
                 </div> 
                 <div className='checkout-nav'>
-                    {/* <Link to='/tickets'>Tickets</Link> */}
-                    <span>Tickets </span>
+                    <Link className='link' to='/tickets'>Tickets {' '}</Link>
                     <span>{'>'}</span>
                     <span> <b>Shipping</b> </span>
                     <span>{'>'}</span>
-                    <span> Complete</span>
+                    <span onClick={handleCheckout} style={{cursor: 'pointer'}}> Complete</span>
                 </div>
                 <div className='checkout-contact-container'>
                     <h2>Contact information</h2>
@@ -184,9 +208,32 @@ const Checkout = () => {
                 </div>
                 <div className='return-checkout-links'>
                     <Link className="link" to='/tickets'>{'<'} Return to tickets</Link>
-                    <button className='checkout-button'>
+                    <button className='checkout-button' onClick={handleCheckout}>
                         <h3>Complete order</h3>
                     </button>
+                    <Backdrop
+                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={open}
+                    >
+                        {loading? <CircularProgress color="inherit" /> 
+                           : <div className="order-confirmation">
+                                <div className="order-confirmation-text">
+                                    <svg width="50" height="50" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9.998 0.00499725C15.515 0.00499725 19.995 4.485 19.995 10.002C19.995 15.52 15.515 20 9.998 20C4.48 20 0 15.52 0 10.002C0 4.485 4.48 0.00499725 9.998 0.00499725ZM4.949 10.391L8.8 13.821C8.942 13.949 9.121 14.011 9.299 14.011C9.501 14.011 9.704 13.93 9.851 13.769L15.804 7.26C15.935 7.117 16 6.937 16 6.758C16 6.348 15.669 6.011 15.252 6.011C15.048 6.011 14.847 6.093 14.698 6.254L9.245 12.216L5.947 9.278C5.803 9.151 5.626 9.088 5.448 9.088C5.033 9.088 4.7 9.423 4.7 9.834C4.7 10.039 4.784 10.243 4.949 10.391Z" fill="#00AC07"/>
+                                    </svg>
+                                    <div className="thank-you">
+                                        Thank you!
+                                    </div>
+                                    <div className="order-confirmed">
+                                        Your order has been confirmed!
+                                    </div>
+                                    <button className='return-home' onClick={()=>navigate('/', {replace: true})}>
+                                        Return to home
+                                    </button>
+                                </div>
+                           </div>
+                        }
+                    </Backdrop>
                 </div>
             </div>
             <div className='item-summary'>
@@ -194,7 +241,7 @@ const Checkout = () => {
                 <div className="item-summary-list">
                     {Object.entries(ticketDetails).map(([ticket, ticketDetails])=>{
                         return tickets[ticket]!==0? 
-                        <div className="order-item">
+                        <div className="order-item" key = {ticket}>
                             <div className='checkout-item-pic'>
                                 <img src={ticketDetails.image} />
                             </div>
@@ -210,7 +257,7 @@ const Checkout = () => {
                     })}
                     {Object.entries(mealTickets).map(([mealTicketKey, mealTicketDetails]) => {
                         return foodTickets[mealTicketKey] !== 0 ? 
-                            <div className="order-item">
+                            <div className="order-item" key = {mealTicketKey}>
                                 <div className='checkout-item-pic'>
                                     <img src={mealTicketDetails.image} />
                                 </div>

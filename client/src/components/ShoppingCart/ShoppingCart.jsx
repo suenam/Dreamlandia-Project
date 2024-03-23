@@ -23,6 +23,10 @@ export const ShoppingCartProvider = ({ children }) => {
         specialMeal2: 0
     })
 
+    const [attractions, setAttractions] = useState([]);
+
+    const [date, setDate] = useState('');
+
     const getTickets = () => {
         return tickets;
     }
@@ -31,11 +35,21 @@ export const ShoppingCartProvider = ({ children }) => {
         return mealTickets;
     }
 
+    const getAttractions = () => {
+        return attractions;
+    }
+
+    const getDate = () => {
+        return date;
+    }
+
 
     return (
         <ShoppingCartContext.Provider value={{
             setTickets, getTickets,
-            setMealTickets, getMealTickets
+            setMealTickets, getMealTickets,
+            setAttractions, getAttractions,
+            setDate, getDate,
             }}>
             {children}
         </ShoppingCartContext.Provider>
