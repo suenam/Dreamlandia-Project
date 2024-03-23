@@ -71,15 +71,19 @@ const server = http.createServer((req, res) => {
       });
     }
 
-    if (req.url === '/api/tickets' && req.method === 'GET') {
+    else if (req.url === '/api/tickets' && req.method === 'GET') {
       authenticateToken(req, res, () => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ /* ticket data */ }));
       });
     } else if (req.url === '/auth/login' && req.method === 'POST') {
       loginHandler(req, res);
-    } else if (req.url === '/auth/signup' && req.method === 'POST') {
+    }else if (req.url === '/auth/logout' && req.method === 'POST') {
+      logoutHandler(req, res);
+    }else if (req.url === '/auth/signup' && req.method === 'POST') {
       signupHandler(req, res);
+    }else if (req.url === '/employee/login' && req.method === 'POST') {
+      employeeLoginHandler(req, res);
     } else if (req.url === '/weatherform' && req.method === 'POST') {
       weatherHandler(req, res);
     } else if (req.url === '/maintenance-requests' && req.method === 'POST') {
