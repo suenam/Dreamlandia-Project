@@ -4,8 +4,9 @@ import './MMaintenance.css';
 import MSidebar from '../../../components/MSidebar/MSidebar';
 
 function Maintenance() {
-  const { setShowNavbar } = useOutletContext();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
   const maintenanceRequests = [
     { id: 1, attraction: 'attraction1', status: 'Open', comment: 'Initial request', cost: 0 },
     { id: 2, attraction: 'attraction2', status: 'In Progress', comment: 'Working on it', cost: 100 },

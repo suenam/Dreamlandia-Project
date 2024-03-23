@@ -3,8 +3,9 @@ import { useOutletContext } from 'react-router-dom';
 import MSidebar from '../../../components/MSidebar/MSidebar';import './DataReport.css';
 
 function DataReport() {
-    const { setShowNavbar } = useOutletContext();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
     const [showFinance, setShowFinance] = useState(false);
     const [showTicketPurchase, setShowTicketPurchase] = useState(false);
     const [showVisitReports, setShowVisitReports] = useState(false);

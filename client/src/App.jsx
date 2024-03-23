@@ -29,17 +29,17 @@ import { RequireUserAuth } from './pages/auth/requireAuth';
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
+  const [showFooter, setShowFooter] = useState(true);
 
   return (
     <>
-    <div className='page-container'>
-      {showNavbar && <Navbar />}
-      <div className='outlet-content'>
-        <Outlet context={{ showNavbar, setShowNavbar }} />
+      <div className='page-container'>
+        {showNavbar && <Navbar />}
+        <div className='outlet-content'>
+          <Outlet context={{ showNavbar, setShowNavbar, showFooter, setShowFooter }} />
+        </div>
+        {showFooter && <Footer />}
       </div>
-      <Footer />
-
-    </div>
     </>
   );
 }

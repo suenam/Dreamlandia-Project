@@ -4,9 +4,9 @@ import Sidebar from '../../../components/Sidebar/Sidebar';
 import './WeatherForm.css'
 
 const WeatherForm = () => {
-  const { setShowNavbar } = useOutletContext();
-
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
   const handleWeatherSubmit = async (event) => {
     event.preventDefault();
     try {

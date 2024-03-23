@@ -5,9 +5,9 @@ import './Manager.css'
 import ECard from '../../components/ECard/ECard';
 
 const Employee = () => {
-  const { setShowNavbar } = useOutletContext();
-
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
 
   const employeeData = {
     name: 'John Doe',
