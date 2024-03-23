@@ -15,6 +15,7 @@ const restaurantExpenseHandler = require("./restaurantExpenseHandler");
 const visitReportHandler = require("./visitReportHandler");
 const ticketReportHandler = require("./ticketReportHandler");
 const viewContactFormsHandler = require("./viewContactFormsHandler");
+const editMaintenanceHandler = require("./editMaintenanceHandler");
 
 const corsOptions = {
   origin: 'http://localhost:5173',
@@ -91,6 +92,8 @@ const server = http.createServer((req, res) => {
       ticketReportHandler(req, res);
     }else if (req.url === '/viewContactForms' && req.method === 'POST') {
       viewContactFormsHandler(req, res);
+    }else if (req.url === '/maintenance-requests' && req.method === 'POST') {
+      editMaintenanceHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
