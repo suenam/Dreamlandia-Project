@@ -154,7 +154,6 @@
 
     .meal-content {
         margin-top: 50px;
-        /* margin-inline: 20%; */
     
         .select-meals {
             color: var(--primary);
@@ -167,6 +166,7 @@
                 display: flex;
                 width: 100%;
                 margin-top: 15px;
+                margin-bottom: 20px;
                 flex-direction: row;
                 justify-content: space-between;
 
@@ -288,36 +288,60 @@
         }
     }
 
-    .checkout-button {
-        display: flex;
-        flex-direction: row;
-        width: 200px;
-        padding: 10px 40px; 
-        margin-block: 60px;
-        margin-inline: 50px;
-        font-size: 16px; 
-        color: white;
-        background: var(--primary); 
-        border: none;
-        border-radius: 25px; 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
-        cursor: pointer;
-        outline: none;
-        transition: all 0.3s ease;
-        letter-spacing: 1px;
-        
-        h3 {
-            font-family: Montserrat;
-            font-weight: 600;
-        }
-    
-        &:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
-            background: #5164a2; 
-        }
-    
-        &:focus {
-            outline: none; 
-        }
+    .calendar-select {
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        width: 325px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.13);
     }
+
+    .ticket-checkout-button-error {
+        display: flex;
+        flex-direction: column;
+        font-family: Montserrat;
+
+        .ticket-error-message {
+            font-size: small;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .ticket-checkout-button {
+            display: flex;
+            flex-direction: row;
+            padding: 10px 40px; 
+            margin-block: 30px;
+            margin-inline: 50px;
+            font-size: 16px; 
+            color: white;
+            background: var(--primary); 
+            border: none;
+            border-radius: 25px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-wrap: nowrap;
+            gap: 3px;
+            
+            h3 {
+                font-family: Montserrat;
+                font-weight: 600;
+            }
+        
+            &:hover {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+                background: #5164a2; 
+            }
+        
+            &:focus {
+                outline: none; 
+            }
+        }
+
+    }
+    
 }

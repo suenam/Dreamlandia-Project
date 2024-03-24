@@ -7,6 +7,7 @@
     align-items: center;
     padding-block: 70px;
     font-family: Montserrat;
+    overflow: auto;
 
     .employee-login-form {
         background-color: white;
