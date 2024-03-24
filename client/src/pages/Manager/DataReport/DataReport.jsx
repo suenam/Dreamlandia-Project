@@ -3,8 +3,9 @@ import { useOutletContext } from 'react-router-dom';
 import MSidebar from '../../../components/MSidebar/MSidebar';import './DataReport.css';
 
 function DataReport() {
-    const { setShowNavbar } = useOutletContext();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
     const [showFinance, setShowFinance] = useState(false);
     const [showTicketPurchase, setShowTicketPurchase] = useState(false);
     const [showVisitReports, setShowVisitReports] = useState(false);
@@ -24,20 +25,68 @@ function DataReport() {
 
   const handleFinanceSubmit = (e) => {
     e.preventDefault();
-    // Handle finance report submission
-    console.log('Finance Report:', financeStartDate, financeEndDate, financeType, financeCategory);
+ 
   };
 
-  const handleTicketSubmit = (e) => {
+  const handleTicketSubmit = async (e) => {
     e.preventDefault();
-    // Handle ticket purchase report submission
-    console.log('Ticket Purchase Report:', ticketStartDate, ticketEndDate, ticketTypes);
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/ticket-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startDate: ticketStartDate,
+          endDate: ticketEndDate,
+          ticketTypes: ticketTypes,
+        }),
+      });
+  
+      if (response.ok) {
+        const reportData = await response.json();
+        // Handle success, e.g., display report data
+        console.log('Ticket report data:', reportData);
+      } else {
+        // Handle errors
+        const errorData = await response.json();
+        console.error('Failed to generate ticket report:', errorData.message);
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
   };
 
-  const handleVisitSubmit = (e) => {
+  const handleVisitSubmit = async (e) => {
     e.preventDefault();
-    // Handle visit report submission
-    console.log('Visit Report:', visitStartDate, visitEndDate, visitCategory);
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/visit-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startDate: visitStartDate,
+          endDate: visitEndDate,
+          category: visitCategory,
+        }),
+      });
+  
+      if (response.ok) {
+        const reportData = await response.json();
+        // Handle success, e.g., display report data
+        console.log('Visit report data:', reportData);
+
+      } else {
+        // Handle errors
+        const errorData = await response.json();
+        console.error('Failed to generate visit report:', errorData.message);
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
   };
 
 

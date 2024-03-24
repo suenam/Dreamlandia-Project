@@ -4,9 +4,9 @@ import MSidebar from '../../../components/MSidebar/MSidebar';
 import './ManageEmp.css';
 
 function ManageEmp() {
-    const { setShowNavbar } = useOutletContext();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
-   
+    setShowFooter(false);
   const [newEmployeeDOB, setNewEmployeeDOB] = useState('');
   const [newEmployeeAddress, setNewEmployeeAddress] = useState('');
   const [newEmployeePhone, setNewEmployeePhone] = useState('');
@@ -25,16 +25,7 @@ const [employees, setEmployees] = useState([
 
 const handleAddEmployeeSubmit = (e) => {
     e.preventDefault();
-    // Handle adding a new employee
-    console.log(
-      'Add Employee:',
-      newEmployeeName,
-      newEmployeeDOB,
-      newEmployeeAddress,
-      newEmployeeEmail,
-      newEmployeePhone,
-      newEmployeeRole
-    );
+  
   };
 const handleArchiveEmployeeSubmit = (e) => {
   e.preventDefault();

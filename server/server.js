@@ -6,8 +6,16 @@ const port = process.env.PORT;
 const signupHandler = require('./signupHandler');
 const loginHandler = require('./loginHandler');
 const authenticateToken = require('./authenticateToken');
+const weatherHandler = require('./weatherHandler');
+
 const employeeLoginHandler = require('./EmployeeLoginControl/employeeHandler');
 const logoutHandler = require('./logoutHandler');
+const maintenanceHandler = require("./maintenanceHandler");
+const restaurantExpenseHandler = require("./restaurantExpenseHandler");
+const visitReportHandler = require("./visitReportHandler");
+const ticketReportHandler = require("./ticketReportHandler");
+const viewContactFormsHandler = require("./viewContactFormsHandler");
+const editMaintenanceHandler = require("./editMaintenanceHandler");
 
 const corsOptions = {
   origin: 'http://localhost:5173',
@@ -39,6 +47,12 @@ const server = http.createServer((req, res) => {
         }
       });
     }
+     // if (req.url === '/auth/signup' && req.method === 'POST') {
+  //   signupHandler(req, res);
+  // } else {
+  //   res.writeHead(404, { 'Content-Type': 'application/json' });
+  //   res.end(JSON.stringify({ message: 'Route not found' }));
+  // }
     else if (req.url === '/api/employee' && req.method === 'GET') {
       console.log('api/employee is called in server.js');
       authenticateToken(req, res, () => {
@@ -57,7 +71,6 @@ const server = http.createServer((req, res) => {
       });
     }
 
-
     else if (req.url === '/api/tickets' && req.method === 'GET') {
       authenticateToken(req, res, () => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -65,12 +78,26 @@ const server = http.createServer((req, res) => {
       });
     } else if (req.url === '/auth/login' && req.method === 'POST') {
       loginHandler(req, res);
-    } else if (req.url === '/auth/logout' && req.method === 'POST') {
+    }else if (req.url === '/auth/logout' && req.method === 'POST') {
       logoutHandler(req, res);
-    } else if (req.url === '/auth/signup' && req.method === 'POST') {
+    }else if (req.url === '/auth/signup' && req.method === 'POST') {
       signupHandler(req, res);
-    } else if (req.url === '/employee/login' && req.method === 'POST') {
+    }else if (req.url === '/employee/login' && req.method === 'POST') {
       employeeLoginHandler(req, res);
+    } else if (req.url === '/weatherform' && req.method === 'POST') {
+      weatherHandler(req, res);
+    } else if (req.url === '/maintenance-requests' && req.method === 'POST') {
+      maintenanceHandler(req, res);
+    }else if (req.url === '/expense-restaurant' && req.method === 'POST') {
+      restaurantExpenseHandler(req, res);
+    }else if (req.url === '/visit-report' && req.method === 'POST') {
+      visitReportHandler(req, res);
+    }else if (req.url === '/ticket-report' && req.method === 'POST') {
+      ticketReportHandler(req, res);
+    }else if (req.url === '/viewContactForms' && req.method === 'POST') {
+      viewContactFormsHandler(req, res);
+    }else if (req.url === '/maintenance-requests' && req.method === 'POST') {
+      editMaintenanceHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

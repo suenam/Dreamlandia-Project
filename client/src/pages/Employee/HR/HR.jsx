@@ -4,8 +4,9 @@ import Sidebar from '../../../components/Sidebar/Sidebar';
 import { useOutletContext } from 'react-router-dom';
 
 const HR = () => {
-  const { setShowNavbar } = useOutletContext();
-    setShowNavbar(false);
+  const { setShowNavbar, setShowFooter } = useOutletContext();
+  setShowNavbar(false);
+    setShowFooter(false);
   return (
     <>
     <Sidebar />
@@ -29,9 +30,11 @@ const HR = () => {
           <li>Career development opportunities</li>
           <li>Employee assistance programs</li>
         </ul>
+        <div className='paragraph-closing-hr'>
         <p>
-          Our HR team is committed to providing support and resources to help you thrive in your career at OurCompany. Feel free to reach out to us with any questions or concerns.
+          Our HR team is committed to providing support and resources to help you thrive in your career at Dreamlandia. Feel free to reach out to us with any questions or concerns.
         </p>
+        </div>
       </div>
     </div>
     </>

@@ -1,5 +1,7 @@
 .hr-container {
     margin-left: 270px;
+    font-family: Montserrat;
+
   }
   
   .hr-page {
@@ -35,6 +37,10 @@
   }
   
   .hr-page ul li {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+  }
+  .hr-page .paragraph-closing-hr{
+    margin-top: 30px;
+
   }
   

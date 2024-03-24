@@ -3,22 +3,23 @@
     margin-top: 40px;
     font-family: Montserrat;
   }
-  .form-header {
+  .report-section .form-header {
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
 
   }
   
-  .form-header h3 {
+  .report-section .form-header h3 {
     margin: 0;
     font-family: Montserrat;
     margin-right: 0.5rem;
   }
   
-  .form-header i {
+  .report-section .form-header i {
     font-size: 1.2rem;
     color: #666;
+
   }
   .data-report {
     margin-left: 270px;
@@ -34,34 +35,33 @@
 
   }
   
-  .generate-but-dr{
+  .report-section .generate-but-dr{
     padding: 0.5rem 1rem;
     font-size: 1rem;
     background-color: var(--primary);
     color: #fff;
     border: none;
-    cursor: pointer;
     width: 200px;
     margin-left: auto; 
     margin-bottom: 1rem;
   }
-  .data-report button {
+  .report-section button {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     background-color: var(--primary);
     color: #fff;
     border: none;
-    cursor: pointer;
     width: 200px;
     margin-bottom: 1rem;
   }
   
   
-  .data-report button:hover {
+  .finance-report-div button:hover {
     background-color: #0056b3;
+    cursor: pointer;
   }
   
-  form {
+   form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -78,11 +78,10 @@
     gap: 1rem;
   }
   
-  label {
+  .report-section label {
     flex-basis: 150px;
     font-weight: bold;
   }
-  
   input,
   select {
     padding: 0.5rem;
@@ -91,6 +90,7 @@
     border: 1px solid #000000;
     border-radius: 4px;
   }
+
   
   .checkbox-group {
     display: flex;
