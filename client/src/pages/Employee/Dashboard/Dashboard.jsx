@@ -42,7 +42,7 @@ function MDashboard() {
                 ref={dashboardRef}
             >
             <div className="mdash-header">
-                <h1 className='h1dash-manager'>Manager Dashboard</h1>
+                <h1 className='h1dash-manager'>Employee Dashboard</h1>
                 <span className="current-date-time">Date: {currentDateTime}</span>
                 
             </div>

@@ -1,50 +1,72 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
 .contact-container {
     display: flex;
     flex-direction: column;
+    font-family: Montserrat;
     align-items: center;
-    margin-top: 50px;
-    font-family: 'Montserrat', sans-serif;
-}
 
-.contact-form {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-}
+    .contact-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-image: url('../../assets/sky_bkg.png');
+        color: white;
+        font-family: Montserrat;
+        text-shadow: #ffffffa2 1px 0 10px;
+        width: 100%;
+        height: 170px;
+        margin-bottom: 50px;
+    }
 
-.input-group {
-    margin-bottom: 20px;
-}
+    .contact-form {
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid rgba(0, 0, 0, 0.13);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-bottom: 50px;
 
-.input-group label {
-    margin-bottom: 5px;
-    color: var(--primary);
-}
+        .input-group {
+            margin-bottom: 20px;
 
-.input-group input,
-.input-group textarea {
-    padding: 8px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-}
+            label {
+                margin-bottom: 5px;
+                color: var(--primary);
+                font-weight: bold;
+            }
 
-.input-group textarea {
-    resize: vertical;
-}
+            input,
+            textarea,
+            select {
+                padding: 8px;
+                width: 100%;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-family: 'Montserrat', sans-serif;
+            }
 
-.btn-submit {
-    padding: 10px 20px;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+            textarea {
+                resize: vertical;
+            }
+        }
 
-.btn-submit:hover {
-    background-color: #0056b3;
+        .btn-submit {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: flex-end;
+
+            &:hover {
+                background-color: #5164a2;
+            }
+        }
+    }
 }

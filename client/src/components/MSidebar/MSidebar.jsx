@@ -15,15 +15,15 @@ const Sidebar = () => {
         <NavLink to='/Manager' style={{textDecoration: 'none'}}><h3>Manager Portal</h3></NavLink>
       </div>
       <nav className="sidebar-links">
-        <NavLink className="sidebar-link" to="/MDashboard" >Dashboard</NavLink>
-        <NavLink className="sidebar-link" to="/DataReport" >Data Reports</NavLink>
-        <NavLink className="sidebar-link" to="/ExpenseForm" >Expense Form</NavLink>
+        <NavLink className="sidebar-link" to="/manager/dashboard" >Dashboard</NavLink>
+        <NavLink className="sidebar-link" to="/manager/data-reports" >Data Reports</NavLink>
+        <NavLink className="sidebar-link" to="/manager/expense-form" >Expense Form</NavLink>
 
-        <NavLink className="sidebar-link" to="/MMaintenance">Maintenance Requests</NavLink>
-        <NavLink className="sidebar-link" to="/ManageEmp">Manage Employees</NavLink>
-        <NavLink className="sidebar-link" to="/ViewContact">View Contact Forms</NavLink>
+        <NavLink className="sidebar-link" to="/manager/maintenance">Maintenance Requests</NavLink>
+        <NavLink className="sidebar-link" to="/manager/manage-employees">Manage Employees</NavLink>
+        <NavLink className="sidebar-link" to="/manager/view-contact-forms">View Contact Forms</NavLink>
 
-        <NavLink className="sidebar-link" to="/MHR" >HR</NavLink>
+        <NavLink className="sidebar-link" to="/manager/HR" >HR</NavLink>
         <NavLink className="sidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
       </nav>
     </div>
