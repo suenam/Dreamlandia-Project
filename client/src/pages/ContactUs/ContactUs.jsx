@@ -30,6 +30,7 @@ const ContactUs = () => {
             <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="input-group">
                     <label htmlFor="name">Name:</label>
+                    <div>
                     <input
                         type="text"
                         id="name"
@@ -37,9 +38,11 @@ const ContactUs = () => {
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
+                    </div>
                 </div>
                 <div className="input-group">
                     <label htmlFor="email">Email:</label>
+                    <div>
                     <input
                         type="email"
                         id="email"
@@ -47,9 +50,11 @@ const ContactUs = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
+                    </div>
                 </div>
                 <div className="input-group">
                     <label htmlFor="type">Type:</label>
+                    <div>
                     <select
                         id="type"
                         value={type}
@@ -61,18 +66,22 @@ const ContactUs = () => {
                         <option value="Complaint">Complaint</option>
                         <option value="Feedback">Feedback</option>
                     </select>
+                    </div>
                 </div>
                 <div className="input-group">
                     <label htmlFor="ticketID">Ticket ID:</label>
+                    <div>
                     <input
                         type="text"
                         id="ticketID"
                         value={ticketID}
                         onChange={(e) => setTicketID(e.target.value)}
                     />
+                    </div>
                 </div>
                 <div className="input-group">
                     <label htmlFor="message">Message:</label>
+                    <div>
                     <textarea
                         id="message"
                         rows="4"
@@ -80,9 +89,11 @@ const ContactUs = () => {
                         onChange={(e) => setMessage(e.target.value)}
                         required
                     ></textarea>
+                    </div>
                 </div>
                 <div className="input-group">
                     <label htmlFor="date">Date:</label>
+                    <div>
                     <input
                         type="date"
                         id="date"
@@ -90,6 +101,7 @@ const ContactUs = () => {
                         onChange={(e) => setDate(e.target.value)}
                         required
                     />
+                    </div>
                 </div>
                 <button type="submit" className="btn-submit">
                     Submit
