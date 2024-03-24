@@ -55,48 +55,48 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/Employee",
+        path: "/employee",
         element: <Employee />
       },
       
       {
-      path: "/Dashboard",
+      path: "/employee/dashboard",
       element: <Dashboard />
       },
       {
-        path: "/MDashboard",
+        path: "/manager/dashboard",
         element: <MDashboard />
       },
       {
-        path: "/Maintenance",
+        path: "/employee/maintenance",
         element: <Maintenance />
       },
       {
-        path: "/MMaintenance",
+        path: "/manager/maintenance",
         element: <MMaintenance />
       },
       {
-        path: "/MHR",
+        path: "/manager/HR",
         element: <MHR />
       },
       {
-        path: "/HR",
+        path: "/employee/HR",
         element: <HR />
       },
       {
-        path: "/Manager",
+        path: "/manager",
         element: <Manager />
       },
       {
-        path: "/DataReport",
+        path: "/manager/data-reports",
         element: <DataReport />
       },
       {
-        path: "/ManageEmp",
+        path: "/manager/manage-employees",
         element: <ManageEmp />
       },
       {
-        path: "/ExpenseForm",
+        path: "/manager/expense-form",
         element: <ExpenseForm />
       },
       {
@@ -113,11 +113,11 @@ const router = createBrowserRouter([
         element: <Signup />
       },
       {
-        path: "/ViewContact",
+        path: "/manager/view-contact-forms",
         element: <ViewContact />
       },
       {
-        path: "/WeatherForm",
+        path: "/employee/weather-form",
         element: <WeatherForm />
       },
       {
@@ -125,7 +125,7 @@ const router = createBrowserRouter([
         element: <Shop />
       },
   {
-        path: "/contactUs", // Define route for Contact Us page
+        path: "/contactUs", 
         element: <ContactUs />
       },
       {
