@@ -14,8 +14,21 @@ import BellaFood from '../../assets/bellasfood.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
+import { useNavigate } from 'react-router-dom';
+import Sparkles from '../../components/SparkleCursor/Sparkles';
 
 const Tickets = () => {
+
+    const shoppingCartContext = useShoppingCart();
+    const navigate = useNavigate();
+
+    const [visitDate, setVisitDate] = useState(dayjs());
+    const today = dayjs().startOf('day');
 
     const [standardTicket, setStandardTicket] = useState(0);
     const [expressTicket, setExpressTicket] = useState(0);
@@ -47,7 +60,40 @@ const Tickets = () => {
             setAttractions(attractions.filter((attraction)=>attraction !== newAttraction));
         }
     }
-    
+
+    const [errorState, setErrorState] = useState(false);
+    const handleCheckout = (event) => {
+        event.preventDefault();
+        if (!standardTicket &&  !expressTicket && !childTicket) {
+            setErrorState(true);
+            console.log("no ticket selected");
+            return;
+        }
+        console.log(attractions)
+        if (!attractions.length) {
+            setErrorState(true);
+            console.log('no attraction selected');
+            return;
+        }
+        try {
+          shoppingCartContext.setTickets({
+            standardTicket: standardTicket,
+            expressTicket: expressTicket,
+            childTicket: childTicket
+          }) 
+          shoppingCartContext.setMealTickets({
+            ...foodTickets
+          }) 
+          shoppingCartContext.setAttractions([
+            ...attractions
+          ])
+          shoppingCartContext.setDate(visitDate.format("YYYY-MM-DD"));
+          navigate('/checkout', { replace: true });
+        } catch (error) {
+           console.log("error adding items to cart");
+        }
+      };
+
     return (
         <div className="tickets-container">
             <div className='tickets-header'>
@@ -285,12 +331,27 @@ const Tickets = () => {
                     </div>
                 </div>
 
+                <div className="calendar-container">
+                    <h2>Select your day of visit </h2>  
+                    <div className='calendar-select'>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateCalendar 
+                                value={visitDate} 
+                                onChange={(newVisitDate) => setVisitDate(newVisitDate)} 
+                                minDate={today}  
+                                />
+                        </LocalizationProvider>
+                    </div>
+                </div>
             </div>
 
-            <button className='checkout-button'>
-                <ShoppingCartIcon/> 
-                <h3>Checkout</h3>
-            </button>
+            <div className="ticket-checkout-button-error">
+                <button className='ticket-checkout-button' onClick={handleCheckout}>
+                    <ShoppingCartIcon/> 
+                    <h3> Checkout</h3>
+                </button>
+                {errorState && <div className='ticket-error-message' style={{color: "red"}}>*Please add a ticket and/or attraction!</div> }
+            </div> 
         </div>
     );
 }

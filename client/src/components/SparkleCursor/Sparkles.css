@@ -1,0 +1,6 @@
+.sparkle-animation {
+    position: fixed;
+    z-index: 6;
+    opacity: 0.5;
+    pointer-events: none;
+  }
