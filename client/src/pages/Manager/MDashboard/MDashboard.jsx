@@ -144,7 +144,7 @@ function MDashboard() {
                 </div>
 
                 <div className='vertical-box'>
-                    <h2>Maintenance Requests</h2>
+                    <h2>Maintenance</h2>
                     <div className='box-content'>
                         <div className='value-container'>
                             <span className='big-value'>$3,471</span>
