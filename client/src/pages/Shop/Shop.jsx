@@ -7,6 +7,7 @@ import PantsImage2 from '../../assets/pants2.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Sparkles from '../../components/SparkleCursor/Sparkles';
 
 const Shop = () => {
 
@@ -57,6 +58,7 @@ const Shop = () => {
     return (
         <div className="shop-container">
             <div className="shop-header">
+                <Sparkles/>
                 <h1>Theme Park Shop</h1>
                 <p>Bring home a piece of the magic!</p>
 

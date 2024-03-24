@@ -1,5 +1,6 @@
 import './ContactUs.css';
 import React, { useState } from 'react';
+import Sparkles from '../../components/SparkleCursor/Sparkles';
 
 const ContactUs = () => {
   const [name, setName] = useState('');
@@ -23,6 +24,7 @@ const ContactUs = () => {
   return (
     <div className="contact-container">
       <div className="contact-header">
+        <Sparkles/>
         <h1>Contact Us</h1>
         <p>Note that only accounts with registered emails and at least one purchase order actually have their message sent to us</p>
       </div>

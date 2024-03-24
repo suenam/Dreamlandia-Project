@@ -2,6 +2,8 @@ import './Sparkles.css';
 import { useState, useEffect, useRef } from "react";
 
 const Sparkles = () => {
+  const currentComponentRef = useRef(null);
+
   const trailArr = [1, 0.9, 0.8, 0.5, 0.25, 0.6, 0.4, 0.3, 0.2];
 
   const [sparkles, setSparkles] = useState([]);
@@ -28,7 +30,6 @@ const Sparkles = () => {
     return () => cancelAnimationFrame(requestRef.current);
   }, []); 
 
- 
   useEffect(() => {
     const handleMouseMove = e => {
       trailArr.forEach(i => {
@@ -51,27 +52,30 @@ const Sparkles = () => {
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const parentComponent = currentComponentRef.current.parentNode;
+    parentComponent.addEventListener('mousemove', handleMouseMove);
+    return () => parentComponent.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
     <>
-      {sparkles.map((sparkle, index) => (
-        <div
-          key={index}
-          className="sparkle-animation"
-          style={{
-            top: sparkle.top,
-            left: sparkle.left,
-            width: sparkle.size,
-            height: sparkle.size,
-            borderRadius: sparkle.size,
-            background: sparkle.background,
-            transform: `translateY(${sparkle.translateY}px)`,
-          }}
-        />
-      ))}
+      <div className="" ref={currentComponentRef}>
+        {sparkles.map((sparkle, index) => (
+          <div
+            key={index}
+            className="sparkle-animation"
+            style={{
+              top: sparkle.top,
+              left: sparkle.left,
+              width: sparkle.size,
+              height: sparkle.size,
+              borderRadius: sparkle.size,
+              background: sparkle.background,
+              transform: `translateY(${sparkle.translateY}px)`,
+            }}
+          />
+        ))}
+      </div>
     </>
   )
 }

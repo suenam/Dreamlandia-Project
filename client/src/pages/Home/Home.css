@@ -58,7 +58,8 @@
 
             &:hover {
                 box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
-                filter: brightness(110%);
+                filter: brightness(105%);
+                transform: translateY(-0.25em)
             }
         }
 

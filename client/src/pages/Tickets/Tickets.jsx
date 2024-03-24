@@ -97,6 +97,7 @@ const Tickets = () => {
     return (
         <div className="tickets-container">
             <div className='tickets-header'>
+                <Sparkles/>
                 <h1>Theme Park Tickets</h1>
                 <p>Embark on a journey beyond your wildest dreams!</p>
             </div>

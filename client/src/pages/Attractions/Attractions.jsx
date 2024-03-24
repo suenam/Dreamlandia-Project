@@ -6,6 +6,7 @@ import ThemedRide from '../../assets/themed_rides.jpg';
 import WaterRide from '../../assets/water_ride.jpg';
 import HeightIcon from '@mui/icons-material/Height';
 import { useState } from 'react';
+import Sparkles from '../../components/SparkleCursor/Sparkles';
 
 const Attractions = () => {
   const [showModal, setShowModal] = useState(false);
@@ -67,6 +68,7 @@ const Attractions = () => {
   return (
     <div className="attractions-container">
       <div className="attractions-header">
+        <Sparkles/>
         <h1>Thrilling Attractions</h1>
         <p>Embark on a journey beyond your wildest dreams!</p>
       </div>
