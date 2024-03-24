@@ -17,10 +17,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import dayjs from 'dayjs';
 import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
+import Sparkles from '../../components/SparkleCursor/Sparkles';
 
 const Tickets = () => {
 
