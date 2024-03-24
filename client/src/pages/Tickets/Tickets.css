@@ -297,37 +297,51 @@
         border: 1px solid rgba(0, 0, 0, 0.13);
     }
 
-    .checkout-button {
+    .ticket-checkout-button-error {
         display: flex;
-        flex-direction: row;
-        padding: 10px 40px; 
-        margin-block: 60px;
-        margin-inline: 50px;
-        font-size: 16px; 
-        color: white;
-        background: var(--primary); 
-        border: none;
-        border-radius: 25px; 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
-        cursor: pointer;
-        outline: none;
-        transition: all 0.3s ease;
-        letter-spacing: 1px;
-        text-wrap: nowrap;
-        gap: 3px;
+        flex-direction: column;
+        font-family: Montserrat;
+
+        .ticket-error-message {
+            font-size: small;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .ticket-checkout-button {
+            display: flex;
+            flex-direction: row;
+            padding: 10px 40px; 
+            margin-block: 30px;
+            margin-inline: 50px;
+            font-size: 16px; 
+            color: white;
+            background: var(--primary); 
+            border: none;
+            border-radius: 25px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-wrap: nowrap;
+            gap: 3px;
+            
+            h3 {
+                font-family: Montserrat;
+                font-weight: 600;
+            }
         
-        h3 {
-            font-family: Montserrat;
-            font-weight: 600;
+            &:hover {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+                background: #5164a2; 
+            }
+        
+            &:focus {
+                outline: none; 
+            }
         }
-    
-        &:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
-            background: #5164a2; 
-        }
-    
-        &:focus {
-            outline: none; 
-        }
+
     }
+    
 }

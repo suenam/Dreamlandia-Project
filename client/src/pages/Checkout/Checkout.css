@@ -100,36 +100,46 @@
                 text-decoration: none;
                 color: var(--primary);
             }
-            
-            .checkout-button {
-                display: flex;
-                flex-direction: row;
-                text-wrap: nowrap;
-                padding: 10px 40px; 
-                font-size: 13px; 
-                color: white;
-                background: var(--primary); 
-                border: none;
-                border-radius: 25px; 
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
-                cursor: pointer;
-                transition: all 0.3s ease;
-                letter-spacing: 1px;
-                
-                h3 {
+
+            .checkout-button-error {
+
+                .error-message {
                     font-family: Montserrat;
-                    font-weight: 500;
+                    font-size: small;
                 }
-            
-                &:hover {
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
-                    background: #5164a2; 
-                }
-            
-                &:focus {
-                    outline: none; 
+
+                .checkout-button {
+                    display: flex;
+                    flex-direction: row;
+                    text-wrap: nowrap;
+                    padding: 10px 40px; 
+                    font-size: 13px; 
+                    color: white;
+                    background: var(--primary); 
+                    border: none;
+                    border-radius: 25px; 
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    letter-spacing: 1px;
+                    
+                    h3 {
+                        font-family: Montserrat;
+                        font-weight: 500;
+                    }
+                
+                    &:hover {
+                        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+                        background: #5164a2; 
+                    }
+                
+                    &:focus {
+                        outline: none; 
+                    }
                 }
             }
+            
+            
 
             .order-confirmation {
                 background-color: white;
@@ -260,15 +270,6 @@
             padding-top: 20px;
             font-size: 22px;
         }
-        
-        .label {
-            
-        }
-        
-        .value {
-            /* Styles for the value */
-        }
-        
     }
 
 

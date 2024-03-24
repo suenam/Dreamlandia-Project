@@ -255,10 +255,12 @@ const Checkout = () => {
                 </div>
                 <div className='return-checkout-links'>
                     <Link className="link" to='/tickets'>{'<'} Return to tickets</Link>
-                    <button className='checkout-button' onClick={handleCheckout}>
-                        <h3>Complete order</h3>
-                    </button>
-                    {errorState?? <div style={{color: "red"}}>*Please complete missing fields</div> }
+                    <div className='checkout-button-error'>
+                        <button className='checkout-button' onClick={handleCheckout}>
+                            <h3>Complete order</h3>
+                        </button>
+                        {errorState && <div className='error-message' style={{color: "red"}}>*Please complete missing fields</div> }
+                    </div>
                     <Backdrop
                         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                         open={open}

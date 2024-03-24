@@ -61,8 +61,20 @@ const Tickets = () => {
         }
     }
 
+    const [errorState, setErrorState] = useState(false);
     const handleCheckout = (event) => {
         event.preventDefault();
+        if (!standardTicket &&  !expressTicket && !childTicket) {
+            setErrorState(true);
+            console.log("no ticket selected");
+            return;
+        }
+        console.log(attractions)
+        if (!attractions.length) {
+            setErrorState(true);
+            console.log('no attraction selected');
+            return;
+        }
         try {
           shoppingCartContext.setTickets({
             standardTicket: standardTicket,
@@ -78,8 +90,7 @@ const Tickets = () => {
           shoppingCartContext.setDate(visitDate.format("YYYY-MM-DD"));
           navigate('/checkout', { replace: true });
         } catch (error) {
-           // if cart is EMPTY, user CANNOT checkout
-          console.error('Login failed:', error);
+           console.log("error adding items to cart");
         }
       };
 
@@ -334,10 +345,13 @@ const Tickets = () => {
                 </div>
             </div>
 
-            <button className='checkout-button' onClick={handleCheckout}>
-                <ShoppingCartIcon/> 
-                <h3> Add to cart</h3>
-            </button>
+            <div className="ticket-checkout-button-error">
+                <button className='ticket-checkout-button' onClick={handleCheckout}>
+                    <ShoppingCartIcon/> 
+                    <h3> Checkout</h3>
+                </button>
+                {errorState && <div className='ticket-error-message' style={{color: "red"}}>*Please add a ticket and/or attraction!</div> }
+            </div> 
         </div>
     );
 }
