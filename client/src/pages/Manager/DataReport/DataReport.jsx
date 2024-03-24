@@ -32,16 +32,37 @@ function DataReport() {
     e.preventDefault();
   
     try {
+      let requestBody = {};
+  
+      if (ticketTypes.length === 1) {
+        requestBody = {
+          startDate: ticketStartDate,
+          endDate: ticketEndDate,
+          ticketType: ticketTypes[0].toLowerCase(),
+        };
+      } else if (ticketTypes.length === 2) {
+        requestBody = {
+          startDate: ticketStartDate,
+          endDate: ticketEndDate,
+          ticketType1: ticketTypes[0].toLowerCase(),
+          ticketType2: ticketTypes[1].toLowerCase(),
+        };
+      } else if (ticketTypes.length === 3) {
+        requestBody = {
+          startDate: ticketStartDate,
+          endDate: ticketEndDate,
+          ticketType1: ticketTypes[0].toLowerCase(),
+          ticketType2: ticketTypes[1].toLowerCase(),
+          ticketType3: ticketTypes[2].toLowerCase(),
+        };
+      }
+  
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/ticket-report`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          startDate: ticketStartDate,
-          endDate: ticketEndDate,
-          ticketTypes: ticketTypes,
-        }),
+        body: JSON.stringify(requestBody),
       });
   
       if (response.ok) {
@@ -57,7 +78,7 @@ function DataReport() {
       console.error('There was an error:', error);
     }
   };
-
+  
   const handleVisitSubmit = async (e) => {
     e.preventDefault();
   
