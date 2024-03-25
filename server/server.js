@@ -18,7 +18,7 @@ const viewContactFormsHandler = require("./viewContactFormsHandler");
 const editMaintenanceHandler = require("./editMaintenanceHandler");
 
 const corsOptions = {
-  origin: 'https://dreamlandia.vercel.app',
+  origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
   credentials: true,
 };
 
@@ -34,14 +34,18 @@ const server = http.createServer((req, res) => {
       console.log('api/user is called in server.js');
       authenticateToken(req, res, () => {
         if (req.user) {
+          console.log("entering if req.user...")
           if (req.user.userType === 'user') {
+            console.log("entering if req.user.userType is user...")
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(req.user));
           } else {
+            console.log("entering if req.user.userType NOT user...")
             res.writeHead(403, { 'Content-Type': 'application/json' });
             // res.end(JSON.stringify({ message: 'Forbidden' }));
           }
         } else {
+          console.log("entering if NOT req.user...")
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(null));
         }
