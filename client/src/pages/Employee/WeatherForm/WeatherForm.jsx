@@ -4,13 +4,13 @@ import Sidebar from '../../../components/Sidebar/Sidebar';
 import './WeatherForm.css'
 
 const WeatherForm = () => {
-  const { setShowNavbar } = useOutletContext();
-
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
   const handleWeatherSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/weather`, {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/weatherform`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -19,13 +19,14 @@ const WeatherForm = () => {
       });
 
       if (response.ok) {
-        // Handle success 
+        // Handle success
         alert('Weather input successful!');
         console.log("Weather input successful");
       } else {
-        // Handle errors 
-        alert('Weather input failed.');
-        console.error("Weather input failed");
+        // Handle errors
+        const result = await response.json();
+        alert(`Weather input failed: ${result.message}`);
+        console.error("Weather input failed:", result.message);
       }
     } catch (error) {
       console.error('There was an error:', error);
@@ -33,7 +34,7 @@ const WeatherForm = () => {
   };
 const [WDate, setWeatherDate] = useState('');
 const [WeatherCondition, setWeather] = useState('');
-  
+
 
   return (
     <>
@@ -66,7 +67,7 @@ const [WeatherCondition, setWeather] = useState('');
                     <button type="submit">Submit</button>
                 </form>
             </div>
-        
+
     </>
   );
 }

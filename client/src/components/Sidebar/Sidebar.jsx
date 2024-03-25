@@ -25,10 +25,10 @@ const Sidebar = () => {
         <NavLink to='/Employee' style={{textDecoration: 'none'}}><h3>Employee Portal</h3></NavLink>
       </div>
       <nav className="sidebar-links">
-        <NavLink className="sidebar-link" to="/Dashboard" >Dashboard</NavLink>
-        <NavLink className="sidebar-link" to="/Maintenance" >Maintenance Requests</NavLink>
-        <NavLink className="sidebar-link" to="/HR" >HR</NavLink>
-        <NavLink className="sidebar-link" to="/WeatherForm" >WeatherForm</NavLink>
+        <NavLink className="sidebar-link" to="/employee/dashboard" >Dashboard</NavLink>
+        <NavLink className="sidebar-link" to="/employee/maintenance" >Maintenance Requests</NavLink>
+        <NavLink className="sidebar-link" to="/employee/HR" >HR</NavLink>
+        <NavLink className="sidebar-link" to="/employee/weather-form" >WeatherForm</NavLink>
 
         <NavLink className="sidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
       </nav>

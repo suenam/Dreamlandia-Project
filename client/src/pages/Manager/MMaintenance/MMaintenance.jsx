@@ -4,24 +4,16 @@ import './MMaintenance.css';
 import MSidebar from '../../../components/MSidebar/MSidebar';
 
 function Maintenance() {
-  const { setShowNavbar } = useOutletContext();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
   setShowNavbar(false);
+    setShowFooter(false);
   const maintenanceRequests = [
     { id: 1, attraction: 'attraction1', status: 'Open', comment: 'Initial request', cost: 0 },
     { id: 2, attraction: 'attraction2', status: 'In Progress', comment: 'Working on it', cost: 100 },
     { id: 3, attraction: 'attraction3', status: 'Completed', comment: 'All done', cost: 200 },
   ];
-  const attractions = [
-    { id: '', value: '', label: 'Select an Attraction' },
-    { id: 1, value: 'attraction1', label: 'Attraction 1' },
-    { id: 2, value: 'attraction2', label: 'Attraction 2' },
-    { id: 3, value: 'attraction3', label: 'Attraction 3' },
-  ];
-
-  const [subject, setSubject] = useState('');
-  const [comment, setComment] = useState('');
-  const [date, setDate] = useState('');
-  const [cost, setCost] = useState(0);
+ 
+  
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [currentStatus, setCurrentStatus] = useState('');
   const [currentComment, setCurrentComment] = useState('');
@@ -30,9 +22,7 @@ function Maintenance() {
   const [newComment, setNewComment] = useState('');
   const [newCost, setNewCost] = useState(0);
   const [dateResolved, setDateResolved] = useState('');
-  const [showSubmitContainer, setShowSubmitContainer] = useState(false);
   const [showEditContainer, setShowEditContainer] = useState(false);
-  const [selectedAttractionId, setSelectedAttractionId] = useState('');
 
   const handleRequestSelect = (requestId) => {
     const request = maintenanceRequests.find((req) => req.id === requestId);
@@ -47,6 +37,37 @@ function Maintenance() {
       setDateResolved('');
     }
   };
+
+ 
+  const getAttractionIdFromName = (attractionName) => {
+    const attraction = attractions.find((a) => a.label === attractionName);
+    return attraction ? attraction.id : null;
+  };
+  
+  const handleNewCostChange = (event) => {
+    setNewCost(parseFloat(event.target.value));
+  };
+
+  const handleDateResolvedChange = (event) => {
+    setDateResolved(event.target.value);
+  };
+
+ 
+  
+  const attractions = [
+    { id: 2, value: 'Roller Coaster', label: 'Roller Coaster' },
+    { id: 3, value: 'Carousel', label: 'Carousel' },
+    { id: 4, value: 'Ferris Wheel', label: 'Ferris Wheel' },
+    { id: 5, value: 'Themed Rides', label: 'Themed Rides' },
+    { id: 6, value: 'Water Rides', label: 'Water Rides' },
+  ];
+
+  const [subject, setSubject] = useState('');
+  const [comment, setComment] = useState('');
+  const [date, setDate] = useState('');
+  const [cost, setCost] = useState(0);
+  const [selectedAttractionId, setSelectedAttractionId] = useState('');
+  const [showSubmitContainer, setShowSubmitContainer] = useState(false);
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
@@ -64,49 +85,45 @@ function Maintenance() {
     setCost(parseFloat(event.target.value));
   };
 
-  const handleNewCostChange = (event) => {
-    setNewCost(parseFloat(event.target.value));
-  };
-
-  const handleDateResolvedChange = (event) => {
-    setDateResolved(event.target.value);
-  };
-
   const handleAttractionChange = (event) => {
-    const selectedAttraction = attractions.find(
-      (attraction) => attraction.value === event.target.value
-    );
-    setSelectedAttractionId(selectedAttraction?.id || '');
+    setSelectedAttractionId(event.target.value);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const attractionId = getAttractionIdFromName(selectedAttractionId);
+  
+    if (attractionId === null) {
+      alert('Please select a valid attraction.');
+      return;
+    }
+  
     try {
-      const response = await fetch('/maintenance/create', {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/maintenance-requests`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ attractionId: selectedAttractionId, subject, comment, cost }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          MRDescription: comment,
+          MRCost: cost,
+          AttractionID: attractionId, // Use the attractionId obtained from getAttractionIdFromName
+          MRSubject: subject
+        }),
       });
-
+  
       if (response.ok) {
-        setSubject('');
-        setComment('');
-        setCost(0);
-        setDate('');
-        setSelectedAttractionId('');
+        // Handle success
         alert('Maintenance request submitted successfully!');
+        console.log('Maintenance request submitted successfully!');
       } else {
-        const error = await response.json();
-        alert(`Error submitting maintenance request: ${error.message}`);
+        // Handle errors
+        alert('Failed to submit maintenance request.');
+        console.error('Failed to submit maintenance request.');
       }
     } catch (error) {
-      console.error('Error submitting maintenance request:', error);
-      alert('An error occurred while submitting the maintenance request.');
+      console.error('There was an error:', error);
     }
   };
+  
 
   return (
     <>
@@ -135,6 +152,7 @@ function Maintenance() {
                   value={selectedAttractionId}
                   onChange={handleAttractionChange}
                 >
+                  <option value="">Select an Attraction</option>
                   {attractions.map((attraction) => (
                     <option key={attraction.id} value={attraction.value}>
                       {attraction.label}
@@ -142,10 +160,7 @@ function Maintenance() {
                   ))}
                 </select>
               </div>
-              <div className='input-container'>
-                <label>Date</label>
-                <input type="date" value={date} onChange={handleDateChange} />
-              </div>
+              
               <div className='input-container'>
                 <label>Cost</label>
                 <input type="number" value={cost} onChange={handleCostChange} />
@@ -160,7 +175,7 @@ function Maintenance() {
             </form>
           </div>
         )}
-        </div>
+      </div>
       <div className='report-sec-maintenace'>
         <button onClick={() => setShowEditContainer(!showEditContainer)}>
           {showEditContainer ? '▲ Edit Request' : '▼ Edit Request'}
@@ -248,5 +263,3 @@ function Maintenance() {
 }
 
 export default Maintenance;
-
-    

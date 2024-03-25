@@ -1,26 +1,94 @@
-
-.hours-worked{
-    margin-left: 300px;
+.h1dash-manager {
+    margin-right: 520px; 
+}
+.current-date-time {
+    font-size: 20px;
+}
+.mdash-header{
+    display: flex;
+    align-items: center;
+    margin-left: 270px;
     margin-top: 40px;
-
-}
-.dash-attraction-card{
-    margin-left: 300px;
-    margin-top: 20px;
-}
-.active-mr-card{
-    margin-left: 300px;
-    margin-top: 20px;
-
+    margin-bottom: 40px;
+    font-family: Montserrat;
 }
 
-.mr-report-card{
-    margin-left: 850px;
-    margin-top: -470px;
-}
-h1.h1dash{
-    margin-left:270px;
+.mdashboard-class {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 30px;
+    justify-content: space-around;
+    margin-left: 270px;    
     font-family: Montserrat;
 
-    margin-top: 40px;
+    
+    .vertical-box {
+        height: 600px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 23%;
+
+        h2 {
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .box-content {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+
+            .value-container {
+                display: flex;
+                flex-direction: column;
+                align-items: left;
+                margin-bottom: 30px;
+
+                .big-value {
+                    font-size: 35px;
+                    font-weight: bold;
+                    display: flex;
+                    align-items: center;
+                }
+                .small-text{
+                    font-size: 18px;
+                }
+            }
+
+            .small-value-container {
+                display: flex;
+                width: 100%;
+                align-items: left;
+                margin-bottom: 25px;
+
+                .small-value-item {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: left;
+
+                    .small-value {
+                        font-size: 23px;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+}
+.exportPdf-mdash-butt{
+    padding: 0.5rem 1rem;
+font-size: 1rem;
+background-color: var(--primary);
+color: #fff;
+border: none;
+width: 200px;
+margin-left: 1200px;
+margin-bottom: 1rem;
+}
+.exportPdf-mdash-butt:hover{
+    background-color: #0056b3;
+    cursor: pointer;
 }

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Route, Outlet } from 'react-router
 import React, { useState } from 'react';import Home from './pages/Home/Home'
 import Employee from './pages/Employee/Employee'
 import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
 import Dashboard from './pages/Employee/Dashboard/Dashboard';
 import Maintenance from './pages/Employee/Maintenance/Maintenance';
 import HR from './pages/Employee/HR/HR';
@@ -16,12 +17,15 @@ import ManageEmp from './pages/Manager/ManageEmp/ManageEmp';
 import WeatherForm from './pages/Employee/WeatherForm/WeatherForm';
 import ExpenseForm from  './pages/Manager/ExpenseForm/ExpenseForm';
 import ViewContact from  './pages/Manager/ViewContact/ViewContact';
-
+import Shop from './pages/Shop/Shop';
+import Attractions from './pages/Attractions/Attractions';
 import Tickets from './pages/Tickets/Tickets';
 import Signup from './pages/auth/User/Signup/Signup';
 import Login from './pages/auth/User/Login/Login';
 import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
+import Checkout from './pages/Checkout/Checkout'
 import { AuthProvider } from './pages/auth/auth';
+
 import { RequireUserAuth } from './pages/auth/requireAuth';
 //my addition
 import Profile from './pages/Profile/Profile';
@@ -31,15 +35,17 @@ import PastOrders from './pages/PastOrders/PastOrders';
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
+  const [showFooter, setShowFooter] = useState(true);
 
   return (
     <>
-    <div className='page-container'>
-      {showNavbar && <Navbar />}
-      <div className='outlet-content'>
-        <Outlet context={{ showNavbar, setShowNavbar }} />
+      <div className='page-container'>
+        {showNavbar && <Navbar />}
+        <div className='outlet-content'>
+          <Outlet context={{ showNavbar, setShowNavbar, showFooter, setShowFooter }} />
+        </div>
+        {showFooter && <Footer />}
       </div>
-    </div>
     </>
   );
 }
@@ -55,54 +61,54 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/Employee",
+        path: "/employee",
         element: <Employee />
       },
       
       {
-      path: "/Dashboard",
+      path: "/employee/dashboard",
       element: <Dashboard />
       },
       {
-        path: "/MDashboard",
+        path: "/manager/dashboard",
         element: <MDashboard />
       },
       {
-        path: "/Maintenance",
+        path: "/employee/maintenance",
         element: <Maintenance />
       },
       {
-        path: "/MMaintenance",
+        path: "/manager/maintenance",
         element: <MMaintenance />
       },
       {
-        path: "/MHR",
+        path: "/manager/HR",
         element: <MHR />
       },
       {
-        path: "/HR",
+        path: "/employee/HR",
         element: <HR />
       },
       {
-        path: "/Manager",
+        path: "/manager",
         element: <Manager />
       },
       {
-        path: "/DataReport",
+        path: "/manager/data-reports",
         element: <DataReport />
       },
       {
-        path: "/ManageEmp",
+        path: "/manager/manage-employees",
         element: <ManageEmp />
       },
       {
-        path: "/ExpenseForm",
+        path: "/manager/expense-form",
         element: <ExpenseForm />
       },
       {
         path: "/tickets",
-        // element: <Tickets />
-        element: <RequireUserAuth><Tickets /></RequireUserAuth>
+        element: <Tickets />
+        // element: <RequireUserAuth><Tickets /></RequireUserAuth>
       },
       {
         path: "/login",
@@ -149,14 +155,20 @@ const router = createBrowserRouter([
   {
     path: "/employee/login",
     element: <EmployeeLogin />
-  }
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />
+  },
 ]);
 
 function App() {
 
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <ShoppingCartProvider>
+        <RouterProvider router={router} />
+      </ShoppingCartProvider>
     </AuthProvider>
   );
 }
