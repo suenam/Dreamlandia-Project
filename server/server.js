@@ -18,7 +18,7 @@ const viewContactFormsHandler = require("./viewContactFormsHandler");
 const editMaintenanceHandler = require("./editMaintenanceHandler");
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: 'https://dreamlandia.vercel.app',
   credentials: true,
 };
 
