@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import dayjs from 'dayjs';
 
 const ShoppingCartContext = createContext({});
 
@@ -25,7 +26,7 @@ export const ShoppingCartProvider = ({ children }) => {
 
     const [attractions, setAttractions] = useState([]);
 
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(dayjs());
 
     const getTickets = () => {
         return tickets;
@@ -43,6 +44,26 @@ export const ShoppingCartProvider = ({ children }) => {
         return date;
     }
 
+    const resetTicketPage = () => {
+        setTickets({
+            standardTicket: 0, 
+            expressTicket: 0, 
+            childTicket: 0
+        });
+
+        setMealTickets({
+            standardMeal1: 0,
+            standardMeal2: 0,
+            deluxeMeal1: 0,
+            deluxeMeal2: 0,
+            specialMeal1: 0,
+            specialMeal2: 0
+        });
+        
+        setAttractions([]);
+        setDate(dayjs());
+    }
+
 
     return (
         <ShoppingCartContext.Provider value={{
@@ -50,6 +71,7 @@ export const ShoppingCartProvider = ({ children }) => {
             setMealTickets, getMealTickets,
             setAttractions, getAttractions,
             setDate, getDate,
+            resetTicketPage
             }}>
             {children}
         </ShoppingCartContext.Provider>

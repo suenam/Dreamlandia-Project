@@ -27,22 +27,21 @@ const Tickets = () => {
     const shoppingCartContext = useShoppingCart();
     const navigate = useNavigate();
 
-    const [visitDate, setVisitDate] = useState(dayjs());
+    const cartDate = shoppingCartContext.getDate();
+    const [visitDate, setVisitDate] = useState(cartDate);
     const today = dayjs().startOf('day');
 
-    const [standardTicket, setStandardTicket] = useState(0);
-    const [expressTicket, setExpressTicket] = useState(0);
-    const [childTicket, setChildTicket] = useState(0);
+    const cartTickets = shoppingCartContext.getTickets();
+    const [standardTicket, setStandardTicket] = useState(cartTickets.standardTicket);
+    const [expressTicket, setExpressTicket] = useState(cartTickets.expressTicket);
+    const [childTicket, setChildTicket] = useState(cartTickets.childTicket);
 
-    const [attractions, setAttractions] = useState([]);
+    const cartAttractions = shoppingCartContext.getAttractions();
+    const [attractions, setAttractions] = useState([...cartAttractions]);
 
+    const cartFoodTickets = shoppingCartContext.getMealTickets();
     const [foodTickets, setFoodTickets] = useState({
-        standardMeal1: 0,
-        standardMeal2: 0,
-        deluxeMeal1: 0,
-        deluxeMeal2: 0,
-        specialMeal1: 0,
-        specialMeal2: 0
+        ...cartFoodTickets
     })
 
     const updateMealTicket = (mealKey, value) => {
@@ -87,7 +86,7 @@ const Tickets = () => {
           shoppingCartContext.setAttractions([
             ...attractions
           ])
-          shoppingCartContext.setDate(visitDate.format("YYYY-MM-DD"));
+          shoppingCartContext.setDate(visitDate);
           navigate('/checkout', { replace: true });
         } catch (error) {
            console.log("error adding items to cart");

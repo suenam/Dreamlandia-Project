@@ -104,7 +104,6 @@ const router = createBrowserRouter([
       {
         path: "/tickets",
         element: <Tickets />
-        // element: <RequireUserAuth><Tickets /></RequireUserAuth>
       },
       {
         path: "/login",
@@ -147,10 +146,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element: <Checkout />
+    element: <RequireUserAuth><Checkout /></RequireUserAuth>
   },
 ]);
-
 function App() {
 
   return (

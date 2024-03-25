@@ -19,15 +19,13 @@ const EmployeeLogin = () => {
   const [password, setPassword] = useState('');
   const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const redirectPath = location.state?.path || '/';
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
       await auth.employeeLogin({ email, password });
       console.log("employeeLogin.jsx is called");
-      navigate(redirectPath, { replace: true });
+      navigate(`/${auth.employee.SRole === "Staff"? "employee":"manager"}/dashboard`, { replace: true });
     } catch (error) {
       console.error('employee Login failed:', error);
     }
