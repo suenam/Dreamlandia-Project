@@ -27,7 +27,11 @@ import Checkout from './pages/Checkout/Checkout'
 import { AuthProvider } from './pages/auth/auth';
 
 import { RequireUserAuth } from './pages/auth/requireAuth';
-import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
+//my addition
+import Profile from './pages/Profile/Profile';
+import PastOrders from './pages/PastOrders/PastOrders';
+// import PersonalInformation from './pages/PersonalInformation/PersonalInformation'; // Import the PersonalInformation component
+
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -113,29 +117,36 @@ const router = createBrowserRouter([
         path: "/auth/signup",
         element: <Signup />
       },
-      {
-        path: "/manager/view-contact-forms",
-        element: <ViewContact />
-      },
-      {
-        path: "/employee/weather-form",
-        element: <WeatherForm />
-      },
-      {
-        path: "/Shop",
-        element: <Shop />
-      },
-      {
-        path: "/contactUs", 
-        element: <ContactUs />
-      },
-      {
-        path: "/attractions",
-        element: <Attractions />
-      }
-
+      // {
+      //   path: "/Profile",
+      //   element: <Profile />
+      // },
+      // {
+      //   path: "/PastOrders",
+      //   element: <PastOrders />
+      // }
+      // {
+      //   path: "/attractions",
+      //   element: <Attractions />
+      // },
+      // {
+      //   path: "/shop",
+      //   element: <Shop />
+      // }
     ]
   },
+  {
+    path: "/PastOrders",
+    element: <PastOrders />
+  },
+  {
+    path: "/Profile",
+    element: <Profile />
+  },
+  // {
+  //   path: "/personal-information",
+  //   element: <PersonalInformation /> // Render the PersonalInformation component
+  // },
   {
     path: "*",
     element: <h1>Page Not Found</h1>
