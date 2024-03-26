@@ -23,7 +23,7 @@ const Checkout = () => {
     const tickets = shoppingCartContext.getTickets();
     const foodTickets = shoppingCartContext.getMealTickets();
     const attractions = shoppingCartContext.getAttractions();
-    const visitDate = shoppingCartContext.getDate();
+    const visitDate = shoppingCartContext.getDate().format("YYYY-MM-DD");
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -144,8 +144,8 @@ const Checkout = () => {
             visitDate,
         }
 
-        // console.log(data);
-        console.log(orderForm);
+        // resetting data in frontend after checkout
+        shoppingCartContext.resetTicketPage();
     }
 
     return (

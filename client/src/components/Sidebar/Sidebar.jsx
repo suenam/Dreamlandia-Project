@@ -1,13 +1,22 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate, useOutletContext } from 'react-router-dom';
+import { useAuth } from "../../pages/auth/auth";
 import './Sidebar.css';
 import Home from '../../pages/Home/Home';
 import Maintenance from '../../pages/Employee/Maintenance/Maintenance';
 import Dashboard from '../../pages/Employee/Dashboard/Dashboard';
 import HR from '../../pages/Employee/HR/HR';
+
 const Sidebar = () => {
-    const handleSignOut = () => {
-        navigate({Home}); 
+
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const { setShowNavbar, setShowFooter } = useOutletContext();
+    const handleSignOut = async () => {
+        await auth.logout();
+        navigate('/', { replace: true }); 
+        setShowNavbar(true);
+        setShowFooter(true);
     };
     const handleDashboard = () => {
         navigate({Dashboard}); 

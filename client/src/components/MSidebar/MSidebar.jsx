@@ -1,11 +1,18 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate, useOutletContext } from 'react-router-dom';
 import './MSidebar.css';
-import Home from '../../pages/Home/Home';
+import { useAuth } from "../../pages/auth/auth";
+
 
 const Sidebar = () => {
-    const handleSignOut = () => {
-        navigate({Home}); 
+    const { setShowNavbar, setShowFooter } = useOutletContext();
+    const navigate = useNavigate();
+    const auth = useAuth();
+    const handleSignOut = async () => {
+      await auth.logout();
+      navigate('/', { replace: true }); 
+      setShowNavbar(true);
+      setShowFooter(true);
     };
     
 
