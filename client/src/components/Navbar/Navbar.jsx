@@ -13,7 +13,6 @@ const Navbar = () => {
             <Link to='/'><img className="dreamlandiaLogo" src={Logo} alt="logo" /></Link>
             <div className="mainnavbar-right">
                 <nav className="mainnavbar-links">
-                    <NavLink className="link" to='/'>Home</NavLink>
                     <NavLink className="link" to='/tickets'>Tickets</NavLink>
                     <NavLink className="link" to='/attractions'>Attractions</NavLink>
 
