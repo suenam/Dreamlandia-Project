@@ -15,7 +15,7 @@ async function loginHandler(req, res) {
             const token = jwt.sign({ userId: user.UserID, userType: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
             console.log('token is initiated in loginHandler.js : ', token);
             console.log('user is initiated in loginHandler.js : ', user);
-            res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Secure; SameSite=None`);
+            res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; SameSite=None; Secure`);
             // res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/;`);
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: 'Login successful', user, token }));
