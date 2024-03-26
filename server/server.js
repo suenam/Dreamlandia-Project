@@ -16,6 +16,7 @@ const visitReportHandler = require("./visitReportHandler");
 const ticketReportHandler = require("./ticketReportHandler");
 const viewContactFormsHandler = require("./viewContactFormsHandler");
 const editMaintenanceHandler = require("./editMaintenanceHandler");
+const checkoutHandler = require("./checkoutHandler");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -76,6 +77,7 @@ const server = http.createServer((req, res) => {
     }
 
     else if (req.url === '/api/tickets' && req.method === 'GET') {
+      console.log('api/tickets is called in server.js');
       authenticateToken(req, res, () => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ /* ticket data */ }));
@@ -102,6 +104,8 @@ const server = http.createServer((req, res) => {
       viewContactFormsHandler(req, res);
     }else if (req.url === '/maintenance-requests' && req.method === 'POST') {
       editMaintenanceHandler(req, res);
+    }else if (req.url === '/checkout' && req.method === 'POST') {
+      checkoutHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

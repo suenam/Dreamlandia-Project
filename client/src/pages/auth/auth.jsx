@@ -55,7 +55,16 @@ export const AuthProvider = ({ children }) => {
             setUser(response.data);
             setEmployee(null);
         } catch (error) {
-            console.error('Error logging in:', error);
+          console.error('Error logging in:', error);
+          // default error message
+          let errorMessage = 'An unexpected error occurred. Please try again later.';
+
+          //check if error is due to authentication failure
+          if (error.response && error.response.status === 401) {
+              errorMessage = 'Email or password is incorrect. Please try again.';
+          }
+
+          alert(errorMessage);
         }
     };
 

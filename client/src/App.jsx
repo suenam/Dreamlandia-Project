@@ -53,14 +53,14 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/", 
+        path: "/",
         element: <Home />
       },
       {
         path: "/employee",
         element: <Employee />
       },
-      
+
       {
       path: "/employee/dashboard",
       element: <Dashboard />
@@ -126,7 +126,7 @@ const router = createBrowserRouter([
         element: <Shop />
       },
       {
-        path: "/contactUs", 
+        path: "/contactUs",
         element: <ContactUs />
       },
       {
