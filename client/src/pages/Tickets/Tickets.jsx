@@ -13,6 +13,7 @@ import WhiteCastle from '../../assets/whitecastle.jpg';
 import BellaFood from '../../assets/bellasfood.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -61,37 +62,43 @@ const Tickets = () => {
     }
 
     const [errorState, setErrorState] = useState(false);
-    const handleCheckout = (event) => {
-        event.preventDefault();
+
+    const addToCart = () => {
         if (!standardTicket &&  !expressTicket && !childTicket) {
             setErrorState(true);
             console.log("no ticket selected");
-            return;
+            return false;
         }
         console.log(attractions)
         if (!attractions.length) {
             setErrorState(true);
             console.log('no attraction selected');
-            return;
+            return false;
         }
-        try {
-          shoppingCartContext.setTickets({
+        shoppingCartContext.setTickets({
             standardTicket: standardTicket,
             expressTicket: expressTicket,
             childTicket: childTicket
-          })
-          shoppingCartContext.setMealTickets({
+        })
+
+        shoppingCartContext.setMealTickets({
             ...foodTickets
-          })
-          shoppingCartContext.setAttractions([
+        })
+
+        shoppingCartContext.setAttractions([
             ...attractions
-          ])
-          shoppingCartContext.setDate(visitDate);
-          navigate('/checkout', { replace: true });
-        } catch (error) {
-           console.log("error adding items to cart");
+        ])
+        
+        shoppingCartContext.setDate(visitDate);
+        return true;
+    }
+
+    const handleCheckout = (event) => {
+        event.preventDefault();
+        if (addToCart()) {
+            navigate('/checkout', { replace: true });
         }
-      };
+    };
 
     return (
         <div className="tickets-container">
@@ -346,10 +353,16 @@ const Tickets = () => {
             </div>
 
             <div className="ticket-checkout-button-error">
-                <button className='ticket-checkout-button' onClick={handleCheckout}>
-                    <ShoppingCartIcon/>
-                    <h3> Checkout</h3>
-                </button>
+                <div className='ticket-cart-buttons'>
+                    <button className='ticket-cart-button' onClick={addToCart}>
+                        <AddShoppingCartIcon/>
+                        <h3>Add to Cart</h3>
+                    </button>
+                    <button className='ticket-cart-button' onClick={handleCheckout}>
+                        <ShoppingCartIcon/>
+                        <h3> Checkout</h3>
+                    </button>
+                </div>
                 {errorState && <div className='ticket-error-message' style={{color: "red"}}>*Please add a ticket and/or attraction!</div> }
             </div>
         </div>

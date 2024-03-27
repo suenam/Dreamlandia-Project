@@ -28,9 +28,15 @@
             font-style: normal;
             display: flex;
             margin-right: 10px;
+
+            .cart-dropdown {
+                position: relative;
+            }
     
             .link {
-                margin-inline: 15px;
+                margin-inline: 10px;
+                padding-block: 10px;
+                padding-inline: 5px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -44,15 +50,20 @@
                 color: var(--secondary);
             }
 
-            .link:hover::after {
+            .link.active {
+                color: var(--secondary);
+                text-shadow: #ffffffa2 1px 0 10px;
+            }
+
+            .link:not(.checkout):hover::after {
                 transform: translate3d(0, 0, 0);
                 background-color: var(--secondary);
             }
             
-            .link::after {
+            .link:not(.checkout)::after {
                 position: absolute;
                 content: '';
-                bottom: 0;
+                bottom: 7px;
                 left: 0;
                 width: 100%;
                 height: 0.15em;
