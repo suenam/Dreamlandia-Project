@@ -32,7 +32,7 @@ const Navbar = () => {
                         onMouseEnter={()=>setHover(true)} 
                         onMouseLeave={()=>setHover(false)}
                     >
-                        <NavLink className="link checkout" to='/checkout'>
+                        <NavLink className="link checkout" to='/checkout' style={{color: hover ? '#FFDE59' : 'white'}}>
                             <ShoppingCartIcon/>
                             </NavLink>
                         {hover && <CartDropdown/>}
