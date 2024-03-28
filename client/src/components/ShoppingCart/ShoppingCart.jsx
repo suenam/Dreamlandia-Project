@@ -28,6 +28,13 @@ export const ShoppingCartProvider = ({ children }) => {
 
     const [date, setDate] = useState(dayjs());
 
+    const [merch, setMerch] = useState({
+        shirt1: 0,
+        shirt2: 0,
+        pants1: 0, 
+        pants2: 0
+    })
+
     const getTickets = () => {
         return tickets;
     }
@@ -42,6 +49,10 @@ export const ShoppingCartProvider = ({ children }) => {
 
     const getDate = () => {
         return date;
+    }
+
+    const getMerch = () => {
+        return merch;
     }
 
     const resetTicketPage = () => {
@@ -71,6 +82,7 @@ export const ShoppingCartProvider = ({ children }) => {
             setMealTickets, getMealTickets,
             setAttractions, getAttractions,
             setDate, getDate,
+            setMerch, getMerch,
             resetTicketPage
             }}>
             {children}
