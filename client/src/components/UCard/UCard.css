@@ -1,0 +1,64 @@
+.user-profile {
+    height: auto;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    text-align: left;
+    margin-right: 20px;
+    font-family: Montserrat;
+    color: #000000; 
+  }
+  
+  .user-profile h3 {
+    margin-bottom: 30px;
+    color: #000000;
+  }
+  
+  .user-profile .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-profile .form-group label {
+    display: block;
+    font-weight: bold;
+    font-family: Montserrat;
+    width: 150px;
+    text-align: left;
+    margin-right: 10px;
+    color: #000000;
+  }
+  
+  .user-profile .form-group input {
+    width: 300px;
+    padding: 10px;
+    font-family: Montserrat;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .user-profile .form-group input:focus {
+    border-color: #4caf50;
+  }
+  
+  .user-profile .edit-btn {
+    font-family: Montserrat;
+    display: inline-block;
+    font-size: 16px;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    width: 100px;
+    height: 35px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .user-profile .edit-btn:hover {
+    background-color: #45a049;
+    cursor: select;
+  }
