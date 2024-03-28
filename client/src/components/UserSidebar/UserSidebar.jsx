@@ -19,12 +19,11 @@ const Sidebar = () => {
   return (
     <div className="usidebar">
       <div className="usidebar-header">
-        <NavLink to='/' style={{textDecoration: 'none'}}><h3>User Portal</h3></NavLink>
+        <NavLink to='/UserPage' style={{textDecoration: 'none'}}><h3>User Portal</h3></NavLink>
       </div>
       <nav className="usidebar-links">
         <NavLink className="usidebar-link" to="/" >Home</NavLink>
-        <NavLink className="usidebar-link" to="/tickets" >Tickets</NavLink>
-        <NavLink className="usidebar-link" to="/shop" >Shop</NavLink>
+        <NavLink className="usidebar-link" to="/UserPage/RecentOrders" >Recent Orders</NavLink>
         
         <NavLink className="usidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
 
