@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         element: <Employee />
       },
       {
-        path: "/userPage",
+        path: "/user/profile",
         element: <UserPage />
       },
 
@@ -76,7 +76,7 @@ const router = createBrowserRouter([
         element: <MDashboard />
       },
       {
-        path: "UserPage/RecentOrders",
+        path: "/user/recent-orders",
         element: <RecentOrders />
       },
       {

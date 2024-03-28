@@ -23,7 +23,8 @@ const Sidebar = () => {
       </div>
       <nav className="usidebar-links">
         <NavLink className="usidebar-link" to="/" >Home</NavLink>
-        <NavLink className="usidebar-link" to="/UserPage/RecentOrders" >Recent Orders</NavLink>
+        <NavLink className="usidebar-link" to="/user/profile" >My Profile</NavLink>
+        <NavLink className="usidebar-link" to="/user/recent-orders" >Recent Orders</NavLink>
         
         <NavLink className="usidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
 
