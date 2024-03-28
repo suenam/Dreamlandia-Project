@@ -3,13 +3,19 @@
     margin-top: 40px;
     font-family: Montserrat;
   }
+  .datareport-date-range {
+    font-size: 0.8rem;
+    font-weight: normal;
+  }
   .report-section .form-header {
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
 
   }
-  
+  .data-report-exportPdf-dr-butt{
+    margin-left: 819px;
+  }
   .report-section .form-header h3 {
     margin: 0;
     font-family: Montserrat;

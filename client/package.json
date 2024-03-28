@@ -16,7 +16,7 @@
     "@mui/material": "^5.15.13",
     "@mui/x-date-pickers": "^6.19.8",
     "@progress/kendo-react-pdf": "^7.3.0",
-    "@react-pdf/renderer": "^3.4.0",
+    "@react-pdf/renderer": "^3.4.2",
     "axios": "^1.6.8",
     "dayjs": "^1.11.10",
     "html2canvas": "^1.4.1",

@@ -158,7 +158,7 @@ FROM (
         DATE_FORMAT(ExpenseDate, '%Y-%m-%d') AS Date,
         'Dining' AS Department,
         SUM(ExpenseAmt) AS Expense,
-        0 AS Revenue
+        SUM(Amount) AS Revenue
     FROM restaurant, restaurant_expense
     WHERE restaurant.RestaurantID= restaurant_expense.RestaurantID 
     AND ExpenseDate between ? AND ?

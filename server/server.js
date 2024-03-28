@@ -18,6 +18,7 @@ const viewContactFormsHandler = require("./viewContactFormsHandler");
 const editMaintenanceHandler = require("./editMaintenanceHandler");
 const dashboardDataHandler = require("./dashboardDataHandler");
 const financeReportHandler = require("./financeReportHandler");
+const maintenanceReportHandler = require("./maintenanceReportHandler");
 
 const corsOptions = {
   origin: 'http://localhost:5173',
@@ -94,8 +95,8 @@ const server = http.createServer((req, res) => {
       restaurantExpenseHandler(req, res);
     }else if (req.url === '/visit-report' && req.method === 'POST') {
       visitReportHandler(req, res);
-    }else if (req.url === '/ticket-report' && req.method === 'POST') {
-      ticketReportHandler(req, res);
+    }else if (req.url === '/maintenance-report' && req.method === 'POST') {
+      maintenanceReportHandler(req, res);
     }else if (req.url === '/viewContactForms' && req.method === 'POST') {
       viewContactFormsHandler(req, res);
     }else if (req.url === '/maintenance-requests' && req.method === 'POST') {

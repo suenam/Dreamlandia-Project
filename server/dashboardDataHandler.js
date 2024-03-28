@@ -23,14 +23,14 @@ async function dashboardDataHandler(req, res) {
         // Fetch restaurant data
         const restaurantQuery = `
             SELECT
-                SUM(Amount) AS TotalRestaurantRevenue,
+                SUM(restaurant.Amount) AS TotalRestaurantRevenue,
                 COUNT(*) AS TotalRestaurantTransactions,
                 (SELECT COUNT(*) FROM restaurant_transaction WHERE RestaurantID IN (SELECT RestaurantID FROM restaurant WHERE RestaurantType = 'Standard') AND DATE(TransactionTimeStamp) BETWEEN ? AND ?) AS TotalStandardRestaurantTransactions,
                 (SELECT COUNT(*) FROM restaurant_transaction WHERE RestaurantID IN (SELECT RestaurantID FROM restaurant WHERE RestaurantType = 'Deluxe') AND DATE(TransactionTimeStamp) BETWEEN ? AND ?) AS TotalDeluxeRestaurantTransactions,
                 (SELECT COUNT(*) FROM restaurant_transaction WHERE RestaurantID IN (SELECT RestaurantID FROM restaurant WHERE RestaurantType = 'Special') AND DATE(TransactionTimeStamp) BETWEEN ? AND ?) AS TotalSpecialRestaurantTransactions,
                 (SELECT SUM(ExpenseAmt) FROM restaurant_expense WHERE DATE(ExpenseDate) BETWEEN ? AND ?) AS restaurantExpense
-            FROM restaurant_transaction
-            WHERE DATE(TransactionTimeStamp) BETWEEN ? AND ?;
+            FROM restaurant_transaction, restaurant
+            WHERE restaurant.RestaurantID = restaurant_transaction.RestaurantID AND DATE(TransactionTimeStamp) BETWEEN ? AND ?;
         `;
         const [restaurantData] = await pool.execute(restaurantQuery, [
             startDate, endDate, startDate, endDate, startDate, endDate, startDate, endDate, startDate, endDate
