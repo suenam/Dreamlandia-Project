@@ -8,7 +8,10 @@ function ViewContact() {
   setShowNavbar(false);
   setShowFooter(false);
 
-  const [viewDate, setViewDate] = useState('');
+  const [viewStartDate, setViewStartDate] = useState('');
+  const [viewEndDate, setViewEndDate] = useState('');
+  const [contactType, setContactType] = useState('all'); 
+
   const [contactForms, setContactForms] = useState([]);
 
   const handleViewSubmit = async (e) => {
@@ -20,7 +23,7 @@ function ViewContact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ startDate: viewDate, endDate: viewDate }),
+        body: JSON.stringify({ startDate: viewStartDate, endDate: viewEndDate, type: contactType }),
       });
 
       if (response.ok) {
@@ -47,8 +50,21 @@ function ViewContact() {
               <i title="Select a date to view contact forms submitted on that date.">&#9432;</i>
             </div>
             <div className="form-row">
-              <label>Date:</label>
-              <input type="date" value={viewDate} onChange={(e) => setViewDate(e.target.value)} />
+              <label>Start Date:</label>
+              <input type="date" value={viewStartDate} onChange={(e) => setViewStartDate(e.target.value)} />
+            </div>
+            <div className="form-row">
+              <label>End Date:</label>
+              <input type="date" value={viewEndDate} onChange={(e) => setViewEndDate(e.target.value)} />
+            </div>
+            <div className="form-row">
+              <label>Contact Type:</label>
+              <select value={contactType} onChange={(e) => setContactType(e.target.value)}>
+                <option value="all">All</option>
+                <option value="query">Query</option>
+                <option value="issue">Issue</option>
+                <option value="feedback">Feedback</option>
+              </select>
             </div>
             <button className="generate-but-dr" type="submit">
               View Contact Forms
@@ -83,7 +99,7 @@ function ViewContact() {
               </tbody>
             </table>
           ) : (
-            <p>No contact forms found for the selected date.</p>
+            <p>No contact forms found for the selected date and type.</p>
           )}
         </div>
       </div>

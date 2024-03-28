@@ -25,6 +25,8 @@ import Login from './pages/auth/User/Login/Login';
 import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
 import Checkout from './pages/Checkout/Checkout'
 import { AuthProvider } from './pages/auth/auth';
+import UserPage from './pages/UserPage/UserPage';
+import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders'
 
 import { RequireUserAuth } from './pages/auth/requireAuth';
 import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
@@ -60,6 +62,10 @@ const router = createBrowserRouter([
         path: "/employee",
         element: <Employee />
       },
+      {
+        path: "/user/profile",
+        element: <UserPage />
+      },
 
       {
       path: "/employee/dashboard",
@@ -68,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "/manager/dashboard",
         element: <MDashboard />
+      },
+      {
+        path: "/user/recent-orders",
+        element: <RecentOrders />
       },
       {
         path: "/employee/maintenance",

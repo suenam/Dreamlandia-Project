@@ -16,6 +16,9 @@ const visitReportHandler = require("./visitReportHandler");
 const ticketReportHandler = require("./ticketReportHandler");
 const viewContactFormsHandler = require("./viewContactFormsHandler");
 const editMaintenanceHandler = require("./editMaintenanceHandler");
+const dashboardDataHandler = require("./dashboardDataHandler");
+const financeReportHandler = require("./financeReportHandler");
+const maintenanceReportHandler = require("./maintenanceReportHandler");
 const checkoutHandler = require("./checkoutHandler");
 
 const corsOptions = {
@@ -98,12 +101,16 @@ const server = http.createServer((req, res) => {
       restaurantExpenseHandler(req, res);
     }else if (req.url === '/visit-report' && req.method === 'POST') {
       visitReportHandler(req, res);
-    }else if (req.url === '/ticket-report' && req.method === 'POST') {
-      ticketReportHandler(req, res);
+    }else if (req.url === '/maintenance-report' && req.method === 'POST') {
+      maintenanceReportHandler(req, res);
     }else if (req.url === '/viewContactForms' && req.method === 'POST') {
       viewContactFormsHandler(req, res);
     }else if (req.url === '/maintenance-requests' && req.method === 'POST') {
       editMaintenanceHandler(req, res);
+    }else if (req.url === '/dashboardData' && req.method === 'POST') { 
+      dashboardDataHandler(req, res);
+    }else if (req.url === '/finance-report' && req.method === 'POST') { 
+      financeReportHandler(req, res);
     }else if (req.url === '/checkout' && req.method === 'POST') {
       checkoutHandler(req, res);
     }

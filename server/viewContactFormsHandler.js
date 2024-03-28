@@ -3,20 +3,25 @@ const getPostData = require('./postDataParser');
 
 async function viewContactFormsHandler(req, res) {
   try {
-    const { startDate, endDate } = await getPostData(req);
-
-
-    const query = `
+    const { startDate, endDate, type } = await getPostData(req);
+    let query = `
       SELECT SubmissionID, Cname, Cemail, DATE_FORMAT(Cdate, '%Y-%m-%d %h:%i %p') AS Cdate, CType, Content, TicketID
       FROM contact_us_form
       WHERE Cdate BETWEEN ? AND ?
     `;
 
-    // Execute the query
-    const [rows] = await pool.execute(query, [
+    const queryParams = [
       new Date(startDate),
-      new Date(endDate + ' 23:59:59'), //this includes the hwole day 
-    ]);
+      new Date(endDate + ' 23:59:59'),
+    ];
+
+    if (type !== 'all') {
+      query += ' AND CType = ?';
+      queryParams.push(type);
+    }
+
+    // Execute the query
+    const [rows] = await pool.execute(query, queryParams);
 
     // Return the contact forms as JSON
     res.writeHead(200, { 'Content-Type': 'application/json' });
