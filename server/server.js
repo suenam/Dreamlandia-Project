@@ -19,9 +19,10 @@ const editMaintenanceHandler = require("./editMaintenanceHandler");
 const dashboardDataHandler = require("./dashboardDataHandler");
 const financeReportHandler = require("./financeReportHandler");
 const maintenanceReportHandler = require("./maintenanceReportHandler");
+const checkoutHandler = require("./checkoutHandler");
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
   credentials: true,
 };
 
@@ -37,14 +38,18 @@ const server = http.createServer((req, res) => {
       console.log('api/user is called in server.js');
       authenticateToken(req, res, () => {
         if (req.user) {
+          console.log("entering if req.user...")
           if (req.user.userType === 'user') {
+            console.log("entering if req.user.userType is user...")
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(req.user));
           } else {
+            console.log("entering if req.user.userType NOT user...")
             res.writeHead(403, { 'Content-Type': 'application/json' });
             // res.end(JSON.stringify({ message: 'Forbidden' }));
           }
         } else {
+          console.log("entering if NOT req.user...")
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(null));
         }
@@ -75,6 +80,7 @@ const server = http.createServer((req, res) => {
     }
 
     else if (req.url === '/api/tickets' && req.method === 'GET') {
+      console.log('api/tickets is called in server.js');
       authenticateToken(req, res, () => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ /* ticket data */ }));
@@ -105,6 +111,8 @@ const server = http.createServer((req, res) => {
       dashboardDataHandler(req, res);
     }else if (req.url === '/finance-report' && req.method === 'POST') { 
       financeReportHandler(req, res);
+    }else if (req.url === '/checkout' && req.method === 'POST') {
+      checkoutHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

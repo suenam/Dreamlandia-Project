@@ -13,6 +13,7 @@ import WhiteCastle from '../../assets/whitecastle.jpg';
 import BellaFood from '../../assets/bellasfood.jpg';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -27,22 +28,21 @@ const Tickets = () => {
     const shoppingCartContext = useShoppingCart();
     const navigate = useNavigate();
 
-    const [visitDate, setVisitDate] = useState(dayjs());
+    const cartDate = shoppingCartContext.getDate();
+    const [visitDate, setVisitDate] = useState(cartDate);
     const today = dayjs().startOf('day');
 
-    const [standardTicket, setStandardTicket] = useState(0);
-    const [expressTicket, setExpressTicket] = useState(0);
-    const [childTicket, setChildTicket] = useState(0);
+    const cartTickets = shoppingCartContext.getTickets();
+    const [standardTicket, setStandardTicket] = useState(cartTickets.standardTicket);
+    const [expressTicket, setExpressTicket] = useState(cartTickets.expressTicket);
+    const [childTicket, setChildTicket] = useState(cartTickets.childTicket);
 
-    const [attractions, setAttractions] = useState([]);
+    const cartAttractions = shoppingCartContext.getAttractions();
+    const [attractions, setAttractions] = useState([...cartAttractions]);
 
+    const cartFoodTickets = shoppingCartContext.getMealTickets();
     const [foodTickets, setFoodTickets] = useState({
-        standardMeal1: 0,
-        standardMeal2: 0,
-        deluxeMeal1: 0,
-        deluxeMeal2: 0,
-        specialMeal1: 0,
-        specialMeal2: 0
+        ...cartFoodTickets
     })
 
     const updateMealTicket = (mealKey, value) => {
@@ -62,37 +62,43 @@ const Tickets = () => {
     }
 
     const [errorState, setErrorState] = useState(false);
-    const handleCheckout = (event) => {
-        event.preventDefault();
+
+    const addToCart = () => {
         if (!standardTicket &&  !expressTicket && !childTicket) {
             setErrorState(true);
             console.log("no ticket selected");
-            return;
+            return false;
         }
         console.log(attractions)
         if (!attractions.length) {
             setErrorState(true);
             console.log('no attraction selected');
-            return;
+            return false;
         }
-        try {
-          shoppingCartContext.setTickets({
+        shoppingCartContext.setTickets({
             standardTicket: standardTicket,
             expressTicket: expressTicket,
             childTicket: childTicket
-          }) 
-          shoppingCartContext.setMealTickets({
+        })
+
+        shoppingCartContext.setMealTickets({
             ...foodTickets
-          }) 
-          shoppingCartContext.setAttractions([
+        })
+
+        shoppingCartContext.setAttractions([
             ...attractions
-          ])
-          shoppingCartContext.setDate(visitDate.format("YYYY-MM-DD"));
-          navigate('/checkout', { replace: true });
-        } catch (error) {
-           console.log("error adding items to cart");
+        ])
+        
+        shoppingCartContext.setDate(visitDate);
+        return true;
+    }
+
+    const handleCheckout = (event) => {
+        event.preventDefault();
+        if (addToCart()) {
+            navigate('/checkout', { replace: true });
         }
-      };
+    };
 
     return (
         <div className="tickets-container">
@@ -110,11 +116,11 @@ const Tickets = () => {
                             <h4>$65</h4>
                             <div>Provides full-day access to thrilling rides, entertaining shows, and unique attractions for guests of all ages</div>
                             <div className='remove-add-tickets'>
-                                <RemoveCircleOutlineIcon fontSize='large' pointerEvents={standardTicket === 0? 'none': ''} color={standardTicket === 0? 'action' : ''} 
+                                <RemoveCircleOutlineIcon fontSize='large' pointerEvents={standardTicket === 0? 'none': ''} color={standardTicket === 0? 'action' : ''}
                                     onClick={()=>setStandardTicket(standardTicket-1)}
                                 />
                                 <div className='ticket-count'>{standardTicket}</div>
-                                <AddCircleOutlineIcon fontSize='large' 
+                                <AddCircleOutlineIcon fontSize='large'
                                     onClick={()=>setStandardTicket(standardTicket+1)}
                                 />
                             </div>
@@ -128,7 +134,7 @@ const Tickets = () => {
                                     onClick={()=>setExpressTicket(expressTicket-1)}
                                 />
                                 <div className='ticket-count'>{expressTicket}</div>
-                                <AddCircleOutlineIcon fontSize='large' 
+                                <AddCircleOutlineIcon fontSize='large'
                                     onClick={()=>setExpressTicket(expressTicket+1)}
                                 />
                             </div>
@@ -142,7 +148,7 @@ const Tickets = () => {
                                     onClick={()=>setChildTicket(childTicket-1)}
                                 />
                                 <div className='ticket-count'>{childTicket}</div>
-                                <AddCircleOutlineIcon fontSize='large' 
+                                <AddCircleOutlineIcon fontSize='large'
                                     onClick={()=>setChildTicket(childTicket+1)}
                                 />
                             </div>
@@ -161,10 +167,10 @@ const Tickets = () => {
                                     <div>Buckle up for a dreamlike journey on our roller coaster, where you'll soar through clouds and dive into the depths of an enchanted wonderland, feeling the thrill of magic at every twist and turn.</div>
                                 </div>
                                 <button className='add-attraction'
-                                    style = {{backgroundColor: attractions.includes("rollerCoaster") ? "#67C237" : ''}}
-                                    onClick={()=>setAttractionFn("rollerCoaster")}
+                                    style = {{backgroundColor: attractions.includes("Roller Coaster") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("Roller Coaster")}
                                 >
-                                    {attractions.includes("rollerCoaster") ? "Added ✔" : 'Add attraction'}
+                                    {attractions.includes("Roller Coaster") ? "Added ✔" : 'Add attraction'}
                                 </button>
                             </div>
                             <div className='attraction-option'>
@@ -174,10 +180,10 @@ const Tickets = () => {
                                     <div>Mount your dream steed on our carousel, a revolving realm of wonder where every gallop and gentle melody transports you to a timeless dance amidst a kaleidoscope of lights and colors.</div>
                                 </div>
                                 <button className='add-attraction'
-                                    style = {{backgroundColor: attractions.includes("carousel") ? "#67C237" : ''}}
-                                    onClick={()=>setAttractionFn("carousel")}
+                                    style = {{backgroundColor: attractions.includes("Carousel") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("Carousel")}
                                 >
-                                    {attractions.includes("carousel") ? "Added ✔" : 'Add attraction'}
+                                    {attractions.includes("Carousel") ? "Added ✔" : 'Add attraction'}
                                 </button>
                             </div>
                             <div className='attraction-option'>
@@ -187,10 +193,10 @@ const Tickets = () => {
                                     <div> Step into your own floating dream as you ascend the Ferris wheel, offering a serene escape high above, where the world below blends into a tapestry of lights and whimsy under the sky.</div>
                                 </div>
                                 <button className='add-attraction'
-                                    style = {{backgroundColor: attractions.includes("ferrisWheel") ? "#67C237" : ''}}
-                                    onClick={()=>setAttractionFn("ferrisWheel")}
+                                    style = {{backgroundColor: attractions.includes("Ferris Wheel") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("Ferris Wheel")}
                                 >
-                                    {attractions.includes("ferrisWheel") ? "Added ✔" : 'Add attraction'}
+                                    {attractions.includes("Ferris Wheel") ? "Added ✔" : 'Add attraction'}
                                 </button>
                             </div>
                             <div className='attraction-option'>
@@ -200,10 +206,10 @@ const Tickets = () => {
                                     <div>Embark on a journey through magical realms on our dark themed rides, where each turn unveils a fragment of a dream, weaving stories that dance in the delicate balance between fantasy and mystery.</div>
                                 </div>
                                 <button className='add-attraction'
-                                    style = {{backgroundColor: attractions.includes("themedRide") ? "#67C237" : ''}}
-                                    onClick={()=>setAttractionFn("themedRide")}
+                                    style = {{backgroundColor: attractions.includes("Themed Rides") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("Themed Rides")}
                                 >
-                                    {attractions.includes("themedRide") ? "Added ✔" : 'Add attraction'}
+                                    {attractions.includes("Themed Rides") ? "Added ✔" : 'Add attraction'}
                                 </button>
                             </div>
                             <div className='attraction-option'>
@@ -213,10 +219,10 @@ const Tickets = () => {
                                     <div>Glide through mystical waters on our water rides, where splashes lead to laughter and each drop is a portal to a refreshing adventure in a lush, dream-infused landscape.</div>
                                 </div>
                                 <button className='add-attraction'
-                                    style = {{backgroundColor: attractions.includes("waterRide") ? "#67C237" : ''}}
-                                    onClick={()=>setAttractionFn("waterRide")}
+                                    style = {{backgroundColor: attractions.includes("Water Rides") ? "#67C237" : ''}}
+                                    onClick={()=>setAttractionFn("Water Rides")}
                                 >
-                                    {attractions.includes("waterRide") ? "Added ✔" : 'Add attraction'}
+                                    {attractions.includes("Water Rides") ? "Added ✔" : 'Add attraction'}
                                 </button>
                             </div>
                         </div>
@@ -225,9 +231,9 @@ const Tickets = () => {
 
                 <div className='meal-content'>
                     <div className='select-meals'>
-                        <h2>Select your meal vouchers (one per person) </h2>  
+                        <h2>Select your meal vouchers (one per person) </h2>
                         <div className='meal-options'>
-                            <div className='meal-options-col'> 
+                            <div className='meal-options-col'>
                                 <h4>Standard ($10/ea) </h4>
                                 <i>Quick eats and quick service</i>
                                 <div className='meal-option'>
@@ -239,7 +245,7 @@ const Tickets = () => {
                                             onClick={()=>updateMealTicket('standardMeal1', -1)}
                                         />
                                         <div className='ticket-count'>{foodTickets.standardMeal1}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
+                                        <AddCircleOutlineIcon fontSize='large'
                                             onClick={()=>updateMealTicket('standardMeal1', 1)}
                                         />
                                     </div>
@@ -254,7 +260,7 @@ const Tickets = () => {
                                             onClick={()=>updateMealTicket('standardMeal2', -1)}
                                         />
                                         <div className='ticket-count'>{foodTickets.standardMeal2}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
+                                        <AddCircleOutlineIcon fontSize='large'
                                             onClick={()=>updateMealTicket('standardMeal2', 1)}
                                         />
                                     </div>
@@ -273,7 +279,7 @@ const Tickets = () => {
                                             onClick={()=>updateMealTicket('deluxeMeal1', -1)}
                                         />
                                         <div className='ticket-count'>{foodTickets.deluxeMeal1}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
+                                        <AddCircleOutlineIcon fontSize='large'
                                             onClick={()=>updateMealTicket('deluxeMeal1', 1)}
                                         />
                                     </div>
@@ -288,7 +294,7 @@ const Tickets = () => {
                                             onClick={()=>updateMealTicket('deluxeMeal2', -1)}
                                         />
                                         <div className='ticket-count'>{foodTickets.deluxeMeal2}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
+                                        <AddCircleOutlineIcon fontSize='large'
                                             onClick={()=>updateMealTicket('deluxeMeal2', 1)}
                                         />
                                     </div>
@@ -307,7 +313,7 @@ const Tickets = () => {
                                             onClick={()=>updateMealTicket('specialMeal1', -1)}
                                         />
                                         <div className='ticket-count'>{foodTickets.specialMeal1}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
+                                        <AddCircleOutlineIcon fontSize='large'
                                             onClick={()=>updateMealTicket('specialMeal1', 1)}
                                         />
                                     </div>
@@ -322,7 +328,7 @@ const Tickets = () => {
                                             onClick={()=>updateMealTicket('specialMeal2', -1)}
                                         />
                                         <div className='ticket-count'>{foodTickets.specialMeal2}</div>
-                                        <AddCircleOutlineIcon fontSize='large' 
+                                        <AddCircleOutlineIcon fontSize='large'
                                             onClick={()=>updateMealTicket('specialMeal2', 1)}
                                         />
                                     </div>
@@ -333,13 +339,13 @@ const Tickets = () => {
                 </div>
 
                 <div className="calendar-container">
-                    <h2>Select your day of visit </h2>  
+                    <h2>Select your day of visit </h2>
                     <div className='calendar-select'>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DateCalendar 
-                                value={visitDate} 
-                                onChange={(newVisitDate) => setVisitDate(newVisitDate)} 
-                                minDate={today}  
+                            <DateCalendar
+                                value={visitDate}
+                                onChange={(newVisitDate) => setVisitDate(newVisitDate)}
+                                minDate={today}
                                 />
                         </LocalizationProvider>
                     </div>
@@ -347,12 +353,18 @@ const Tickets = () => {
             </div>
 
             <div className="ticket-checkout-button-error">
-                <button className='ticket-checkout-button' onClick={handleCheckout}>
-                    <ShoppingCartIcon/> 
-                    <h3> Checkout</h3>
-                </button>
+                <div className='ticket-cart-buttons'>
+                    <button className='ticket-cart-button' onClick={addToCart}>
+                        <AddShoppingCartIcon/>
+                        <h3>Add to Cart</h3>
+                    </button>
+                    <button className='ticket-cart-button' onClick={handleCheckout}>
+                        <ShoppingCartIcon/>
+                        <h3> Checkout</h3>
+                    </button>
+                </div>
                 {errorState && <div className='ticket-error-message' style={{color: "red"}}>*Please add a ticket and/or attraction!</div> }
-            </div> 
+            </div>
         </div>
     );
 }
