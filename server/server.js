@@ -19,6 +19,10 @@ const editMaintenanceHandler = require("./editMaintenanceHandler");
 const dashboardDataHandler = require("./dashboardDataHandler");
 const financeReportHandler = require("./financeReportHandler");
 const maintenanceReportHandler = require("./maintenanceReportHandler");
+const addEmpHandler = require("./addEmpHandler");
+const archiveEmpHandler = require("./archiveEmpHandler");
+const getEmployeesHandler = require("./getEmployeesHandler");
+const loadMaintenanceRequestHandler = require("./loadMaintenanceRequestHandler");
 
 const corsOptions = {
   origin: 'http://localhost:5173',
@@ -105,6 +109,15 @@ const server = http.createServer((req, res) => {
       dashboardDataHandler(req, res);
     }else if (req.url === '/finance-report' && req.method === 'POST') { 
       financeReportHandler(req, res);
+    }else if (req.url === '/employees' && req.method === 'GET') { 
+      getEmployeesHandler(req, res);
+    }
+    else if (req.url === '/addEmp' && req.method === 'POST') { 
+      addEmpHandler(req, res);
+    }else if (req.url === '/archiveEmp' && req.method === 'POST') { 
+      archiveEmpHandler(req, res);
+    }else if (req.url.startsWith('/loadMaintenanceRequest') && req.method === 'GET') {
+      loadMaintenanceRequestHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
