@@ -19,6 +19,9 @@ const editMaintenanceHandler = require("./editMaintenanceHandler");
 const dashboardDataHandler = require("./dashboardDataHandler");
 const financeReportHandler = require("./financeReportHandler");
 const maintenanceReportHandler = require("./maintenanceReportHandler");
+const addEmpHandler = require("./addEmpHandler");
+const archiveEmpHandler = require("./archiveEmpHandler");
+const getEmployeesHandler = require("./getEmployeesHandler");
 const checkoutHandler = require("./checkoutHandler");
 
 const corsOptions = {
@@ -107,6 +110,13 @@ const server = http.createServer((req, res) => {
       financeReportHandler(req, res);
     }else if (req.url === '/checkout' && req.method === 'POST') {
       checkoutHandler(req, res);
+    }else if (req.url === '/employees' && req.method === 'GET') { 
+      getEmployeesHandler(req, res);
+    }
+    else if (req.url === '/addEmp' && req.method === 'POST') { 
+      addEmpHandler(req, res);
+    }else if (req.url === '/archiveEmp' && req.method === 'POST') { 
+      archiveEmpHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -118,3 +128,4 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+
