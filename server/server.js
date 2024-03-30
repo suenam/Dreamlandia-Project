@@ -20,6 +20,7 @@ const dashboardDataHandler = require("./dashboardDataHandler");
 const financeReportHandler = require("./financeReportHandler");
 const maintenanceReportHandler = require("./maintenanceReportHandler");
 const checkoutHandler = require("./checkoutHandler");
+const contactUsPageHandler = require("./contactUsPageHandler");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -29,22 +30,27 @@ const corsOptions = {
 const server = http.createServer((req, res) => {
   cors(corsOptions)(req, res, () => {
     if (req.method === 'OPTIONS') {
-      res.writeHead(204);
+      res.writeHead(200);
       res.end();
       return;
     }
 
     if (req.url === '/api/user' && req.method === 'GET') {
+      console.log('api/user is called in server.js');
       authenticateToken(req, res, () => {
         if (req.user) {
+          console.log("entering if req.user...")
           if (req.user.userType === 'user') {
+            console.log("entering if req.user.userType is user...")
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(req.user));
           } else {
+            console.log("entering if req.user.userType NOT user...")
             res.writeHead(403, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Forbidden' }));
+            // res.end(JSON.stringify({ message: 'Forbidden' }));
           }
         } else {
+          console.log("entering if NOT req.user...")
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(null));
         }
@@ -57,6 +63,7 @@ const server = http.createServer((req, res) => {
   //   res.end(JSON.stringify({ message: 'Route not found' }));
   // }
     else if (req.url === '/api/employee' && req.method === 'GET') {
+      console.log('api/employee is called in server.js');
       authenticateToken(req, res, () => {
         if (req.user) {
           if (req.user.userType === 'employee') {
@@ -64,7 +71,7 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify(req.user));
           } else {
             res.writeHead(403, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Forbidden' }));
+            // res.end(JSON.stringify({ message: 'Forbidden' }));
           }
         } else {
           res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -101,12 +108,14 @@ const server = http.createServer((req, res) => {
       viewContactFormsHandler(req, res);
     }else if (req.url === '/maintenance-requests' && req.method === 'POST') {
       editMaintenanceHandler(req, res);
-    }else if (req.url === '/dashboardData' && req.method === 'POST') {
+    }else if (req.url === '/dashboardData' && req.method === 'POST') { 
       dashboardDataHandler(req, res);
-    }else if (req.url === '/finance-report' && req.method === 'POST') {
+    }else if (req.url === '/finance-report' && req.method === 'POST') { 
       financeReportHandler(req, res);
     }else if (req.url === '/checkout' && req.method === 'POST') {
       checkoutHandler(req, res);
+    }else if(req.url = '/contact-us' && req.method == 'POST') {
+      contactUsPageHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

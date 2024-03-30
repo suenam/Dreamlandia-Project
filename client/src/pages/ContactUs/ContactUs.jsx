@@ -9,22 +9,37 @@ const ContactUs = () => {
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here (e.g., sending data to server)
-    console.log("Submitted:", { name, ticketId, email, type, message });
-    // Clear input fields after submission
-    setName('');
-    setTicketId('');
-    setEmail('');
-    setType('');
-    setMessage('');
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/contact-us`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, ticketId, email, type, message }),
+      });
+
+      if (response.ok) {
+        alert('Message submitted successfully!');
+        console.log('Message submitted successfully!');
+        // Clear input fields after submission
+        setName('');
+        setTicketId('');
+        setEmail('');
+        setType('');
+        setMessage('');
+      } else {
+        alert('Failed to submit message.');
+        console.error('Failed to submit message.');
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
   };
 
   return (
     <div className="contact-container">
       <div className="contact-header">
-        <Sparkles/>
+        <Sparkles />
         <h1>Contact Us</h1>
         <p>Note that only accounts with registered emails and at least one purchase order actually have their message sent to us</p>
       </div>
