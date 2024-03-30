@@ -12,6 +12,7 @@ const CartDropdown = () => {
     const shoppingCartContext = useShoppingCart();
     const tickets = shoppingCartContext.getTickets();
     const foodTickets = shoppingCartContext.getMealTickets()
+    const merchItems = shoppingCartContext.getMerch();
 
     const isNotEmptyCart = () => {
         return (

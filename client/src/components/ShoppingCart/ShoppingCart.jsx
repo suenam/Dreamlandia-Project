@@ -29,10 +29,22 @@ export const ShoppingCartProvider = ({ children }) => {
     const [date, setDate] = useState(dayjs());
 
     const [merch, setMerch] = useState({
-        shirt1: 0,
-        shirt2: 0,
-        pants1: 0, 
-        pants2: 0
+        shirt1: {
+            size: '',
+            quantity: 0,
+        }, 
+        shirt2: {
+            size: '',
+            quantity: 0,
+        }, 
+        pants1: {
+            size: '',
+            quantity: 0,
+        }, 
+        pants2: {
+            size: '',
+            quantity: 0,
+        }, 
     })
 
     const getTickets = () => {

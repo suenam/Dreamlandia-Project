@@ -7,21 +7,25 @@ export const merchDetails = {
     "shirt1": {
         image: ShirtImage1,
         name: "Enchanted T-Shirt",
-        price: 24.99
+        price: 24.99, 
+        clothingType: "Shirt"
     },
     "shirt2": {
         image: ShirtImage2,
         name: "Enchanted T-Shirt 2.0",
-        price: 29.99
+        price: 29.99,
+        clothingType: "Shirt"
     },
     "pants1": {
         image: PantsImage1,
         name: "Enchanted Shorts",
-        price: 19.99
+        price: 19.99,
+        clothingType: "Pants"
     },
     "pants2": {
         image: PantsImage2,
         name: "Enchanted Shorts 2.0",
-        price: 24.99
+        price: 24.99,
+        clothingType: "Pants"
     },
 }

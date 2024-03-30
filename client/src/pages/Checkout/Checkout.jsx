@@ -9,6 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Logo from '../../assets/logoWhiteBkg.png';
 import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
 import { ticketDetails, mealTickets } from '../../constants/ticketModels';
+import { merchDetails } from '../../constants/merchModel';
 import { useAuth } from '../auth/auth';
 import axios from 'axios';
 
@@ -19,6 +20,8 @@ const Checkout = () => {
     const foodTickets = shoppingCartContext.getMealTickets();
     const attractions = shoppingCartContext.getAttractions();
     const visitDate = shoppingCartContext.getDate().format("YYYY-MM-DD");
+
+    const merchItems = shoppingCartContext.getMerch();
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -54,6 +57,10 @@ const Checkout = () => {
 
         Object.entries(ticketDetails).forEach(([ticket, ticketDetail]) => {
             total += ticketDetail.price * tickets[ticket];
+        })
+
+        Object.entries(merchDetails).forEach(([merch, merchDetail]) => {
+            total += merchDetail.price * merchItems[merch].quantity;
         })
 
         return total;
@@ -276,6 +283,23 @@ const Checkout = () => {
                                         </div>
                                     </div>
                                     <div className='price'>${mealTicketDetails.price * foodTickets[mealTicketKey]}</div>
+                                </div>
+                                : null;
+                        })}
+                        {Object.entries(merchDetails).map(([merch, merchDetail]) => {
+                            return merchItems[merch].quantity !== 0 ?
+                                <div className="order-item" key={merch}>
+                                    <div className='checkout-item-pic'>
+                                        <img src={merchDetail.image} />
+                                    </div>
+                                    <div className='item'>
+                                        {merchDetail.name}
+                                        <div className="item-quantity">
+                                            Quantity: {merchItems[merch].quantity}<br />
+                                            Size: {merchItems[merch].size}
+                                        </div>
+                                    </div>
+                                    <div className='price'>${merchDetail.price * merchItems[merch].quantity}</div>
                                 </div>
                                 : null;
                         })}
