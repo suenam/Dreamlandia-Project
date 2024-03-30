@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
               const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/user`, { withCredentials: true });
               if (response.status === 200) {
                 setUser(response.data);
+                console.log(response.data);
               } else {
                 setUser(null);
               }
