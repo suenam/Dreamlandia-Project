@@ -31,7 +31,7 @@ const Navbar = () => {
                     } */}
                     {!auth.user ?
                         <NavLink className="link account" to='/login' style={{borderLeft: "1px solid white", paddingLeft: "15px"}}><AccountCircleIcon/></NavLink> :
-                        <NavLink className="link account" to='/user/profile' style={{borderLeft: "1px solid white"}}><AccountCircleIcon/></NavLink>
+                        <NavLink className="link account" to='/user/profile' style={{borderLeft: "1px solid white", paddingLeft: "15px"}}><AccountCircleIcon/></NavLink>
                     }
                     <div className="cart-dropdown"  
                         onMouseEnter={()=>setHover(true)} 
