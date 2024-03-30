@@ -35,7 +35,7 @@
     
             .link {
                 margin-inline: 10px;
-                padding-block: 5px;
+                padding-block: 10px;
                 padding-inline: 5px;
                 display: flex;
                 justify-content: center;
@@ -53,10 +53,6 @@
             .link.active {
                 color: var(--secondary);
                 text-shadow: #ffffffa2 1px 0 10px;
-            }
-
-            .link.account {
-                padding-left: 15px;
             }
 
             .link:not(.checkout,.account):hover::after {

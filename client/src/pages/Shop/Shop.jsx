@@ -1,6 +1,5 @@
 import './Shop.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ShirtImage1 from '../../assets/shirt1.jpg';
 import ShirtImage2 from '../../assets/shirt2.jpg';
 import PantsImage1 from '../../assets/pants1.jpg';
@@ -65,9 +64,13 @@ const Shop = () => {
             console.log("you did not select merch!");
             return false;
         }
-        shoppingCartContext.setMerch({
-            ...selectedItems
-        })
+        shoppingCartContext.setMerch((prevMerch)=> ({
+            ...prevMerch,
+            [item]: {
+                size: selectedItems[item].size,
+                quantity: selectedItems[item].quantity
+            }
+        }));
         console.log("shirt added!");
         console.log(selectedItems);
         return true;
