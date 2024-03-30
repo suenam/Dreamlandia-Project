@@ -5,23 +5,21 @@ import { useAuth } from "../../pages/auth/auth";
 
 
 const Sidebar = () => {
-    const { setShowNavbar, setShowFooter } = useOutletContext();
     const navigate = useNavigate();
     const auth = useAuth();
     const handleSignOut = async () => {
       await auth.logout();
       navigate('/', { replace: true }); 
-      setShowNavbar(true);
-      setShowFooter(true);
     };
     
 
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <NavLink to='/Manager' style={{textDecoration: 'none'}}><h3>Manager Portal</h3></NavLink>
+        <NavLink to='/manager/profile' style={{textDecoration: 'none'}}><h3>Manager Portal</h3></NavLink>
       </div>
       <nav className="sidebar-links">
+        <NavLink className="sidebar-link" to="/manager/profile" >My Profile</NavLink>
         <NavLink className="sidebar-link" to="/manager/dashboard" >Dashboard</NavLink>
         <NavLink className="sidebar-link" to="/manager/data-reports" >Data Reports</NavLink>
         <NavLink className="sidebar-link" to="/manager/expense-form" >Expense Form</NavLink>

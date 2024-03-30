@@ -4,9 +4,6 @@ import Sidebar from '../../../components/Sidebar/Sidebar';
 import { useOutletContext } from 'react-router-dom';
 
 const HR = () => {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-    setShowFooter(false);
   return (
     <>
     <Sidebar />

@@ -4,9 +4,6 @@ import UserSidebar from '../../../components/UserSidebar/UserSidebar';
 import { useOutletContext } from 'react-router-dom';
 
 const User = () => {
-    const { setShowNavbar, setShowFooter } = useOutletContext();
-    setShowNavbar(false);
-      setShowFooter(false);
     const UserData = {
       name: 'John Doe',
       title: 'Customer',

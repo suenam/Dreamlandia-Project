@@ -3,6 +3,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useShoppingCart } from './ShoppingCart';
 import { ticketDetails, mealTickets } from '../../constants/ticketModels';
+import { merchDetails } from '../../constants/merchModel';
 import EmptyCartIcon from '../../assets/empty_cart_blob.svg';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,12 +13,13 @@ const CartDropdown = () => {
     const shoppingCartContext = useShoppingCart();
     const tickets = shoppingCartContext.getTickets();
     const foodTickets = shoppingCartContext.getMealTickets()
+    const merchItems = shoppingCartContext.getMerch();
 
     const isNotEmptyCart = () => {
         return (
             Object.values(tickets).some(ticketCount => ticketCount > 0)
             || Object.values(foodTickets).some(foodTicketCount => foodTicketCount > 0)
-            // check if merch has something later
+            || Object.values(merchItems).some(merchItem => merchItem.quantity > 0)
         )
     }
 
@@ -30,6 +32,16 @@ const CartDropdown = () => {
             specialMeal1: 0,
             specialMeal2: 0
         });
+    }
+
+    const removeMerchItem = (merchItem) => {
+        shoppingCartContext.setMerch((prevMerchItems)=> ({
+            ...prevMerchItems,
+            [merchItem]: {
+                size: '',
+                quantity: 0
+            }
+        }));
     }
 
     return (
@@ -82,6 +94,24 @@ const CartDropdown = () => {
                             </div>
                         </div>
                     }
+                    { Object.entries(merchDetails).map(([merch, merchItemDetails]) => {
+                            return merchItems[merch].quantity !== 0?
+                        <div className="cart-dropdown-item">
+                            <div className="item-content">
+                                <div className="item-name">
+                                    {merchItemDetails.name}
+                                </div>
+                                <div className="item-details">
+                                    {`Size: ${merchItems[merch].size}`}<br/>
+                                    {`Quantity: x${merchItems[merch].quantity}`}
+                                </div>
+                            </div>
+                            <div className="remove-item" onClick={()=>removeMerchItem(merch)}>
+                                <RemoveCircleOutlineIcon />
+                            </div>
+                        </div> : null;
+                    }) 
+                }
                 </div>
                 {isNotEmptyCart() &&
                     <div className="button-holder">

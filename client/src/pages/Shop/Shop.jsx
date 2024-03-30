@@ -8,53 +8,74 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Sparkles from '../../components/SparkleCursor/Sparkles';
+import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
 
 const Shop = () => {
 
-    const [selectedSize, setSelectedSize] = useState({
-        shirt1: '',
-        shirt2: '',
-        pants1: '',
-        pants2: '',
-    });
-
-    const [quantities, setQuantities] = useState({
-        shirt1: 0,
-        shirt2: 0,
-        pants1: 0,
-        pants2: 0,
-        cap: 0,
-    });
+    const shoppingCartContext = useShoppingCart();
+    
+    const [selectedItems, setSelectedItems] = useState({
+        shirt1: {
+            size: '',
+            quantity: 0,
+        }, 
+        shirt2: {
+            size: '',
+            quantity: 0,
+        }, 
+        pants1: {
+            size: '',
+            quantity: 0,
+        }, 
+        pants2: {
+            size: '',
+            quantity: 0,
+        }, 
+    })
 
     const handleSizeChange = (item, size) => {
-        if (quantities[item] === 0) {
-            setSelectedSize((prevSizes) => ({
-                ...prevSizes,
-                [item]: '',
-            }));
-        } else {
-            setSelectedSize((prevSizes) => ({
-                ...prevSizes,
-                [item]: size,
-            }));
+        if (selectedItems[item].quantity == 0) {
+            return;
         }
+        setSelectedItems((prevItems) => ({
+            ...prevItems,
+            [item]: {
+                ...prevItems[item],
+                size,
+            }
+        }));
     };
 
     const updateQuantity = (item, value) => {
-        setQuantities((prevQuantities) => {
-            const newQuantity = prevQuantities[item] + value;
-            if (newQuantity === 0) {
-                handleSizeChange(item, '');
-            }
+        setSelectedItems((prevItems) => {
+            const newQuantity = prevItems[item].quantity + value;
             return {
-                ...prevQuantities,
-                [item]: newQuantity,
+                ...prevItems,
+                [item]: {
+                    size: newQuantity === 0 ? '' : prevItems[item].size,
+                    quantity: newQuantity
+                }
             };
         });
     };
 
+    const addToCart = (item) => {
+        if (!selectedItems[item].quantity || !selectedItems[item].size) {
+            console.log("you did not select merch!");
+            return false;
+        }
+        shoppingCartContext.setMerch((prevMerch)=> ({
+            ...prevMerch,
+            [item]: {
+                size: selectedItems[item].size,
+                quantity: selectedItems[item].quantity
+            }
+        }));
+        console.log("shirt added!");
+        console.log(selectedItems);
+        return true;
+    }
     
-
     return (
         <div className="shop-container">
             <div className="shop-header">
@@ -72,7 +93,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt1', 'S')}
                             style={{
-                                backgroundColor: selectedSize.shirt1 === 'S' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt1.size === 'S' ? '#67C237' : '',
                             }}
                         >
                             S
@@ -80,7 +101,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt1', 'M')}
                             style={{
-                                backgroundColor: selectedSize.shirt1 === 'M' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt1.size === 'M' ? '#67C237' : '',
                             }}
                         >
                             M
@@ -88,7 +109,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt1', 'L')}
                             style={{
-                                backgroundColor: selectedSize.shirt1 === 'L' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt1.size === 'L' ? '#67C237' : '',
                             }}
                         >
                             L
@@ -96,7 +117,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt1', 'XL')}
                             style={{
-                                backgroundColor: selectedSize.shirt1 === 'XL' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt1.size === 'XL' ? '#67C237' : '',
                             }}
                         >
                             XL
@@ -105,11 +126,11 @@ const Shop = () => {
                     <div className="quantity-control">
                         <RemoveCircleOutlineIcon
                             fontSize="large"
-                            pointerEvents={quantities.shirt1 === 0 ? 'none' : ''}
-                            color={quantities.shirt1 === 0 ? 'action' : ''}
+                            pointerEvents={selectedItems.shirt1.quantity === 0 ? 'none' : ''}
+                            color={selectedItems.shirt1.quantity === 0 ? 'action' : ''}
                             onClick={() => updateQuantity('shirt1', -1)}
                         />
-                        <div className="quantity-count">{quantities.shirt1}</div>
+                        <div className="quantity-count">{selectedItems.shirt1.quantity}</div>
                         <AddCircleOutlineIcon
                             fontSize="large"
                             onClick={() => updateQuantity('shirt1', 1)}
@@ -117,6 +138,8 @@ const Shop = () => {
                     </div>
                     <button
                         className="add-to-cart-btn"
+                        disabled={!selectedItems['shirt1'].quantity || !selectedItems["shirt1"].size}
+                        onClick={()=>addToCart('shirt1')}
                     >
                         <ShoppingCartIcon />
                     </button>
@@ -130,7 +153,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt2', 'S')}
                             style={{
-                                backgroundColor: selectedSize.shirt2 === 'S' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt2.size === 'S' ? '#67C237' : '',
                             }}
                         >
                             S
@@ -138,7 +161,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt2', 'M')}
                             style={{
-                                backgroundColor: selectedSize.shirt2 === 'M' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt2.size === 'M' ? '#67C237' : '',
                             }}
                         >
                             M
@@ -146,7 +169,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt2', 'L')}
                             style={{
-                                backgroundColor: selectedSize.shirt2 === 'L' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt2.size === 'L' ? '#67C237' : '',
                             }}
                         >
                             L
@@ -154,7 +177,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('shirt2', 'XL')}
                             style={{
-                                backgroundColor: selectedSize.shirt2 === 'XL' ? '#67C237' : '',
+                                backgroundColor: selectedItems.shirt2.size === 'XL' ? '#67C237' : '',
                             }}
                         >
                             XL
@@ -163,11 +186,11 @@ const Shop = () => {
                     <div className="quantity-control">
                         <RemoveCircleOutlineIcon
                             fontSize="large"
-                            pointerEvents={quantities.shirt2 === 0 ? 'none' : ''}
-                            color={quantities.shirt2 === 0 ? 'action' : ''}
+                            pointerEvents={selectedItems.shirt2.quantity === 0 ? 'none' : ''}
+                            color={selectedItems.shirt2.quantity === 0 ? 'action' : ''}
                             onClick={() => updateQuantity('shirt2', -1)}
                         />
-                        <div className="quantity-count">{quantities.shirt2}</div>
+                        <div className="quantity-count">{selectedItems.shirt2.quantity}</div>
                         <AddCircleOutlineIcon
                             fontSize="large"
                             onClick={() => updateQuantity('shirt2', 1)}
@@ -175,6 +198,8 @@ const Shop = () => {
                     </div>
                     <button
                         className="add-to-cart-btn"
+                        disabled={!selectedItems['shirt2'].quantity || !selectedItems["shirt2"].size}
+                        onClick={()=>addToCart('shirt2')}
                        
                     >
                         <ShoppingCartIcon />
@@ -188,7 +213,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants1', 'S')}
                             style={{
-                                backgroundColor: selectedSize.pants1 === 'S' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants1.size === 'S' ? '#67C237' : '',
                             }}
                         >
                             S
@@ -196,7 +221,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants1', 'M')}
                             style={{
-                                backgroundColor: selectedSize.pants1 === 'M' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants1.size === 'M' ? '#67C237' : '',
                             }}
                         >
                             M
@@ -204,7 +229,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants1', 'L')}
                             style={{
-                                backgroundColor: selectedSize.pants1 === 'L' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants1.size === 'L' ? '#67C237' : '',
                             }}
                         >
                             L
@@ -212,7 +237,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants1', 'XL')}
                             style={{
-                                backgroundColor: selectedSize.pants1 === 'XL' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants1.size === 'XL' ? '#67C237' : '',
                             }}
                         >
                             XL
@@ -221,11 +246,11 @@ const Shop = () => {
                     <div className="quantity-control">
                         <RemoveCircleOutlineIcon
                             fontSize="large"
-                            pointerEvents={quantities.pants1 === 0 ? 'none' : ''}
-                            color={quantities.pants1 === 0 ? 'action' : ''}
+                            pointerEvents={selectedItems.pants1.quantity === 0 ? 'none' : ''}
+                            color={selectedItems.pants1.quantity === 0 ? 'action' : ''}
                             onClick={() => updateQuantity('pants1', -1)}
                         />
-                        <div className="quantity-count">{quantities.pants1}</div>
+                        <div className="quantity-count">{selectedItems.pants1.quantity}</div>
                         <AddCircleOutlineIcon
                             fontSize="large"
                             onClick={() => updateQuantity('pants1', 1)}
@@ -233,6 +258,8 @@ const Shop = () => {
                     </div>
                     <button
                         className="add-to-cart-btn"
+                        disabled={!selectedItems['pants1'].quantity || !selectedItems["pants1"].size}
+                        onClick={()=>addToCart('pants1')}
                         
                     >
                         <ShoppingCartIcon />
@@ -246,7 +273,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants2', 'S')}
                             style={{
-                                backgroundColor: selectedSize.pants2 === 'S' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants2.size === 'S' ? '#67C237' : '',
                             }}
                         >
                             S
@@ -254,7 +281,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants2', 'M')}
                             style={{
-                                backgroundColor: selectedSize.pants2 === 'M' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants2.size === 'M' ? '#67C237' : '',
                             }}
                         >
                             M
@@ -262,7 +289,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants2', 'L')}
                             style={{
-                                backgroundColor: selectedSize.pants2 === 'L' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants2.size === 'L' ? '#67C237' : '',
                             }}
                         >
                             L
@@ -270,7 +297,7 @@ const Shop = () => {
                         <button
                             onClick={() => handleSizeChange('pants2', 'XL')}
                             style={{
-                                backgroundColor: selectedSize.pants2 === 'XL' ? '#67C237' : '',
+                                backgroundColor: selectedItems.pants2.size === 'XL' ? '#67C237' : '',
                             }}
                         >
                             XL
@@ -279,11 +306,11 @@ const Shop = () => {
                     <div className="quantity-control">
                         <RemoveCircleOutlineIcon
                             fontSize="large"
-                            pointerEvents={quantities.pants2 === 0 ? 'none' : ''}
-                            color={quantities.pants2 === 0 ? 'action' : ''}
+                            pointerEvents={selectedItems.pants2.quantity === 0 ? 'none' : ''}
+                            color={selectedItems.pants2.quantity === 0 ? 'action' : ''}
                             onClick={() => updateQuantity('pants2', -1)}
                         />
-                        <div className="quantity-count">{quantities.pants2}</div>
+                        <div className="quantity-count">{selectedItems.pants2.quantity}</div>
                         <AddCircleOutlineIcon
                             fontSize="large"
                             onClick={() => updateQuantity('pants2', 1)}
@@ -291,6 +318,8 @@ const Shop = () => {
                     </div>
                     <button
                         className="add-to-cart-btn"
+                        disabled={!selectedItems['pants2'].quantity || !selectedItems["pants2"].size}
+                        onClick={()=>addToCart('pants2')}
                         
                     >
                         <ShoppingCartIcon />
@@ -298,10 +327,13 @@ const Shop = () => {
                 </div>
             </div>
 
-            <button className="checkout-button">
+            {/* <button className="checkout-button"
+                onClick={handleCheckout}
+            
+            >
                 <ShoppingCartIcon />
                 <h3>Checkout</h3>
-            </button>
+            </button> */}
         </div>
     );
 };

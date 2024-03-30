@@ -55,12 +55,12 @@
                 text-shadow: #ffffffa2 1px 0 10px;
             }
 
-            .link:not(.checkout):hover::after {
+            .link:not(.checkout,.account):hover::after {
                 transform: translate3d(0, 0, 0);
                 background-color: var(--secondary);
             }
             
-            .link:not(.checkout)::after {
+            .link:not(.checkout,.account)::after {
                 position: absolute;
                 content: '';
                 bottom: 7px;

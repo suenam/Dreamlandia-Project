@@ -9,11 +9,6 @@ import './Dashboard.css';
 
 function MDashboard() {
     
-    const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-    setShowFooter(false);
-    
-   
     const [currentDateTime, setCurrentDateTime] = useState('');
 
     useEffect(() => {
