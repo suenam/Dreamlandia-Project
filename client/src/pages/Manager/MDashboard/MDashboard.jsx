@@ -5,9 +5,6 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 import './MDashboard.css';
 
 function MDashboard() {
-    const { setShowNavbar, setShowFooter } = useOutletContext();
-    setShowNavbar(false);
-    setShowFooter(false);
 
     const [currentDateTime, setCurrentDateTime] = useState('');
     const [dashboardData, setDashboardData] = useState({

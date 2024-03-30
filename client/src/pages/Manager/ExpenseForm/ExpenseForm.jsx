@@ -4,9 +4,6 @@ import MSidebar from '../../../components/MSidebar/MSidebar';
 import './ExpenseForm.css';
 
 function ExpenseForm() {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-    setShowFooter(false);
 
   const [employeeId, setEmployeeId] = useState('');
   const [restaurantId, setRestaurantId] = useState('');

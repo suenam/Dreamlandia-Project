@@ -5,14 +5,11 @@ import { useAuth } from "../../pages/auth/auth";
 
 
 const Sidebar = () => {
-    const { setShowNavbar, setShowFooter } = useOutletContext();
     const navigate = useNavigate();
     const auth = useAuth();
     const handleSignOut = async () => {
       await auth.logout();
       navigate('/', { replace: true }); 
-      setShowNavbar(true);
-      setShowFooter(true);
     };
     
 

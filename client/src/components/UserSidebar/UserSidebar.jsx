@@ -8,12 +8,9 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
   const auth = useAuth();
-  const { setShowNavbar, setShowFooter } = useOutletContext();
     const handleSignOut = async () => {
         await auth.logout();
         navigate('/', { replace: true }); 
-        setShowNavbar(true);
-        setShowFooter(true);
     };
 
   return (

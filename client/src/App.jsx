@@ -32,24 +32,27 @@ import { RequireUserAuth } from './pages/auth/requireAuth';
 import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
 
 const Layout = () => {
-  // const [showNavbar, setShowNavbar] = useState(true);
-  // const [showFooter, setShowFooter] = useState(true);
 
   return (
     <>
-      {/* <div className='page-container'>
-        {showNavbar && <Navbar />}
-        <div className='outlet-content'>
-          <Outlet context={{ showNavbar, setShowNavbar, showFooter, setShowFooter }} />
-        </div>
-        {showFooter && <Footer />}
-      </div> */}
       <div className='page-container'>
+        <Navbar/>
+        <div className='outlet-content'>
+          <Outlet/>
+        </div>
+        <Footer />
+      </div>
+    </>
+  );
+}
+
+const NoNavLayout = () => {
+  return (
+    <div className='page-container'>
         <div className='outlet-content'>
           <Outlet/>
         </div>
       </div>
-    </>
   );
 }
 
@@ -64,59 +67,6 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/employee",
-        element: <Employee />
-      },
-      {
-        path: "/user/profile",
-        element: <UserPage />
-      },
-
-      {
-      path: "/employee/dashboard",
-      element: <Dashboard />
-      },
-      {
-        path: "/manager/dashboard",
-        element: <MDashboard />
-      },
-      {
-        path: "/user/recent-orders",
-        element: <RecentOrders />
-      },
-      {
-        path: "/employee/maintenance",
-        element: <Maintenance />
-      },
-      {
-        path: "/manager/maintenance",
-        element: <MMaintenance />
-      },
-      {
-        path: "/manager/HR",
-        element: <MHR />
-      },
-      {
-        path: "/employee/HR",
-        element: <HR />
-      },
-      {
-        path: "/manager",
-        element: <Manager />
-      },
-      {
-        path: "/manager/data-reports",
-        element: <DataReport />
-      },
-      {
-        path: "/manager/manage-employees",
-        element: <ManageEmp />
-      },
-      {
-        path: "/manager/expense-form",
-        element: <ExpenseForm />
-      },
-      {
         path: "/tickets",
         element: <Tickets />
       },
@@ -127,14 +77,6 @@ const router = createBrowserRouter([
       {
         path: "/auth/signup",
         element: <Signup />
-      },
-      {
-        path: "/manager/view-contact-forms",
-        element: <ViewContact />
-      },
-      {
-        path: "/employee/weather-form",
-        element: <WeatherForm />
       },
       {
         path: "/Shop",
@@ -152,18 +94,102 @@ const router = createBrowserRouter([
     ]
   },
   {
+    element: <NoNavLayout />,
+    children: [
+      {
+        path: "/employee",
+        children: [
+          {
+            path: "/employee",
+            element: <Employee />
+          },
+          {
+            path: "/employee/login",
+            element: <EmployeeLogin />
+          },
+          {
+            path: "/employee/dashboard",
+            element: <Dashboard />
+          },
+          {
+            path: "/employee/maintenance",
+            element: <Maintenance />
+          },
+          {
+            path: "/employee/weather-form",
+            element: <WeatherForm />
+          },
+          {
+            path: "/employee/HR",
+            element: <HR />
+          },
+        ]
+      },
+      {
+        path: "/manager",
+        children: [
+          {
+            path: "/manager",
+            element: <Manager />
+          },
+          {
+            path: "/manager/maintenance",
+            element: <MMaintenance />
+          },
+          {
+            path: "/manager/HR",
+            element: <MHR />
+          },
+          {
+            path: "/manager/manage-employees",
+            element: <ManageEmp />
+          },
+          {
+            path: "/manager/expense-form",
+            element: <ExpenseForm />
+          },
+          {
+            path: "/manager/data-reports",
+            element: <DataReport />
+          },
+          {
+            path: "/manager/view-contact-forms",
+            element: <ViewContact />
+          },
+          {
+            path: "/manager/dashboard",
+            element: <MDashboard />
+          },
+        ]
+      },
+      {
+        path: "/user",
+        children: [
+          {
+            path: "/user/recent-orders",
+            element: <RecentOrders />
+          },
+          {
+            path: "/user/profile",
+            element: <UserPage />
+          },
+        ]
+      },
+    ]
+  },
+  
+  {
     path: "*",
     element: <h1>Page Not Found</h1>
-  },
-  {
-    path: "/employee/login",
-    element: <EmployeeLogin />
   },
   {
     path: "/checkout",
     element: <RequireUserAuth><Checkout /></RequireUserAuth>
   },
 ]);
+
+
+
 function App() {
 
   return (
