@@ -1,6 +1,7 @@
 import './ContactUs.css';
 import React, { useState } from 'react';
 import Sparkles from '../../components/SparkleCursor/Sparkles';
+import { useAuth } from '../auth/auth';
 
 const ContactUs = () => {
   const [name, setName] = useState('');
@@ -8,14 +9,18 @@ const ContactUs = () => {
   const [email, setEmail] = useState('');
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
+  const auth = useAuth();
+  // const userID = auth.user?.UserID ?? null;
+  const userID = auth.user.UserID;
 
   const handleSubmit = async (e) => {
+    let submittedTicketId = !ticketId ? null : ticketId;
     e.preventDefault();
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/contact-us`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, ticketId, email, type, message }),
+        body: JSON.stringify({ name, email, type, message, submittedTicketId, userID }),
       });
 
       if (response.ok) {

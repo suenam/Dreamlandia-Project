@@ -4,12 +4,13 @@ const getPostData = require('./postDataParser');
 async function contactUsPageHandler(req, res) {
   try {
     // Extracting data from the request body
-    const { name, ticketId, email, type, message } = await getPostData(req);
+    const { name, email, type, message, submittedTicketId, userID } = await getPostData(req);
+    console.log(name, email, type, message, submittedTicketId, userID);
 
     // Inserting the contact information into the database
     const [result] = await pool.execute(
-      'INSERT INTO contact_us (name, ticketId, email, type, message) VALUES (?, ?, ?, ?, ?)',
-      [name, ticketId, email, type, message]
+      'INSERT INTO contact_us_form (Cname, Cemail, Cdate, CType, Content, TicketID, UserID) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [name, email, new Date(), type, message, submittedTicketId, userID]
     );
 
     // Sending a success response
