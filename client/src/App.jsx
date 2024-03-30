@@ -84,7 +84,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/contactUs",
-        element: <ContactUs />
+        element: <RequireUserAuth><ContactUs /></RequireUserAuth>
       },
       {
         path: "/attractions",
