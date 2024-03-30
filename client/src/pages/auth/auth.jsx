@@ -54,6 +54,7 @@ export const AuthProvider = ({ children }) => {
             console.log('(frontend)response:', response.data);
             setUser(response.data);
             setEmployee(null);
+            return true;
         } catch (error) {
           console.error('Error logging in:', error);
           // default error message
@@ -64,7 +65,7 @@ export const AuthProvider = ({ children }) => {
               errorMessage = 'Email or password is incorrect. Please try again.';
           }
 
-          alert(errorMessage);
+          throw new Error(errorMessage);
         }
     };
 
@@ -85,8 +86,17 @@ export const AuthProvider = ({ children }) => {
           console.log('(frontend)response:', response.data);
           setEmployee(response.data);
           setUser(null);
+          return true; // return true if login is successful
         } catch (error) {
-          console.error('Error logging in:', error);
+          // default error message
+          let errorMessage = 'An unexpected error occurred. Please try again later.';
+
+          //check if error is due to authentication failure
+          if (error.response && error.response.status === 401) {
+              errorMessage = 'Email or password is incorrect. Please try again.';
+          }
+
+          throw new Error(errorMessage);
         }
       };
 
