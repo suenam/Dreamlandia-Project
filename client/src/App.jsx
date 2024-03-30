@@ -100,7 +100,7 @@ const router = createBrowserRouter([
         path: "/employee",
         children: [
           {
-            path: "/employee",
+            path: "/employee/profile",
             element: <Employee />
           },
           {
@@ -129,7 +129,7 @@ const router = createBrowserRouter([
         path: "/manager",
         children: [
           {
-            path: "/manager",
+            path: "/manager/profile",
             element: <Manager />
           },
           {

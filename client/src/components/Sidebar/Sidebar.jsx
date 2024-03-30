@@ -28,9 +28,10 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <NavLink to='/Employee' style={{textDecoration: 'none'}}><h3>Employee Portal</h3></NavLink>
+        <NavLink to='/employee/profile' style={{textDecoration: 'none'}}><h3>Employee Portal</h3></NavLink>
       </div>
       <nav className="sidebar-links">
+        <NavLink className="sidebar-link" to="/employee/profile" >My Profile</NavLink>
         <NavLink className="sidebar-link" to="/employee/dashboard" >Dashboard</NavLink>
         <NavLink className="sidebar-link" to="/employee/maintenance" >Maintenance Requests</NavLink>
         <NavLink className="sidebar-link" to="/employee/HR" >HR</NavLink>
