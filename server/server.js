@@ -23,6 +23,10 @@ const addEmpHandler = require("./addEmpHandler");
 const archiveEmpHandler = require("./archiveEmpHandler");
 const getEmployeesHandler = require("./getEmployeesHandler");
 const checkoutHandler = require("./checkoutHandler");
+const loggedInEmployeeHandler = require("./loggedInEmployeeHandler");
+const updateLoggedInEmployeeHandler = require("./updateLoggedInEmployeeHandler");
+const maintenanceGetterEditHandler = require("./maintenanceGetterEditHandler");
+const updateMaintenanceHandler = require("./updateMaintenanceHandler");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -117,6 +121,16 @@ const server = http.createServer((req, res) => {
       addEmpHandler(req, res);
     }else if (req.url === '/archiveEmp' && req.method === 'POST') { 
       archiveEmpHandler(req, res);
+    }else if (req.url === '/loggedInEmployee' && req.method === 'GET') { 
+      loggedInEmployeeHandler(req, res);
+    }else if (req.url === '/updateLoggedInEmployee' && req.method === 'POST') { 
+      updateLoggedInEmployeeHandler(req, res);
+    }
+    else if (req.url === '/get-maintenancerequests' && req.method === 'GET') { 
+      maintenanceGetterEditHandler(req, res);
+    }
+    else if (req.url === '/updateMaintenanceRequest' && req.method === 'POST') { 
+      updateMaintenanceHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
