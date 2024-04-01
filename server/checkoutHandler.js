@@ -8,7 +8,8 @@ async function checkoutHandler(req, res) {
             visitDate,
             foodTickets,
             attractions,
-            userID } = await getPostData(req);
+            userID,
+            merchItems } = await getPostData(req);
 
         // Convert tickets to format in the database
         const ticketRecords = [];
@@ -29,6 +30,7 @@ async function checkoutHandler(req, res) {
         console.log('ticketRecords:', ticketRecords);
         console.log('foodTickets:', foodTickets);
         console.log('attractions:', attractions);
+        console.log('merchItems:', merchItems);
         // return;
 
         // Batch insertion of ticket data
@@ -41,8 +43,12 @@ async function checkoutHandler(req, res) {
             record.UserID,
         ]);
 
-        const [result] = await pool.query(query, [values]);
-        const insertedTicketIDs = result.insertId;
+        let insertedTicketIDs = null
+        if (ticketRecords.length > 0) {
+            const [result] = await pool.query(query, [values]);
+            insertedTicketIDs = result.insertId;
+        }
+
 
         // Update attraction_joint table
         for (let i = 0; i < ticketRecords.length; i++) {
@@ -58,6 +64,19 @@ async function checkoutHandler(req, res) {
                 }
             }
         }
+
+        for (const [itemKey, { size, quantity }] of Object.entries(merchItems)) {
+            if (quantity > 0) {
+                const itemName = itemNameConvert(itemKey);
+                const transactionDate = new Date();
+
+                // Call the stored procedure for each item with a quantity greater than 0
+                const merchQuery = 'CALL proc_AddOrderDetail(?, ?, ?, ?, ?)';
+                await pool.query(merchQuery, [itemName, quantity, size, transactionDate, userID]);
+            }
+        }
+
+
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: 'Checkout successful' }));
@@ -78,6 +97,21 @@ function getTicketPrice(ticketType) {
         return 45;
       default:
         throw new Error('Invalid ticket type');
+    }
+  }
+
+  function itemNameConvert(itemname) {
+    switch (itemname) {
+      case 'shirt1':
+        return 'Enchanted T-Shirt 1';
+      case 'shirt2':
+        return 'Enchanted T-Shirt 2';
+      case 'pants1':
+        return 'Enchanted Shorts 1';
+      case 'pants2':
+        return 'Enchanted Shorts 2';
+      default:
+        throw new Error('Invalid item name');
     }
   }
 
