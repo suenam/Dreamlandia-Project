@@ -88,7 +88,8 @@ const Checkout = () => {
                 visitDate,
                 foodTickets,
                 attractions,
-                userID
+                userID,
+                merchItems
             }, { withCredentials: true });
 
             if (response.status === 200) {
