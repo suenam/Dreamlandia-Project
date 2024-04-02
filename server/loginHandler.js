@@ -17,10 +17,8 @@ async function loginHandler(req, res) {
             if (isPasswordValid) {
                 res.setHeader('Set-Cookie', 'token=; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT');
                 const token = jwt.sign({ userId: user.UserID, userType: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-                console.log('token is initiated in loginHandler.js : ', token);
-                console.log('user is initiated in loginHandler.js : ', user);
                 const isProduction = process.env.NODE_ENV === 'production';
-                const cookieSettings = `token=${token}; HttpOnly; Path=/;` + (isProduction ? ' SameSite=None; Secure' : '');
+                const cookieSettings = `token=${token}; HttpOnly; Path=/; Max-Age=3600;` + (isProduction ? ' SameSite=None; Secure' : '');
                 res.setHeader('Set-Cookie', cookieSettings);
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ message: 'Login successful', user, token }));

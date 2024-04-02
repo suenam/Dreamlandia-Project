@@ -7,13 +7,6 @@ async function authenticateToken(req, res, next) {
   console.log("entering authentiationToken...")
   try {
     const token = req.headers.cookie?.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
-    // console.log(req);
-    // console.log(req.headers);
-    // console.log(req.headers.cookie);
-    // console.log(req.headers.cookie?.split('; '));
-    // console.log(req.headers.cookie?.split('; ').find(row => row.startsWith('token=')));
-    // console.log(req.headers.cookie?.split('; ').find(row => row.startsWith('token=')))?.split('=');
-    // console.log(req.headers.cookie?.split('; ').find(row => row.startsWith('token=')))?.split('=')[1];
     if (!token) {
       console.log("entering NOT token...")
       // throw new Error('No token provided');
@@ -36,12 +29,18 @@ async function authenticateToken(req, res, next) {
       throw new Error('User/Employee not found in database');
     }
     req.user = { ...user, userType: decoded.userType };
-    console.log(req.user)
+    console.log("unexpected error... in authenticateToken.js")
     next();
   } catch (error) {
-    console.error(error);
-    res.writeHead(401, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ message: error.message }));
+    if (error.name === 'TokenExpiredError') {
+      console.error("Token expired...");
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Token expired. Please log in again.' }));
+    } else {
+      console.error("Unexpected error in authenticateToken...");
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: error.message }));
+    }
   }
 }
 

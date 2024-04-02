@@ -4,22 +4,22 @@ import UserSidebar from '../../components/UserSidebar/UserSidebar';
 import { useOutletContext } from 'react-router-dom';
 
 const User = () => {
-    const UserData = {
-      name: 'John Doe',
-      title: 'Customer',
-      email: 'johndoe@gmail.com',
-      phone: '123-456-7899'
-    };
+    // const UserData = {
+    //   name: 'John Doe 1 ',
+    //   title: 'Customer',
+    //   email: 'johndoe@gmail.com',
+    //   phone: '123-456-7899'
+    // };
 
     return (
         <div>
-          <h1 className='employee-header-welcome'>Welcome {UserData.name}!</h1>
+          {/* <h1 className='employee-header-welcome'>Welcome</h1> */}
           <UserSidebar />
             <div className='ecard-emp-edit'>
-            <UCard employeeData ={UserData} />
+            <UCard/>
             </div>
-    
-            
+
+
         </div>
       );
 }

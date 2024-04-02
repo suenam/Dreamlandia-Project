@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import './UCard.css';
+import { useAuth } from '../../pages/auth/auth';
+import axios from 'axios';
 
 const UCard = () => {
-  const [user, setUser] = useState({
-    name: '',
-    address: '',
-    phoneNumber: '',
-    email: ''
-  });
+  const auth = useAuth();
+
+
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser) {
-      setUser(storedUser);
-    }
-  }, []);
-
   const handleChange = (u) => {
-    setUser({ ...user, [u.target.name]: u.target.value });
+    auth.setUser(prevUser => ({ ...prevUser, [u.target.name]: u.target.value }));
   }
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   }
 
-  const saveChanges = () => {
-    localStorage.setItem('user', JSON.stringify(user));
-    setIsEditing(false);
+  const saveChanges = async () => {
+    try {
+      const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/api/user`, auth.user, { withCredentials: true });
+      if (response.status === 200) {
+        auth.setUser(response.data);
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  }
+
+  if (auth.loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!auth.user) {
+    return null;
   }
 
   return (
@@ -41,32 +48,21 @@ const UCard = () => {
         <input
           type="text"
           id="name"
-          name="name"
-          value={user.name}
+          name="UName"
+          value={auth.user.UName}
           onChange={handleChange}
           disabled={!isEditing}
         />
       </div>
       <div className="form-group">
-        <label htmlFor="address">Address:</label>
+        <label htmlFor="username">UserName:</label>
         <input
           type="text"
-          id="address"
-          name="address"
-          value={user.address}
+          id="username"
+          name="UUserName"
+          value={auth.user.UUserName}
           onChange={handleChange}
-          disabled={!isEditing}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="phoneNumber">Phone Number:</label>
-        <input
-          type="text"
-          id="phoneNumber"
-          name="phoneNumber"
-          value={user.phoneNumber}
-          onChange={handleChange}
-          disabled={!isEditing}
+          disabled={true}
         />
       </div>
       <div className="form-group">
@@ -74,10 +70,10 @@ const UCard = () => {
         <input
           type="text"
           id="email"
-          name="email"
-          value={user.email}
+          name="UEmail"
+          value={auth.user.UEmail}
           onChange={handleChange}
-          disabled={!isEditing}
+          disabled={true}
         />
       </div>
     </div>
