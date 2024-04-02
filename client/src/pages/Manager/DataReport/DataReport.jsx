@@ -453,7 +453,7 @@ function DataReport() {
       return (
         <>
           <h3>
-            Finance Report ({financeStartDate} - {financeEndDate})
+            Finance Report 
           </h3>
           <div>No finance report found for the selected date and type.</div>
         </>
@@ -1026,7 +1026,7 @@ function DataReport() {
                   </i>
                 </div>
                 <div className="form-row">
-                  <label>Start Date:</label>
+                  <label>Start Date:<span className="required">*</span></label>
                   <input
                     type="date"
                     value={financeStartDate}
@@ -1034,7 +1034,7 @@ function DataReport() {
                   />
                 </div>
                 <div className="form-row">
-                  <label>End Date:</label>
+                  <label>End Date:<span className="required">*</span></label>
                   <input
                     type="date"
                     value={financeEndDate}
@@ -1043,7 +1043,7 @@ function DataReport() {
                 </div>
 
                 <div className="form-row">
-                  <label>Category:</label>
+                  <label>Category:<span className="required">*</span></label>
                   <select
                     value={financeCategory}
                     onChange={(e) => setFinanceCategory(e.target.value)}
@@ -1058,14 +1058,14 @@ function DataReport() {
                 </div>
                 {financeCategory === "tickets" && (
                   <div className="form-row">
-                    <label>Type:</label>
+                    <label>Type:<span className="required">*</span></label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
                     >
                       <option value="financeType">Revenue</option>
                     </select>
-                    <label>Ticket Type:</label>
+                    <label>Ticket Type:<span className="required">*</span></label>
                     <select
                       value={ticketType}
                       onChange={(e) => setTicketType(e.target.value)}
@@ -1079,7 +1079,7 @@ function DataReport() {
                 )}
                 {financeCategory === "dining" && (
                   <div className="form-row">
-                    <label>Type:</label>
+                    <label>Type:<span className="required">*</span></label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
@@ -1088,7 +1088,7 @@ function DataReport() {
                       <option value="diningRev">Revenue</option>
                       <option value="diningExpense">Expense</option>
                     </select>
-                    <label>Dining Type:</label>
+                    <label>Dining Type:<span className="required">*</span></label>
                     <select
                       value={diningType}
                       onChange={(e) => setDiningType(e.target.value)}
@@ -1103,12 +1103,12 @@ function DataReport() {
 
                 {financeCategory === "merch" && (
                   <div className="form-row">
-                    <label>Type:</label>
+                    <label>Type:<span className="required">*</span></label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
                     >
-                      <option value="default">Select Type</option>
+                      <option value="default">Select Type<span className="required">*</span></option>
 
                       <option value="merchRevenue">Revenue</option>
                       <option value="merchExpense">Expense</option>
@@ -1117,7 +1117,7 @@ function DataReport() {
                 )}
                 {financeCategory === "maintenance" && (
                   <div className="form-row">
-                    <label>Type:</label>
+                    <label>Type:<span className="required">*</span></label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
@@ -1128,7 +1128,7 @@ function DataReport() {
                 )}
                 {financeCategory === "all" && (
                   <div className="form-row">
-                    <label>Type:</label>
+                    <label>Type:<span className="required">*</span></label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
@@ -1178,7 +1178,7 @@ function DataReport() {
                 </i>
               </div>
               <div className="form-row">
-                <label>Start Date:</label>
+                <label>Start Date:<span className="required">*</span></label>
                 <input
                   type="date"
                   value={maintenanceStartDate}
@@ -1186,7 +1186,7 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>End Date:</label>
+                <label>End Date:<span className="required">*</span></label>
                 <input
                   type="date"
                   value={maintenanceEndDate}
@@ -1203,7 +1203,7 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>Status:</label>
+                <label>Status:<span className="required">*</span></label>
                 <select
                   value={maintenanceStatus}
                   onChange={(e) => setMaintenanceStatus(e.target.value)}
@@ -1213,7 +1213,7 @@ function DataReport() {
                   <option value="inProgress">In Progress</option>
                   <option value="completed">Completed</option>
                 </select>
-                <label>Attraction Name:</label>
+                <label>Attraction Name:<span className="required">*</span></label>
                 <select
                   value={attractionName}
                   onChange={(e) => setAttractionName(e.target.value)}
@@ -1249,7 +1249,7 @@ function DataReport() {
                 </i>
               </div>
               <div className="form-row">
-                <label>Start Date:</label>
+                <label>Start Date:<span className="required">*</span></label>
                 <input
                   type="date"
                   value={visitStartDate}
@@ -1257,7 +1257,7 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>End Date:</label>
+                <label>End Date:<span className="required">*</span></label>
                 <input
                   type="date"
                   value={visitEndDate}
@@ -1265,7 +1265,7 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>Category:</label>
+                <label>Category:<span className="required">*</span></label>
                 <select
                   value={visitCategory}
                   onChange={(e) => setVisitCategory(e.target.value)}
@@ -1277,7 +1277,7 @@ function DataReport() {
               </div>
               {visitCategory === "attractions" && (
                 <div className="form-row">
-                  <label>Attraction:</label>
+                  <label>Attraction:<span className="required">*</span></label>
                   <select
                     value={attractionName}
                     onChange={(e) => setAttractionName(e.target.value)}
@@ -1293,7 +1293,7 @@ function DataReport() {
               )}
               {visitCategory === "dining" && (
                 <div className="form-row">
-                  <label>Dining:</label>
+                  <label>Dining:<span className="required">*</span></label>
                   <select
                     value={diningName}
                     onChange={(e) => setDiningName(e.target.value)}

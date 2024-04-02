@@ -3,11 +3,11 @@ const getPostData = require('./postDataParser');
 
 async function addEmpHandler(req, res) {
     try {
-      const { fullname, address, role, email, phoneNum, password } = await getPostData(req);
+      const { fullname, address, role, email, phoneNum, password, DOB } = await getPostData(req);
 
       const [result] = await pool.execute(
-        'INSERT INTO staff (SName, SAddress, SRole, SPhoneNumber, SEmail, SPassword) VALUES (?, ?, ?,?,?,?)',
-        [fullname, address, role, phoneNum, email, password]
+        'INSERT INTO staff (SName, SAddress, SRole, SPhoneNumber, SEmail, SPassword, DOB) VALUES (?, ?, ?,?,?,?, ?)',
+        [fullname, address, role, phoneNum, email, password, DOB]
       );
 
       res.writeHead(201, { 'Content-Type': 'application/json' });

@@ -67,11 +67,11 @@ function ExpenseForm() {
             <i title="Form for managers to submit restaurant expenses.">&#9432;</i>
           </div>
           <div className="form-row">
-            <label>Employee ID:</label>
+            <label>EID:<span className="required">*</span></label>
             <input type="text" value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} />
           </div>
           <div className="form-row">
-            <label>Restaurant ID:</label>
+            <label>Restaurant:<span className="required">*</span></label>
             <select value={restaurantId} onChange={(e) => setRestaurantId(e.target.value)}>
               <option value="">Select Restaurant</option>
               <option value="1">WhataSandwich</option>
@@ -83,15 +83,15 @@ function ExpenseForm() {
             </select>
           </div>
           <div className="form-row">
-            <label>Expense Amount:</label>
+            <label>Amount:<span className="required">*</span></label>
             <input type="number" step="0.01" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} />
           </div>
           <div className="form-row">
-            <label>Expense Date:</label>
+            <label>Date:<span className="required">*</span></label>
             <input type="date" value={expenseDate} onChange={(e) => setExpenseDate(e.target.value)} />
           </div>
           <div className="form-row">
-            <label>Expense Type:</label>
+            <label>Type:<span className="required">*</span></label>
             <select value={expenseType} onChange={(e) => setExpenseType(e.target.value)}>
               <option value="">Select Type</option>
               <option value="produce">Produce</option>
@@ -135,7 +135,6 @@ function ExpenseForm() {
         </Box>
       </Modal>
 
-      {/* Failure Modal */}
       <Modal
         open={openFailureModal}
         onClose={handleCloseFailureModal}

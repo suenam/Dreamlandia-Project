@@ -82,6 +82,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
             email: newEmployeeEmail,
             phoneNum: formattedPhoneNumber,
             password: newPassword,
+            DOB: newEmployeeDOB
           }),
         }
       );
@@ -96,6 +97,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
         setNewEmployeePhone("");
         setNewEmployeeRole("");
         setFormattedPhoneNumber("");
+        setNewEmployeeDOB("");
       } else {
         console.error("Failed to add new employee");
         setShowFailedToAddModal(true); 
@@ -165,7 +167,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 </i>{" "}
               </div>
               <div className="form-row">
-                <label>Name:</label>
+                <label>Name:<span className="required">*</span></label>
                 <input
                   type="text"
                   value={newEmployeeName}
@@ -173,7 +175,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Date of Birth:</label>
+                <label>Date of Birth:<span className="required">*</span></label>
                 <input
                   type="date"
                   value={newEmployeeDOB}
@@ -181,7 +183,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Address:</label>
+                <label>Address:<span className="required">*</span></label>
                 <input
                   type="text"
                   value={newEmployeeAddress}
@@ -189,7 +191,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Email:</label>
+                <label>Email:<span className="required">*</span></label>
                 <input
                   type="email"
                   value={newEmployeeEmail}
@@ -197,7 +199,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Phone Number:</label>
+                <label>Phone Number:<span className="required">*</span></label>
                 <input
                   type="tel"
                   value={formattedPhoneNumber}
@@ -208,7 +210,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Role:</label>
+                <label>Role:<span className="required">*</span></label>
                 <select
                   value={newEmployeeRole}
                   onChange={(e) => setNewEmployeeRole(e.target.value)}
@@ -239,7 +241,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 </i>
               </div>
               <div className="form-row">
-                <label>Employee:</label>
+                <label>Employee:<span className="required">*</span></label>
                 <select
                   value={employeeToArchive}
                   onChange={(e) => setEmployeeToArchive(e.target.value)}
