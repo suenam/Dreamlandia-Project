@@ -4,9 +4,6 @@ import UserSidebar from '../../../components/UserSidebar/UserSidebar';
 import './RecentOrders.css';
 
 function ViewContact() {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-  setShowFooter(false);
 
   const [viewDate, setViewDate] = useState('');
   const [contactForms, setContactForms] = useState([]);

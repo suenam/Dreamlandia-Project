@@ -4,9 +4,6 @@ import MSidebar from '../../../components/MSidebar/MSidebar';
 import './ViewContact.css';
 
 function ViewContact() {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-  setShowFooter(false);
 
   const [viewStartDate, setViewStartDate] = useState('');
   const [viewEndDate, setViewEndDate] = useState('');

@@ -6,11 +6,11 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
 function Maintenance() {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-  setShowFooter(false);
+
 
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
+
+  
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [newStatus, setNewStatus] = useState('');
   const [newComment, setNewComment] = useState('');

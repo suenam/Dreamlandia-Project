@@ -6,14 +6,13 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
 const WeatherForm = () => {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-  setShowFooter(false);
+
 
   const [WDate, setWeatherDate] = useState('');
   const [WeatherCondition, setWeather] = useState('');
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailureModal, setOpenFailureModal] = useState(false);
+
 
   const handleWeatherSubmit = async (event) => {
     event.preventDefault();

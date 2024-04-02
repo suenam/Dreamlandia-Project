@@ -8,18 +8,15 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
   const auth = useAuth();
-  const { setShowNavbar, setShowFooter } = useOutletContext();
     const handleSignOut = async () => {
         await auth.logout();
         navigate('/', { replace: true }); 
-        setShowNavbar(true);
-        setShowFooter(true);
     };
 
   return (
     <div className="usidebar">
       <div className="usidebar-header">
-        <NavLink to='/UserPage' style={{textDecoration: 'none'}}><h3>User Portal</h3></NavLink>
+        <NavLink to='/user/profile' style={{textDecoration: 'none'}}><h3>User Portal</h3></NavLink>
       </div>
       <nav className="usidebar-links">
         <NavLink className="usidebar-link" to="/" >Home</NavLink>

@@ -6,9 +6,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
 function ExpenseForm() {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-  setShowFooter(false);
+
 
   const [employeeId, setEmployeeId] = useState('');
   const [restaurantId, setRestaurantId] = useState('');

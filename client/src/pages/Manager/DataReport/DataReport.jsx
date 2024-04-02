@@ -14,9 +14,6 @@ function DataReport() {
     }
   };
 
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-  setShowFooter(false);
 
   const [diningType, setDiningType] = useState("allDining");
   const generateVisitTableSingleAttraction = (data) => {

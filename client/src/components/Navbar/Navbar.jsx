@@ -5,6 +5,7 @@ import { useAuth } from "../../pages/auth/auth";
 import Logo from "../../assets/dreamlandia_logo.svg";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CartDropdown from "../ShoppingCart/CartDropdown";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Navbar = () => {
 
@@ -21,12 +22,16 @@ const Navbar = () => {
                     <NavLink className="link" to='/tickets'>Tickets</NavLink>
                     <NavLink className="link" to='/attractions'>Attractions</NavLink>
                     <NavLink className="link" to='/shop'>Shop</NavLink>
-                    {!auth.user ?
-                        <NavLink className="link" to='/login'>Login</NavLink> :
-                        <NavLink className="link" to='/' onClick={async (event) => {
+                    {/* {!auth.user ?
+                        <NavLink className="link account" to='/login' style={{borderLeft: "1px solid white"}}><AccountCircleIcon/></NavLink> :
+                        <NavLink className="link account" to='/' style={{borderLeft: "1px solid white"}} onClick={async (event) => {
                             event.preventDefault();
                             await auth.logout();
-                        }}>Logout</NavLink>
+                        }}><AccountCircleIcon/></NavLink>
+                    } */}
+                    {!auth.user ?
+                        <NavLink className="link account" to='/login' style={{borderLeft: "1px solid white", paddingLeft: "15px"}}><AccountCircleIcon/></NavLink> :
+                        <NavLink className="link account" to='/user/profile' style={{borderLeft: "1px solid white", paddingLeft: "15px"}}><AccountCircleIcon/></NavLink>
                     }
                     <div className="cart-dropdown"  
                         onMouseEnter={()=>setHover(true)} 

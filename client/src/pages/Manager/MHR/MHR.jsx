@@ -4,9 +4,6 @@ import MSidebar from '../../../components/MSidebar/MSidebar';
 import { useOutletContext } from 'react-router-dom';
 
 const HR = () => {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-    setShowFooter(false);
   return (
     <>
     <MSidebar />

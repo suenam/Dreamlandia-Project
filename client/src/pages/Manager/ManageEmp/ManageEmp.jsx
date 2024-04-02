@@ -6,10 +6,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 
 function ManageEmp() {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-  setShowFooter(false);
-
+ 
   function generatePassword(firstName, lastName, birthYear) {
     const firstLetter = firstName.charAt(0).toUpperCase();
     const password = `${firstLetter}${lastName}${birthYear}`;
@@ -31,6 +28,7 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
   const [newEmployeeDOB, setNewEmployeeDOB] = useState("");
   const [newEmployeeAddress, setNewEmployeeAddress] = useState("");
   const [newEmployeePhone, setNewEmployeePhone] = useState("");
+
   const [showAddEmployee, setShowAddEmployee] = useState(false);
   const [showArchiveEmployee, setShowArchiveEmployee] = useState(false);
   const [newEmployeeName, setNewEmployeeName] = useState("");
