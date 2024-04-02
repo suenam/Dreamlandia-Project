@@ -5,6 +5,7 @@
   }
 .input-weather{
     margin-left:270px;
+    margin-right: 20px;
 }
   .input-weather .form-header {
     display: flex;
@@ -27,6 +28,7 @@
     border-radius: 4px;
     margin-bottom: 1rem;
     padding: 1rem;
+    font-family: Montserrat;
   }
   
   .input-weather button {

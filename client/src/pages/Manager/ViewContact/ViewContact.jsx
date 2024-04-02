@@ -47,15 +47,15 @@ function ViewContact() {
               <i title="Select a date to view contact forms submitted on that date.">&#9432;</i>
             </div>
             <div className="form-row">
-              <label>Start Date:</label>
+              <label>Start Date:<span className="required">*</span></label>
               <input type="date" value={viewStartDate} onChange={(e) => setViewStartDate(e.target.value)} />
             </div>
             <div className="form-row">
-              <label>End Date:</label>
+              <label>End Date:<span className="required">*</span></label>
               <input type="date" value={viewEndDate} onChange={(e) => setViewEndDate(e.target.value)} />
             </div>
             <div className="form-row">
-              <label>Contact Type:</label>
+              <label>Contact Type:<span className="required">*</span></label>
               <select value={contactType} onChange={(e) => setContactType(e.target.value)}>
                 <option value="all">All</option>
                 <option value="query">Query</option>

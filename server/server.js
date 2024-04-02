@@ -19,7 +19,14 @@ const editMaintenanceHandler = require("./editMaintenanceHandler");
 const dashboardDataHandler = require("./dashboardDataHandler");
 const financeReportHandler = require("./financeReportHandler");
 const maintenanceReportHandler = require("./maintenanceReportHandler");
+const addEmpHandler = require("./addEmpHandler");
+const archiveEmpHandler = require("./archiveEmpHandler");
+const getEmployeesHandler = require("./getEmployeesHandler");
 const checkoutHandler = require("./checkoutHandler");
+const loggedInEmployeeHandler = require("./loggedInEmployeeHandler");
+const updateLoggedInEmployeeHandler = require("./updateLoggedInEmployeeHandler");
+const maintenanceGetterEditHandler = require("./maintenanceGetterEditHandler");
+const updateMaintenanceHandler = require("./updateMaintenanceHandler");
 const contactUsPageHandler = require("./contactUsPageHandler");
 
 const corsOptions = {
@@ -114,6 +121,23 @@ const server = http.createServer((req, res) => {
       financeReportHandler(req, res);
     }else if (req.url === '/checkout' && req.method === 'POST') {
       checkoutHandler(req, res);
+    }else if (req.url === '/employees' && req.method === 'GET') { 
+      getEmployeesHandler(req, res);
+    }
+    else if (req.url === '/addEmp' && req.method === 'POST') { 
+      addEmpHandler(req, res);
+    }else if (req.url === '/archiveEmp' && req.method === 'POST') { 
+      archiveEmpHandler(req, res);
+    }else if (req.url === '/loggedInEmployee' && req.method === 'GET') { 
+      loggedInEmployeeHandler(req, res);
+    }else if (req.url === '/updateLoggedInEmployee' && req.method === 'POST') { 
+      updateLoggedInEmployeeHandler(req, res);
+    }
+    else if (req.url === '/get-maintenancerequests' && req.method === 'GET') { 
+      maintenanceGetterEditHandler(req, res);
+    }
+    else if (req.url === '/updateMaintenanceRequest' && req.method === 'POST') { 
+      updateMaintenanceHandler(req, res);
     }else if(req.url = '/contact-us' && req.method == 'POST') {
       contactUsPageHandler(req, res);
     }
@@ -127,3 +151,4 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+

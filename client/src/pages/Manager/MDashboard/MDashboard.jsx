@@ -64,6 +64,7 @@ function MDashboard() {
                         expressTickets: data.TotalExpressTickets,
                         restaurantRevenue: data.TotalRestaurantRevenue,
                         restaurantTransactions: data.TotalRestaurantTransactions,
+                        restaurantExpense: data.restaurantExpense,
                         standardRestaurantTransactions: data.TotalStandardRestaurantTransactions,
                         deluxeRestaurantTransactions: data.TotalDeluxeRestaurantTransactions,
                         specialRestaurantTransactions: data.TotalSpecialRestaurantTransactions,
@@ -71,7 +72,6 @@ function MDashboard() {
                         merchandiseTransactions: data.TotalMerchandiseTransactions,
                         merchandiseExpenses: data.TotalMerchandiseExpenses,
                         maintenanceExpenses: data.TotalMaintenanceExpenses,
-                        restaurantExpense: data.restaurantExpense,
                         activeMaintenanceRequests: data.TotalActiveMaintenanceRequests,
                     });
                     console.log({data})
