@@ -5,12 +5,31 @@ import RollerCoaster from '../../assets/roller_coaster.jpg';
 import ThemedRide from '../../assets/themed_rides.jpg';
 import WaterRide from '../../assets/water_ride.jpg';
 import HeightIcon from '@mui/icons-material/Height';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sparkles from '../../components/SparkleCursor/Sparkles';
 
 const Attractions = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedAttraction, setSelectedAttraction] = useState(null);
+
+  useEffect(() => {
+    fetchAttractionStatus();
+  }, []);
+
+  const fetchAttractionStatus = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}//attraction-status`);
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data);
+      }
+      else {
+        console.error("FAILED TO FETCH!", data.message);
+      }
+    } catch (error) {
+      console.error("There was an error: ", error);
+    }
+  }; 
 
   const attractions = [
     {

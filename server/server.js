@@ -29,6 +29,7 @@ const maintenanceGetterEditHandler = require("./maintenanceGetterEditHandler");
 const updateMaintenanceHandler = require("./updateMaintenanceHandler");
 const contactUsPageHandler = require("./contactUsPageHandler");
 const updateUserProfileHandler = require('./updateUserProfileHandler');
+const getAttractionStatusHandler = require('./getAttractionStatusHandler');
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -139,6 +140,9 @@ const server = http.createServer((req, res) => {
       updateMaintenanceHandler(req, res);
     }else if(req.url = '/contact-us' && req.method == 'POST') {
       contactUsPageHandler(req, res);
+    }
+    else if(req.url = '/attraction-status' && req.method == 'GET') {
+      getAttractionStatusHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
