@@ -26,11 +26,14 @@ const Login = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      await auth.login({ email, password });
+      const isloginSuccessful = await auth.login({ email, password });
       console.log("login.jsx is called");
-      navigate(redirectPath, { replace: true });
+      if (isloginSuccessful) {
+        navigate(redirectPath, { replace: true });  //only navigate when login is successful
+      }
     } catch (error) {
       console.error('Login failed:', error);
+      alert(error.message);
     }
   };
 

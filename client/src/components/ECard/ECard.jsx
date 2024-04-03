@@ -1,99 +1,175 @@
 import React, { useState, useEffect } from 'react';
 import './ECard.css';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
 const ECard = () => {
-  const [employee, setEmployee] = useState({
-    staffId: '',
-    name: '',
-    address: '',
-    phoneNumber: '',
-    email: ''
-  });
+  const [employee, setEmployee] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
 
   useEffect(() => {
-    const storedEmployee = JSON.parse(localStorage.getItem('employee'));
-    if (storedEmployee) {
-      setEmployee(storedEmployee);
-    }
+    fetchLoggedInEmployee();
   }, []);
 
-  const handleChange = (e) => {
-    setEmployee({ ...employee, [e.target.name]: e.target.value });
-  }
+  const fetchLoggedInEmployee = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/loggedInEmployee`);
+      const data = await response.json();
+      if (response.ok) {
+        setEmployee(data.employee);
+      } else {
+        console.error('Failed to fetch logged-in employee:', data.message);
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
+  };
 
-  const toggleEditing = () => {
-    setIsEditing(!isEditing);
-  }
+  const handleEmployeeChange = (e) => {
+    const { name, value } = e.target;
+    setEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      [name]: value,
+    }));
+  };
 
-  const saveChanges = () => {
-    localStorage.setItem('employee', JSON.stringify(employee));
-    setIsEditing(false);
-  }
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/updateLoggedInEmployee`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(employee),
+      });
+
+      if (response.ok) {
+        console.log('Employee updated successfully');
+        setIsEditing(false);
+        setOpenUpdateModal(true);
+        fetchLoggedInEmployee();
+      } else {
+        console.error('Failed to update employee');
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
+  };
+
+  const handleCloseUpdateModal = () => {
+    setOpenUpdateModal(false);
+  };
 
   return (
     <div className="employee-profile">
       <h3>Employee Profile</h3>
-      <button onClick={isEditing ? saveChanges : toggleEditing} className="edit-btn">
-        {isEditing ? 'Save' : 'Edit'}
-      </button>
-      <div className="form-group">
-        <label className='eprofile-label'>Staff ID:</label>
-        <input
-          type="text"
-          id="staffId"
-          name="staffId"
-          value={employee.staffId}
-          readonly="readonly"
-          disabled
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={employee.name}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="address">Address:</label>
-        <input
-          type="text"
-          id="address"
-          name="address"
-          value={employee.address}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="phoneNumber">Phone Number:</label>
-        <input
-          type="text"
-          id="phoneNumber"
-          name="phoneNumber"
-          value={employee.phoneNumber}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          value={employee.email}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
-      </div>
+      {isEditing ? (
+        <>
+          <button onClick={handleSave} className="edit-btn">
+            Save
+          </button>
+          <button onClick={() => setIsEditing(false)} className="edit-btn" style={{ marginLeft: '10px' }}>
+            Cancel
+          </button>
+        </>
+      ) : (
+        <button onClick={handleEdit} className="edit-btn">
+          Edit
+        </button>
+      )}
+      {employee ? (
+        <>
+          <div className="form-group">
+            <label className="eprofile-label">EID:</label>
+            <input type="text" id="staffId" name="id" value={employee.id} disabled />
+          </div>
+          <div className="form-group">
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={employee.name}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="address">Address:</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={employee.address}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="phoneNumber">Phone Number:</label>
+            <input
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              value={employee.phoneNumber}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={employee.email}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+        </>
+      ) : (
+        <p>Loading employee information...</p>
+      )}
+
+      {/* Update Modal */}
+      <Modal
+        open={openUpdateModal}
+        onClose={handleCloseUpdateModal}
+        aria-labelledby="update-modal-title"
+        aria-describedby="update-modal-description"
+        className="modal-container update-modal"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="update-modal-title" className="modal-title">
+            Employee Updated
+          </h2>
+          <p id="update-modal-description" className="modal-description">
+            The employee information has been updated successfully.
+          </p>
+          <button onClick={handleCloseUpdateModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
     </div>
   );
-}
+};
 
 export default ECard;

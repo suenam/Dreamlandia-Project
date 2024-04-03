@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth";
 import './EmployeeLogin.css';
@@ -20,14 +20,20 @@ const EmployeeLogin = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (auth.employee && auth.employee.SRole) {
+      navigate(`/${auth.employee.SRole === "Staff" ? "employee" : "manager"}/dashboard`, { replace: true });
+    }
+  }, [auth.employee, navigate]);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      await auth.employeeLogin({ email, password });
+      const isloginSuccessful = await auth.employeeLogin({ email, password });
       console.log("employeeLogin.jsx is called");
-      navigate(`/${auth.employee.SRole === "Staff"? "employee":"manager"}/dashboard`, { replace: true });
     } catch (error) {
       console.error('employee Login failed:', error);
+      alert(error.message);
     }
   };
 
