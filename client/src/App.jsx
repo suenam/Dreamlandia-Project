@@ -25,6 +25,8 @@ import Login from './pages/auth/User/Login/Login';
 import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
 import Checkout from './pages/Checkout/Checkout'
 import { AuthProvider } from './pages/auth/auth';
+import UserPage from './pages/UserPage/UserPage';
+import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders'
 
 import { RequireUserAuth } from './pages/auth/requireAuth';
 //my addition
@@ -34,19 +36,27 @@ import PastOrders from './pages/PastOrders/PastOrders';
 
 
 const Layout = () => {
-  const [showNavbar, setShowNavbar] = useState(true);
-  const [showFooter, setShowFooter] = useState(true);
 
   return (
     <>
       <div className='page-container'>
-        {showNavbar && <Navbar />}
+        <Navbar/>
         <div className='outlet-content'>
-          <Outlet context={{ showNavbar, setShowNavbar, showFooter, setShowFooter }} />
+          <Outlet/>
         </div>
-        {showFooter && <Footer />}
+        <Footer />
       </div>
     </>
+  );
+}
+
+const NoNavLayout = () => {
+  return (
+    <div className='page-container'>
+        <div className='outlet-content'>
+          <Outlet/>
+        </div>
+      </div>
   );
 }
 
@@ -57,53 +67,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/", 
+        path: "/",
         element: <Home />
-      },
-      {
-        path: "/employee",
-        element: <Employee />
-      },
-      
-      {
-      path: "/employee/dashboard",
-      element: <Dashboard />
-      },
-      {
-        path: "/manager/dashboard",
-        element: <MDashboard />
-      },
-      {
-        path: "/employee/maintenance",
-        element: <Maintenance />
-      },
-      {
-        path: "/manager/maintenance",
-        element: <MMaintenance />
-      },
-      {
-        path: "/manager/HR",
-        element: <MHR />
-      },
-      {
-        path: "/employee/HR",
-        element: <HR />
-      },
-      {
-        path: "/manager",
-        element: <Manager />
-      },
-      {
-        path: "/manager/data-reports",
-        element: <DataReport />
-      },
-      {
-        path: "/manager/manage-employees",
-        element: <ManageEmp />
-      },
-      {
-        path: "/manager/expense-form",
-        element: <ExpenseForm />
       },
       {
         path: "/tickets",
@@ -117,49 +82,118 @@ const router = createBrowserRouter([
         path: "/auth/signup",
         element: <Signup />
       },
-      // {
-      //   path: "/Profile",
-      //   element: <Profile />
-      // },
-      // {
-      //   path: "/PastOrders",
-      //   element: <PastOrders />
-      // }
-      // {
-      //   path: "/attractions",
-      //   element: <Attractions />
-      // },
-      // {
-      //   path: "/shop",
-      //   element: <Shop />
-      // }
+      {
+        path: "/Shop",
+        element: <Shop />
+      },
+      {
+        path: "/contactUs",
+        element: <RequireUserAuth><ContactUs /></RequireUserAuth>
+      },
+      {
+        path: "/attractions",
+        element: <Attractions />
+      }
+
     ]
   },
   {
-    path: "/PastOrders",
-    element: <PastOrders />
+    element: <NoNavLayout />,
+    children: [
+      {
+        path: "/employee",
+        children: [
+          {
+            path: "/employee/profile",
+            element: <Employee />
+          },
+          {
+            path: "/employee/login",
+            element: <EmployeeLogin />
+          },
+          {
+            path: "/employee/dashboard",
+            element: <Dashboard />
+          },
+          {
+            path: "/employee/maintenance",
+            element: <Maintenance />
+          },
+          {
+            path: "/employee/weather-form",
+            element: <WeatherForm />
+          },
+          {
+            path: "/employee/HR",
+            element: <HR />
+          },
+        ]
+      },
+      {
+        path: "/manager",
+        children: [
+          {
+            path: "/manager/profile",
+            element: <Manager />
+          },
+          {
+            path: "/manager/maintenance",
+            element: <MMaintenance />
+          },
+          {
+            path: "/manager/HR",
+            element: <MHR />
+          },
+          {
+            path: "/manager/manage-employees",
+            element: <ManageEmp />
+          },
+          {
+            path: "/manager/expense-form",
+            element: <ExpenseForm />
+          },
+          {
+            path: "/manager/data-reports",
+            element: <DataReport />
+          },
+          {
+            path: "/manager/view-contact-forms",
+            element: <ViewContact />
+          },
+          {
+            path: "/manager/dashboard",
+            element: <MDashboard />
+          },
+        ]
+      },
+      {
+        path: "/user",
+        children: [
+          {
+            path: "/user/recent-orders",
+            element: <RecentOrders />
+          },
+          {
+            path: "/user/profile",
+            element: <UserPage />
+          },
+        ]
+      },
+    ]
   },
-  {
-    path: "/Profile",
-    element: <Profile />
-  },
-  // {
-  //   path: "/personal-information",
-  //   element: <PersonalInformation /> // Render the PersonalInformation component
-  // },
+  
   {
     path: "*",
     element: <h1>Page Not Found</h1>
-  },
-  {
-    path: "/employee/login",
-    element: <EmployeeLogin />
   },
   {
     path: "/checkout",
     element: <RequireUserAuth><Checkout /></RequireUserAuth>
   },
 ]);
+
+
+
 function App() {
 
   return (

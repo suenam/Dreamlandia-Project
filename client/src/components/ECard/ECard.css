@@ -60,5 +60,5 @@
 
 .employee-profile .edit-btn:hover {
   background-color: #45a049;
-  cursor: select;
+  cursor: pointer;
 }

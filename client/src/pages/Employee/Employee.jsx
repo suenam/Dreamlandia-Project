@@ -5,9 +5,6 @@ import './Employee.css'
 import ECard from '../../components/ECard/ECard';
 
 const Employee = () => {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-    setShowFooter(false);
   const employeeData = {
     name: 'John Doe',
     title: 'Software Engineer',
@@ -18,7 +15,7 @@ const Employee = () => {
 
   return (
     <div>
-      <h1 className='employee-header-welcome'>Welcome {employeeData.name}!</h1>
+      <h1 className='employee-header-welcome'>Welcome!</h1>
       <Sidebar />
         <div className='ecard-emp-edit'>
         <ECard employeeData ={employeeData} />

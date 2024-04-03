@@ -4,6 +4,9 @@
   font-family: Montserrat;
 }
 
+.required{
+  color: rgb(182, 0, 0);
+}
 .report-sec-maintenace{
   margin-left: 285px;
   margin-right: 20px;
@@ -18,11 +21,12 @@
   border: none;
   width: 200px;
   margin-bottom: 1rem;
+
+  
 }
 
 
 .report-sec-maintenace button:hover {
-  font-family: Montserrat;
 
   background-color: #0056b3;
   cursor: pointer;

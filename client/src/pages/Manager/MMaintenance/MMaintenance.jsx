@@ -1,36 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import './MMaintenance.css';
 import MSidebar from '../../../components/MSidebar/MSidebar';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 function Maintenance() {
-  const { setShowNavbar, setShowFooter } = useOutletContext();
-  setShowNavbar(false);
-    setShowFooter(false);
-  const maintenanceRequests = [
-    { id: 1, attraction: 'attraction1', status: 'Open', comment: 'Initial request', cost: 0 },
-    { id: 2, attraction: 'attraction2', status: 'In Progress', comment: 'Working on it', cost: 100 },
-    { id: 3, attraction: 'attraction3', status: 'Completed', comment: 'All done', cost: 200 },
-  ];
- 
+
+
+  const [maintenanceRequests, setMaintenanceRequests] = useState([]);
+
   
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [currentStatus, setCurrentStatus] = useState('');
-  const [currentComment, setCurrentComment] = useState('');
-  const [currentCost, setCurrentCost] = useState(0);
   const [newStatus, setNewStatus] = useState('');
   const [newComment, setNewComment] = useState('');
   const [newCost, setNewCost] = useState(0);
   const [dateResolved, setDateResolved] = useState('');
   const [showEditContainer, setShowEditContainer] = useState(false);
 
-  const handleRequestSelect = (requestId) => {
-    const request = maintenanceRequests.find((req) => req.id === requestId);
+  // Modal state variables
+  const [openSubmitSuccessModal, setOpenSubmitSuccessModal] = useState(false);
+  const [openSubmitFailureModal, setOpenSubmitFailureModal] = useState(false);
+  const [openEditSuccessModal, setOpenEditSuccessModal] = useState(false);
+  const [openEditFailureModal, setOpenEditFailureModal] = useState(false);
+
+  useEffect(() => {
+    fetchMaintenanceRequests();
+  }, []);
+
+  const fetchMaintenanceRequests = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/get-maintenancerequests`);
+      const data = await response.json();
+      if (response.ok) {
+        setMaintenanceRequests(data.requests);
+        console.log(maintenanceRequests);
+      } else {
+        console.error('Failed to fetch maintenance requests:', data.message);
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
+  };
+
+  const handleRequestSelect = (RequestID) => {
+    const request = maintenanceRequests.find((req) => req.id === RequestID);
     if (request) {
       setSelectedRequest(request);
-      setCurrentStatus(request.status);
-      setCurrentComment(request.comment);
-      setCurrentCost(request.cost);
       setNewStatus(request.status);
       setNewComment(request.comment);
       setNewCost(request.cost);
@@ -38,12 +54,6 @@ function Maintenance() {
     }
   };
 
- 
-  const getAttractionIdFromName = (attractionName) => {
-    const attraction = attractions.find((a) => a.label === attractionName);
-    return attraction ? attraction.id : null;
-  };
-  
   const handleNewCostChange = (event) => {
     setNewCost(parseFloat(event.target.value));
   };
@@ -52,8 +62,36 @@ function Maintenance() {
     setDateResolved(event.target.value);
   };
 
- 
-  
+  const handleSaveChanges = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/updateMaintenanceRequest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          RequestID: selectedRequest.id,
+          status: newStatus,
+          comment: newComment,
+          cost: newCost,
+          dateResolved: dateResolved,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Maintenance request updated successfully');
+        fetchMaintenanceRequests();
+        setSelectedRequest(null);
+        setOpenEditSuccessModal(true); // Open success modal for editing
+      } else {
+        console.error('Failed to update maintenance request');
+        setOpenEditFailureModal(true); // Open failure modal for editing
+      }
+    } catch (error) {
+      console.error('There was an error:', error);
+    }
+  };
+
   const attractions = [
     { id: 2, value: 'Roller Coaster', label: 'Roller Coaster' },
     { id: 3, value: 'Carousel', label: 'Carousel' },
@@ -88,16 +126,22 @@ function Maintenance() {
   const handleAttractionChange = (event) => {
     setSelectedAttractionId(event.target.value);
   };
+
+  const getAttractionIdFromName = (attractionName) => {
+    const attraction = attractions.find((a) => a.label === attractionName);
+    return attraction ? attraction.id : null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const attractionId = getAttractionIdFromName(selectedAttractionId);
-  
+
     if (attractionId === null) {
       alert('Please select a valid attraction.');
       return;
     }
-  
+
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/maintenance-requests`, {
         method: 'POST',
@@ -105,25 +149,40 @@ function Maintenance() {
         body: JSON.stringify({
           MRDescription: comment,
           MRCost: cost,
-          AttractionID: attractionId, // Use the attractionId obtained from getAttractionIdFromName
+          AttractionID: attractionId,
           MRSubject: subject
         }),
       });
-  
+
       if (response.ok) {
-        // Handle success
-        alert('Maintenance request submitted successfully!');
+        setOpenSubmitSuccessModal(true); // Open success modal for submission
         console.log('Maintenance request submitted successfully!');
+        fetchMaintenanceRequests(); // Fetch updated maintenance requests
       } else {
-        // Handle errors
-        alert('Failed to submit maintenance request.');
+        setOpenSubmitFailureModal(true); // Open failure modal for submission
         console.error('Failed to submit maintenance request.');
       }
     } catch (error) {
       console.error('There was an error:', error);
     }
   };
-  
+
+  // Modal handlers
+  const handleCloseSubmitSuccessModal = () => {
+    setOpenSubmitSuccessModal(false);
+  };
+
+  const handleCloseSubmitFailureModal = () => {
+    setOpenSubmitFailureModal(false);
+  };
+
+  const handleCloseEditSuccessModal = () => {
+    setOpenEditSuccessModal(false);
+  };
+
+  const handleCloseEditFailureModal = () => {
+    setOpenEditFailureModal(false);
+  };
 
   return (
     <>
@@ -142,124 +201,236 @@ function Maintenance() {
                 <i title="Form to submit a new maintenance request for an attraction.">&#9432;</i>
               </div>
               <div className='input-container'>
-                <label>Subject</label>
-                <input type="text" value={subject} onChange={handleSubjectChange} />
-              </div>
-              <div className='input-container'>
-                <label>Select Attraction</label>
-                <select
-                  name="attraction"
-                  value={selectedAttractionId}
-                  onChange={handleAttractionChange}
-                >
-                  <option value="">Select an Attraction</option>
-                  {attractions.map((attraction) => (
-                    <option key={attraction.id} value={attraction.value}>
-                      {attraction.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className='input-container'>
-                <label>Cost</label>
-                <input type="number" value={cost} onChange={handleCostChange} />
-              </div>
-              <div className='input-container'>
-                <label>Comment</label>
-                <textarea value={comment} onChange={handleCommentChange} />
-              </div>
-              <div className="submit-actions">
-                <button type="submit">Submit</button>
-              </div>
-            </form>
-          </div>
-        )}
-      </div>
-      <div className='report-sec-maintenace'>
-        <button onClick={() => setShowEditContainer(!showEditContainer)}>
-          {showEditContainer ? '▲ Edit Request' : '▼ Edit Request'}
-        </button>
-        {showEditContainer && (
-          <div className="edit-container">
-            <form className='submit-mr' onSubmit={handleSubmit}>
-              <div className="form-header">
-                <h3>Edit Maintenance Request</h3>
-                <i title="Form to edit an existing maintenance request.">&#9432;</i>
-              </div>
-              <div className="edit-details">
-                <div className="edit-row">
-                  <label>Select Maintenance Request</label>
-                  <select
-                    value={selectedRequest?.id || ""}
-                    onChange={(e) => handleRequestSelect(parseInt(e.target.value))}
-                  >
-                    <option value="">Select a Request</option>
-                    {maintenanceRequests.map((request) => (
-                      <option key={request.id} value={request.id}>
-                        {`Request ID: ${request.id} - ${request.attraction}`}
-                      </option>
-                    ))}
-                  </select>
+                <label>Subject<span className="required">*</span></label>
+                <input type="text" value={subject} onChange={handleSubjectChange} required />
+                
                 </div>
+                <div className='input-container'>
 
-                {selectedRequest && (
-                  <>
-                    <div className="edit-row">
-                      <label>Current Status:</label>
-                      <span>{currentStatus}</span>
-                    </div>
-                    <div className="edit-row">
-                      <label>Current Comment:</label>
-                      <span>{currentComment}</span>
-                    </div>
-                    <div className="edit-row">
-                      <label>Current Cost:</label>
-                      <span>${currentCost.toFixed(2)}</span> {/* Display currentCost */}
-                    </div>
+              <label>Select Attraction<span className="required">*</span></label>
+               <select
+                 name="attraction"
+                 value={selectedAttractionId}
+                 onChange={handleAttractionChange}
+                 required
+               >
+                 <option value="">Select an Attraction</option>
+                 {attractions.map((attraction) => (
+                   <option key={attraction.id} value={attraction.value}>
+                     {attraction.label}
+                   </option>
+                 ))}
+               </select>
+             </div>
+              
 
-                    <div className="input-container">
-                      <label>New Status:</label>
-                      <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
-                        <option value="Open">Open</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option>
-                      </select>
-                    </div>
+             <div className='input-container'>
+               <label>Cost<span className="required">*</span></label>
+               <input type="number" value={cost} onChange={handleCostChange} required />
+             </div>
+             <div className='input-container'>
+               <label>Comment<span className="required">*</span></label>
+               <textarea value={comment} onChange={handleCommentChange} required />
+             </div>
+             <div className="submit-actions">
+               <button type="submit">Submit</button>
+             </div>
+           </form>
+         </div>
+       )}
+     </div>
+     <div className='report-sec-maintenace'>
+       <button onClick={() => setShowEditContainer(!showEditContainer)}>
+         {showEditContainer ? '▲ Edit Request' : '▼ Edit Request'}
+       </button>
+       {showEditContainer && (
+         <div className="edit-container">
+           <form className='submit-mr'>
+             <div className="form-header">
+               <h3>Edit Maintenance Request</h3>
+               <i title="Form to edit an existing maintenance request.">&#9432;</i>
+             </div>
+             <div className="edit-details">
+               <div className="edit-row">
+                 <label>Select Request<span className="required">*</span></label>
+                 <select
+                   value={selectedRequest?.id || ""}
+                   onChange={(e) => handleRequestSelect(parseInt(e.target.value))}
+                   required
+                 >
+                   <option value="">Select a Request</option>
+                   {maintenanceRequests.map((request) => (
+                     <option key={request.id} value={request.id}>
+                       {`RID: ${request.id} - ${request.subject}`}
+                     </option>
+                   ))}
+                 </select>
+               </div>
 
-                    {newStatus === 'Completed' && (
-                      <div className="input-container">
-                        <label>Date Resolved:</label>
-                        <input type="date" value={dateResolved} onChange={handleDateResolvedChange} />
-                      </div>
-                    )}
+               {selectedRequest && (
+                 <>
+                 <div className="edit-row">
+                     <label>Current Subject:</label>
+                     <span>{selectedRequest.subject}</span>
+                   </div>
+                   <div className="edit-row">
+                     <label>Current Status:</label>
+                     <span>{selectedRequest.status}</span>
+                   </div>
+                   <div className="edit-row">
+                     <label>Current Comment:</label>
+                     <span>{selectedRequest.comment}</span>
+                   </div>
+                   <div className="edit-row">
+                     <label>Current Cost:</label>
+                     <span>${selectedRequest.cost}</span>
+                   </div>
 
-                    <div className="input-container">
-                      <label>New Cost:</label>
-                      <input type="number" value={newCost} onChange={handleNewCostChange} /> 
-                    </div>
+                   <div className="input-container">
+                     <label>New Status:<span className="required">*</span></label>
+                     <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)} required>
+                       <option value="Open">Pending</option>
+                       <option value="In Progress">In Progress</option>
+                       <option value="Completed">Completed</option>
+                     </select>
+                   </div>
 
-                    <div className="input-container">
-                      <label>New Comment:</label>
-                      <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} />
-                    </div>
+                   {newStatus === 'Completed' && (
+                     <div className="input-container">
+                       <label>Date Resolved:<span className="required">*</span></label>
+                       <input type="date" value={dateResolved} onChange={handleDateResolvedChange} required />
+                     </div>
+                   )}
 
-                    <div className="edit-actions">
-                      <button type="button">Save Changes</button>
-                      <button type="button" onClick={() => setSelectedRequest(null)}>
-                        Cancel
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </form>
+                   <div className="input-container">
+                     <label>New Cost:<span className="required">*</span></label>
+                     <input type="number" value={newCost} onChange={handleNewCostChange} required />
+                   </div>
 
-          </div>
-        )}
-      </div>
-    </>
-  );
-}
+                   <div className="input-container">
+                     <label>New Comment:<span className="required">*</span></label>
+                     <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} required />
+                   </div>
 
-export default Maintenance;
+                   <div className="edit-actions">
+                     <button type="button" onClick={handleSaveChanges}>Save Changes</button>
+                     <button type="button" onClick={() => setSelectedRequest(null)}>
+                       Cancel
+                     </button>
+                   </div>
+                 </>
+               )}
+             </div>
+           </form>
+         </div>
+       )}
+     </div>
+
+     {/* Submit Success Modal */}
+     <Modal
+       open={openSubmitSuccessModal}
+       onClose={handleCloseSubmitSuccessModal}
+       aria-labelledby="submit-success-modal-title"
+       aria-describedby="submit-success-modal-description"
+       className="modal-container submit-success-modal"
+     >
+       <Box
+         sx={{
+           position: 'absolute',
+           top: '50%',
+           left: '50%',
+           transform: 'translate(-50%, -50%)',
+           bgcolor: 'background.paper',
+           boxShadow: 24,
+           p: 4,
+         }}
+         className="modal-content"
+       >
+         <h2 id="submit-success-modal-title" className="modal-title">Maintenance Request Submitted</h2>
+         <p id="submit-success-modal-description" className="modal-description">The maintenance request has been submitted successfully.</p>
+         <button onClick={handleCloseSubmitSuccessModal} className="modal-button">Close</button>
+       </Box>
+     </Modal>
+
+     {/* Submit Failure Modal */}
+     <Modal
+       open={openSubmitFailureModal}
+       onClose={handleCloseSubmitFailureModal}
+       aria-labelledby="submit-failure-modal-title"
+       aria-describedby="submit-failure-modal-description"
+       className="modal-container submit-failure-modal"
+     >
+       <Box
+         sx={{
+           position: 'absolute',
+           top: '50%',
+           left: '50%',
+           transform: 'translate(-50%, -50%)',
+           bgcolor: 'background.paper',
+           boxShadow: 24,
+           p: 4,
+         }}
+         className="modal-content"
+       >
+         <h2 id="submit-failure-modal-title" className="modal-title">Failed to Submit Maintenance Request</h2>
+         <p id="submit-failure-modal-description" className="modal-description">There was an error while submitting the maintenance request.</p>
+         <button onClick={handleCloseSubmitFailureModal} className="modal-button">Close</button>
+       </Box>
+     </Modal>
+
+     {/* Edit Success Modal */}
+     <Modal
+       open={openEditSuccessModal}
+       onClose={handleCloseEditSuccessModal}
+       aria-labelledby="edit-success-modal-title"
+       aria-describedby="edit-success-modal-description"
+       className="modal-container edit-success-modal"
+     >
+       <Box
+         sx={{
+           position: 'absolute',
+           top: '50%',
+           left: '50%',
+           transform: 'translate(-50%, -50%)',
+           bgcolor: 'background.paper',
+           boxShadow: 24,
+           p: 4,
+         }}
+         className="modal-content"
+       >
+         <h2 id="edit-success-modal-title" className="modal-title">Maintenance Request Updated</h2>
+         <p id="edit-success-modal-description" className="modal-description">The maintenance request has been updated successfully.</p>
+         <button onClick={handleCloseEditSuccessModal} className="modal-button">Close</button>
+       </Box>
+     </Modal>
+
+     {/* Edit Failure Modal */}
+     <Modal
+       open={openEditFailureModal}
+       onClose={handleCloseEditFailureModal}
+       aria-labelledby="edit-failure-modal-title"
+       aria-describedby="edit-failure-modal-description"
+       className="modal-container edit-failure-modal"
+       >
+       <Box
+       sx={{
+       position: 'absolute',
+       top: '50%',
+       left: '50%',
+       transform: 'translate(-50%, -50%)',
+       bgcolor: 'background.paper',
+       boxShadow: 24,
+       p: 4,
+       }}
+       className="modal-content"
+       >
+       <h2 id="edit-failure-modal-title" className="modal-title">Failed to Update Maintenance Request</h2>
+       <p id="edit-failure-modal-description" className="modal-description">There was an error while updating the maintenance request.</p>
+       <button onClick={handleCloseEditFailureModal} className="modal-button">Close</button>
+       </Box>
+       </Modal>
+       </>
+       );
+       }
+       
+       export default Maintenance;
