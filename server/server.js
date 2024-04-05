@@ -184,9 +184,10 @@ const server = http.createServer((req, res) => {
           res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
         });
     }
-    // else if(req.url = '/contact-us' && req.method == 'POST') {
-    //   contactUsPageHandler(req, res);
-    // }
+    else if(req.url = '/contact-us' && req.method == 'POST') {
+      contactUsPageHandler(req, res);
+
+    }
     
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
