@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ECard.css';
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -6,7 +6,34 @@ import Box from "@mui/material/Box";
 const ECard = () => {
   const [employee, setEmployee] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false); 
+  const staffIdRef = useRef(null);
+
+  useEffect(() => {
+    const fetchStaffId = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/employee`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', 
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          if (userData && userData.StaffID) {
+            staffIdRef.current = userData.StaffID; 
+            console.log('staffid:', staffIdRef.current);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+      }
+    };
+    console.log('staffid:', staffIdRef.current);
+    fetchStaffId();
+  }, []);
 
   useEffect(() => {
     fetchLoggedInEmployee();
@@ -14,7 +41,14 @@ const ECard = () => {
 
   const fetchLoggedInEmployee = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/loggedInEmployee`);
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/loggedInEmployee`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        credentials: 'include',
+      });
       const data = await response.json();
       if (response.ok) {
         setEmployee(data.employee);
@@ -25,7 +59,6 @@ const ECard = () => {
       console.error('There was an error:', error);
     }
   };
-
   const handleEmployeeChange = (e) => {
     const { name, value } = e.target;
     setEmployee((prevEmployee) => ({
@@ -40,21 +73,32 @@ const ECard = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/updateLoggedInEmployee`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(employee),
-      });
-
+      const name = employee.name;
+      const phoneNumber = employee.phoneNumber;
+      const id = employee.id;
+      const address = employee.address;
+      const email = employee.email;
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/updateLoggedInEmployee`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify({ id, name, address, phoneNumber, email }),
+        }
+      );
+  
       if (response.ok) {
-        console.log('Employee updated successfully');
+        const data = await response.json();
+        console.log('Employee updated successfully:', data);
         setIsEditing(false);
         setOpenUpdateModal(true);
-        fetchLoggedInEmployee();
+        await fetchLoggedInEmployee();
       } else {
-        console.error('Failed to update employee');
+        const errorData = await response.json();
+        console.error('Failed to update employee:', errorData);
       }
     } catch (error) {
       console.error('There was an error:', error);

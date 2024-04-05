@@ -1,79 +1,124 @@
-import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
 import UserSidebar from '../../../components/UserSidebar/UserSidebar';
 import './RecentOrders.css';
 
-function ViewContact() {
+function RecentOrder() {
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [selectedMonths, setSelectedMonths] = useState("default");
+  const [userId, setUserId] = useState('');
+  const userIdRef = useRef(null);
 
-  const [viewDate, setViewDate] = useState('');
-  const [contactForms, setContactForms] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState('3'); // Default value is 3
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', 
+        });
 
-  const handleViewSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/viewContactForms`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ startDate: viewDate, endDate: viewDate }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setContactForms(data);
-      } else {
-        const errorData = await response.json();
-        console.error('Error retrieving contact forms:', errorData.message);
+        if (response.ok) {
+          const userData = await response.json();
+          if (userData && userData.UserID) {
+            userIdRef.current = userData.UserID; 
+            console.log('New userId:', userIdRef.current);
+          } else {
+            setUserId(null);
+          }
+        } else {
+          setUserId(null);
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+        setUserId(null);
       }
-    } catch (error) {
-      console.error('Error retrieving contact forms:', error);
-    }
-  };
+    };
 
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    const fetchRecentOrders = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/getRecentTicketOrders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ months: selectedMonths, userId: userIdRef.current }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setRecentOrders(data);
+        } else {
+          const errorData = await response.json();
+          console.error('Error retrieving recent orders:', errorData.message);
+        }
+      } catch (error) {
+        console.error('Error retrieving recent orders:', error);
+      }
+    };
+    fetchRecentOrders();
+
+    if (userIdRef.current) {
+      console.log("User ID:", userIdRef.current);
+      console.log("Months:", selectedMonths);
+
+    }
+  }, [selectedMonths]); 
+  
   return (
     <>
       <UserSidebar />
       <h1 className="h1-dr-m">View Recent Orders</h1>
       <div className="data-report">
         <div className="report-section">
-          <p>Orders placed within&nbsp;
+          <p>
+            Orders placed within&nbsp;
             <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              style={{
-                backgroundColor: '#f2f2f2',
-                padding: '8px', // Slightly thicker padding
-                borderRadius: '5px',
-                border: '1px solid black', // Black border
-              }}
-            >
-              <option value="3">3 months</option>
-              <option value="6">6 months</option>
-              <option value="9">9 months</option>
-              <option value="12">12 months</option>
-            </select>
+  value={selectedMonths}
+  onChange={(e) => setSelectedMonths(e.target.value)}
+  style={{
+    backgroundColor: '#f2f2f2',
+    padding: '7x',
+    borderRadius: '5px',
+    border: '1px solid black',
+  }}
+>
+<option value="default">___________</option>
+
+  <option value="3">3 months</option>
+  <option value="6">6 months</option>
+  <option value="9">9 months</option>
+  <option value="12">12 months</option>
+</select>
+
           </p>
         </div>
         <div className="report-section">
           <h3>Recent Orders</h3>
-          {contactForms.length > 0 ? (
+          {recentOrders.length > 0 ? (
             <table className="contact-table">
               <thead>
                 <tr>
-                  <th>Date</th>
                   <th>TicketID</th>
-                  <th>Attractions-Visited</th>{/* We might change this later */}
+                  <th>Type</th>
+                  <th>Purchase Date</th>
+                  <th>Expiry Date</th>
+                  <th>Price</th>
                 </tr>
               </thead>
               <tbody>
-                {contactForms.map((form) => (
-                  <tr key={form.SubmissionID}>
-                    <td>{form.Cname}</td>
-                    <td>{form.Cemail}</td>
-                    <td>{form.Cemaill}</td>
+                {recentOrders.map((order) => (
+                  <tr key={order.TicketID}>
+                    <td>{order.TicketID}</td>
+                    <td>{order.TType}</td>
+                    <td>{order.TPurchaseDate}</td>
+                    <td>{order.TExpiryDate}</td>
+                    <td>{order.TPrice}</td>
                   </tr>
                 ))}
               </tbody>
@@ -87,4 +132,4 @@ function ViewContact() {
   );
 }
 
-export default ViewContact;
+export default RecentOrder;

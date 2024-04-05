@@ -29,6 +29,7 @@ const maintenanceGetterEditHandler = require("./maintenanceGetterEditHandler");
 const updateMaintenanceHandler = require("./updateMaintenanceHandler");
 const contactUsPageHandler = require("./contactUsPageHandler");
 const updateUserProfileHandler = require('./updateUserProfileHandler');
+const getRecentTicketOrdersHandler = require("./getRecentTicketOrdersHandler");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -127,19 +128,52 @@ const server = http.createServer((req, res) => {
       addEmpHandler(req, res);
     }else if (req.url === '/archiveEmp' && req.method === 'POST') { 
       archiveEmpHandler(req, res);
-    }else if (req.url === '/loggedInEmployee' && req.method === 'GET') { 
-      loggedInEmployeeHandler(req, res);
-    }else if (req.url === '/updateLoggedInEmployee' && req.method === 'POST') { 
-      updateLoggedInEmployeeHandler(req, res);
+    }else if (req.url === '/loggedInEmployee' && req.method === 'GET') {
+      authenticateToken(req, res, () => {
+        if (req.user) {
+          if (req.user.userType === 'employee') {
+            console.log("server -> passAuth -> valid employee(200) pass to frontend employee");
+            const staffId = req.user.StaffID;
+            loggedInEmployeeHandler(req, res, staffId);
+          } else {
+            console.log("server -> passAuth -> null(403) pass to frontend employee");
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(null));
+          }
+        } else {
+          console.log("no token provided null(200) pass to frontend employee");
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(null));
+        }
+      });
+    }else if (req.url.startsWith('/updateLoggedInEmployee') && req.method === 'POST') {
+      updateLoggedInEmployeeHandler(req,res);
     }
     else if (req.url === '/get-maintenancerequests' && req.method === 'GET') { 
       maintenanceGetterEditHandler(req, res);
     }
     else if (req.url === '/updateMaintenanceRequest' && req.method === 'POST') { 
       updateMaintenanceHandler(req, res);
-    }else if(req.url = '/contact-us' && req.method == 'POST') {
-      contactUsPageHandler(req, res);
     }
+    else if (req.url === '/getRecentTicketOrders' && req.method === 'POST') {
+      // console.log('Request Headers:', req.headers);
+    
+      // Parse the request body as JSON
+      req.on('data', (chunk) => {
+        req.body = req.body || {};
+        req.body = { ...req.body, ...JSON.parse(chunk.toString()) };
+      });
+    
+      req.on('end', () => {
+        console.log('Request Body:', req.body);
+        const { userId, months } = req.body;
+        getRecentTicketOrdersHandler(req, res, userId, months);
+      });
+    }
+    // else if(req.url = '/contact-us' && req.method == 'POST') {
+    //   contactUsPageHandler(req, res);
+    // }
+    
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'Route not found' }));

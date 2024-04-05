@@ -1,10 +1,7 @@
-// loggedInEmployeeHandler.js
 const pool = require('./database');
 
-async function loggedInEmployeeHandler(req, res) {
+async function loggedInEmployeeHandler(req, res, staffId) {
   try {
-    const staffId = 2; 
-
     const [result] = await pool.execute(
       'SELECT StaffID, SName, SAddress, SPhoneNumber, SEmail FROM staff WHERE StaffID = ?',
       [staffId]
@@ -18,7 +15,6 @@ async function loggedInEmployeeHandler(req, res) {
         phoneNumber: result[0].SPhoneNumber,
         email: result[0].SEmail,
       };
-
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ employee }));
     } else {
