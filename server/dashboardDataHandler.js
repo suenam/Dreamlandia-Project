@@ -55,10 +55,9 @@ async function dashboardDataHandler(req, res) {
                 SUM(MRCost) AS TotalMaintenanceExpenses,
                 COUNT(*) AS TotalActiveMaintenanceRequests
             FROM maintenance_request
-            WHERE MRStatus = 'Pending' AND DATE(MRDateSubmitted) BETWEEN ? AND ?;
+            WHERE DATE(MRDateSubmitted) BETWEEN ? AND ?;
         `;
         const [maintenanceData] = await pool.execute(maintenanceQuery, [startDate, endDate]);
-
         // Combine all data
         const dashboardData = {
             ...ticketData[0],
@@ -66,6 +65,7 @@ async function dashboardDataHandler(req, res) {
             ...merchandiseData[0],
             ...maintenanceData[0],
         };
+        console.log(dashboardData.merchandiseData);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(dashboardData));

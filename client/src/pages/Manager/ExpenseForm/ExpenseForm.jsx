@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
 import MSidebar from '../../../components/MSidebar/MSidebar';
 import './ExpenseForm.css';
 import Modal from '@mui/material/Modal';
@@ -16,7 +15,34 @@ function ExpenseForm() {
 
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailureModal, setOpenFailureModal] = useState(false);
+  const staffIdRef = useRef(null);
 
+  useEffect(() => {
+    const fetchStaffId = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/employee`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', 
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          if (userData && userData.StaffID) {
+            staffIdRef.current = userData.StaffID; 
+            setEmployeeId(staffIdRef.current);
+            console.log('staffid:', staffIdRef.current);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+      }
+    };
+    console.log('staffid:', staffIdRef.current);
+    fetchStaffId();
+  }, []);
   const handleExpenseSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -26,7 +52,7 @@ function ExpenseForm() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          StaffID: employeeId,
+          StaffID: staffIdRef.current,
           RestaurantID: restaurantId,
           ExpenseAmt: expenseAmount,
           ExpenseDate: expenseDate,
@@ -64,10 +90,7 @@ function ExpenseForm() {
             <h3>Resturant Expense Form</h3>
             <i title="Form for managers to submit restaurant expenses.">&#9432;</i>
           </div>
-          <div className="form-row">
-            <label>EID:<span className="required">*</span></label>
-            <input type="text" value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} />
-          </div>
+          
           <div className="form-row">
             <label>Restaurant:<span className="required">*</span></label>
             <select value={restaurantId} onChange={(e) => setRestaurantId(e.target.value)}>
