@@ -11,27 +11,8 @@ import Sparkles from '../../components/SparkleCursor/Sparkles';
 const Attractions = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedAttraction, setSelectedAttraction] = useState(null);
-
-  useEffect(() => {
-    fetchAttractionStatus();
-  }, []);
-
-  const fetchAttractionStatus = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}//attraction-status`);
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data);
-      }
-      else {
-        console.error("FAILED TO FETCH!", data.message);
-      }
-    } catch (error) {
-      console.error("There was an error: ", error);
-    }
-  }; 
-
-  const attractions = [
+  
+  const [attractions, setAttractions] = useState([
     {
       name: 'Roller Coaster',
       image: RollerCoaster,
@@ -39,6 +20,7 @@ const Attractions = () => {
       shortDescription: 'Soar through clouds and dive into enchanted wonderlands.',
       thrillLevel: 'High',
       heightRequirement: '48 inches',
+      status: true,
     },
     {
       name: 'Carousel',
@@ -47,6 +29,7 @@ const Attractions = () => {
       shortDescription: 'A revolving realm of wonder with galloping steeds.',
       thrillLevel: 'Low',
       heightRequirement: 'None',
+      status: true
     },
     {
       name: 'Ferris Wheel',
@@ -55,6 +38,7 @@ const Attractions = () => {
       shortDescription: 'A serene escape high above with tapestries of lights.',
       thrillLevel: 'Low',
       heightRequirement: 'None',
+      status: true
     },
     {
       name: 'Themed Rides',
@@ -63,6 +47,7 @@ const Attractions = () => {
       shortDescription: 'Magical realms with stories of fantasy and mystery.',
       thrillLevel: 'Moderate',
       heightRequirement: '40 inches',
+      status: true
     },
     {
       name: 'Water Rides',
@@ -71,8 +56,35 @@ const Attractions = () => {
       shortDescription: 'Refreshing adventures through mystical waters.',
       thrillLevel: 'Moderate',
       heightRequirement: '36 inches',
+      status: true
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    fetchAttractionStatus();
+  }, []);
+  
+  const fetchAttractionStatus = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/attraction-status`);
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data);
+        const updatedData = attractions.map((attraction) => ({
+          ...attraction,
+          status: data.requests.find(attractionNew => attractionNew.attractionName === attraction.name).attractionStatus
+        }));
+        
+        setAttractions(updatedData);
+        console.log(updatedData);
+      }
+      else {
+        console.error("FAILED TO FETCH!", data.message);
+      }
+    } catch (error) {
+      console.error("There was an error: ", error);
+    }
+  }; 
 
   const handleAttractionClick = (attraction) => {
     setSelectedAttraction(attraction);
