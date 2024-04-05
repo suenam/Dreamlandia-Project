@@ -35,7 +35,22 @@ const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
   credentials: true,
 };
-
+async function getPostData(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      try {
+        const parsedBody = JSON.parse(body);
+        resolve(parsedBody);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+}
 const server = http.createServer((req, res) => {
   cors(corsOptions)(req, res, () => {
     if (req.method === 'OPTIONS') {
@@ -156,19 +171,18 @@ const server = http.createServer((req, res) => {
       updateMaintenanceHandler(req, res);
     }
     else if (req.url === '/getRecentTicketOrders' && req.method === 'POST') {
-      // console.log('Request Headers:', req.headers);
-    
       // Parse the request body as JSON
-      req.on('data', (chunk) => {
-        req.body = req.body || {};
-        req.body = { ...req.body, ...JSON.parse(chunk.toString()) };
-      });
-    
-      req.on('end', () => {
-        console.log('Request Body:', req.body);
-        const { userId, months } = req.body;
-        getRecentTicketOrdersHandler(req, res, userId, months);
-      });
+      getPostData(req)
+        .then((body) => {
+          console.log('Request Body:', body);
+          const { userId, months, orderType } = body;
+          getRecentTicketOrdersHandler(req, res, userId, months, orderType);
+        })
+        .catch((err) => {
+          console.error('Error parsing request body:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
+        });
     }
     // else if(req.url = '/contact-us' && req.method == 'POST') {
     //   contactUsPageHandler(req, res);

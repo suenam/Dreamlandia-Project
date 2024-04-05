@@ -1,13 +1,14 @@
 const pool = require('./database');
 const getPostData = require('./postDataParser');
+const bcrypt = require('bcrypt');
 
 async function addEmpHandler(req, res) {
     try {
       const { fullname, address, role, email, phoneNum, password, DOB } = await getPostData(req);
-
+      const newPassword = await bcrypt.hash(password, 10);
       const [result] = await pool.execute(
         'INSERT INTO staff (SName, SAddress, SRole, SPhoneNumber, SEmail, SPassword, DOB) VALUES (?, ?, ?,?,?,?, ?)',
-        [fullname, address, role, phoneNum, email, password, DOB]
+        [fullname, address, role, phoneNum, email, newPassword, DOB]
       );
 
       res.writeHead(201, { 'Content-Type': 'application/json' });
