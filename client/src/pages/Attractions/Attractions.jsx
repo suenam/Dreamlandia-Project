@@ -7,6 +7,12 @@ import WaterRide from '../../assets/water_ride.jpg';
 import HeightIcon from '@mui/icons-material/Height';
 import { useState, useEffect } from 'react';
 import Sparkles from '../../components/SparkleCursor/Sparkles';
+import CircleIcon from '@mui/icons-material/Circle';
+import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import CloudIcon from '@mui/icons-material/Cloud';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
+import ErrorIcon from '@mui/icons-material/Error';
 
 const Attractions = () => {
   const [showModal, setShowModal] = useState(false);
@@ -60,16 +66,33 @@ const Attractions = () => {
     },
   ]);
 
+  const [currentWeather, setCurrentWeather] = useState('sunny');
+
   useEffect(() => {
     fetchAttractionStatus();
+    fetchCurrentWeather();
   }, []);
+
+  const fetchCurrentWeather = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/current-weather`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        const currentWeather = data.requests[0]?.weatherStatus?? "sunny";
+        setCurrentWeather(currentWeather);
+      }
+    } catch (error) {
+      console.error("There was an error: ", error);
+    }
+  };
   
   const fetchAttractionStatus = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/attraction-status`);
       const data = await response.json();
       if (response.ok) {
-        console.log(data);
+        // console.log(data);
         const updatedData = attractions.map((attraction) => ({
           ...attraction,
           status: data.requests.find(attractionNew => attractionNew.attractionName === attraction.name).attractionStatus
@@ -103,6 +126,27 @@ const Attractions = () => {
         <h1>Thrilling Attractions</h1>
         <p>Embark on a journey beyond your wildest dreams!</p>
       </div>
+      <div className="weather-banner">
+          <div className={`weather-banner-text ${currentWeather == 'sunny' || currentWeather == 'cloudy' ? 'good-moving' : 'moving'}`} style={{color: '#012F74'}}>
+            <span style={{fontWeight: '600', letterSpacing: '5px'}}>
+              TODAY'S WEATHER: {currentWeather.toUpperCase()}
+            </span>
+            <div className="weather-icon" style={{marginInline: '8px'}}>
+            {
+              currentWeather == 'rainy'? <ThunderstormIcon/> : 
+              currentWeather == 'snowy'? <AcUnitIcon/> :
+              currentWeather == 'cloudy'? <CloudIcon/> :
+              <WbSunnyIcon/> 
+            }
+            </div>
+            {
+              currentWeather !== 'sunny' && currentWeather !== 'cloudy' &&
+              <span style={{fontSize:'20px'}}>
+                Certain rides may be closed due to inclement weather
+              </span>
+            }
+          </div>
+      </div>
       <div className="attractions-content">
         {attractions.map((attraction, index) => (
           <div
@@ -111,7 +155,7 @@ const Attractions = () => {
             onClick={() => handleAttractionClick(attraction)}
           >
             <img src={attraction.image} alt={attraction.name} />
-            <h3>{attraction.name}</h3>
+            <h3>{attraction.name}{!attraction.status && <ErrorIcon style={{color: "red", fontSize: 'medium', verticalAlign: 'center', marginLeft: '1px'}}/>}</h3> 
             <p>{attraction.shortDescription}</p>
           </div>
         ))}
@@ -122,7 +166,11 @@ const Attractions = () => {
             <span className="close-modal" onClick={closeModal}>
               &times;
             </span>
-            <h3>{selectedAttraction.name}</h3>
+            <h3 style={{display: 'flex', alignItems: 'center'}}>{selectedAttraction.name}<CircleIcon style={{color: !selectedAttraction.status? "red" : "green", fontSize: 'small', verticalAlign: 'center', marginLeft: '3px'}}/>
+              <span style={{fontWeight: '600', fontSize: '13px',marginLeft:'2px'}}>
+                {!selectedAttraction.status? "CLOSED" : "OPEN"}
+              </span>
+            </h3>
             <p>{selectedAttraction.description}</p>
             <div className="modal-details">
               <p>
