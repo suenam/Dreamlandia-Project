@@ -35,7 +35,7 @@ const Sidebar = () => {
         <NavLink className="sidebar-link" to="/employee/dashboard" >Dashboard</NavLink>
         <NavLink className="sidebar-link" to="/employee/maintenance" >Maintenance Requests</NavLink>
         <NavLink className="sidebar-link" to="/employee/HR" >HR</NavLink>
-        <NavLink className="sidebar-link" to="/employee/weather-form" >WeatherForm</NavLink>
+        <NavLink className="sidebar-link" to="/employee/weather-form" >Weather Form</NavLink>
 
         <NavLink className="sidebar-link" to="/" onClick={handleSignOut}>Sign Out</NavLink>
       </nav>
