@@ -10,6 +10,19 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 const Navbar = () => {
 
     const auth = useAuth();
+//added dont show navbar on profile page
+
+    // Check if the current page is the Profile page
+    const isProfilePage = location.pathname === '/Profile';
+
+    // If it's the Profile page, don't render the Navbar
+    if (isProfilePage) {
+        return null;
+    }
+//added dont show navbar on profile page
+
+
+    const [hover, setHover] = useState(false);
 
     const [hover, setHover] = useState(false);
 

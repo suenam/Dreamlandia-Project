@@ -29,7 +29,11 @@ import UserPage from './pages/UserPage/UserPage';
 import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders'
 
 import { RequireUserAuth } from './pages/auth/requireAuth';
-import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
+//my addition
+import Profile from './pages/Profile/Profile';
+import PastOrders from './pages/PastOrders/PastOrders';
+// import PersonalInformation from './pages/PersonalInformation/PersonalInformation'; // Import the PersonalInformation component
+
 
 const Layout = () => {
 
