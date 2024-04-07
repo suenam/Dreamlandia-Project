@@ -1,10 +1,10 @@
-const bcrypt = require('bcrypt');
-const pool = require('./database');
+const bcrypt = require('bcrypt'); 
+const pool = require('./database'); 
 const getPostData = require('./postDataParser');
 
 async function signupHandler(req, res) {
   try {
-    const { username, fullname, email, password, address, state, zipcode } = await getPostData(req);
+    const { username, fullname, email, password, address, city, state, zipcode } = await getPostData(req);
 
     // Check if the email already exists
     const [emailCheckResult] = await pool.execute('SELECT * FROM user WHERE UEmail = ?', [email]);
@@ -24,10 +24,9 @@ async function signupHandler(req, res) {
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-
     const [result] = await pool.execute(
-      'INSERT INTO user (UUsername, UName, UEmail, UPassword, address, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [username, fullname, email, hashedPassword, address, state, zipcode]
+      'INSERT INTO user (UUsername, UName, UEmail, UPassword, address, city, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [username, fullname, email, hashedPassword, address, city, state, zipcode]
     );
 
     res.writeHead(201, { 'Content-Type': 'application/json' });

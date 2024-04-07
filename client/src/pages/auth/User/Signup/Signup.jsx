@@ -6,6 +6,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import EmailIcon from '@mui/icons-material/Email';
+import HouseIcon from '@mui/icons-material/House';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
@@ -29,6 +30,8 @@ const SignupPage = () => {
   const [address, setAddress] = useState('');
   const [state, setState] = useState('');
   const [zipcode, setZipcode] = useState('');
+  const [city, setCity] = useState('');
+
   const navigate = useNavigate();
   const [openFailureModal, setOpenFailureModal] = useState(false);
 
@@ -41,17 +44,14 @@ const SignupPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, fullname, email, password, address, state, zipcode }),
+        body: JSON.stringify({ username, fullname, email, password, address, city, state, zipcode }),
       });
 
       if (response.ok) {
-        // Handle success - perhaps redirect to login or home page
         navigate('/login', { replace: true });
         console.log("Signup successful");
       } else {
-        // Handle errors - invalid input, user already exists, etc.
         setOpenFailureModal(true);
-
         console.error("Signup failed");
       }
     } catch (error) {
@@ -123,7 +123,21 @@ const SignupPage = () => {
             placeholder="Address *"
             startAdornment={
               <InputAdornment position="start">
-                <PersonIcon fontSize="medium" />
+                <HouseIcon fontSize="medium" />
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+        <FormControl required sx={{ m: 1, width: '75%', marginTop: '10px' }} variant="outlined">
+          <OutlinedInput
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            id="outlined-adornment-city"
+            type='text'
+            placeholder="City *"
+            startAdornment={
+              <InputAdornment position="start">
+                <HouseIcon fontSize="medium" />
               </InputAdornment>
             }
           />
@@ -137,7 +151,7 @@ const SignupPage = () => {
             placeholder="Zipcode *"
             startAdornment={
               <InputAdornment position="start">
-                <PersonIcon fontSize="medium" />
+                <HouseIcon fontSize="medium" />
               </InputAdornment>
             }
           />
@@ -147,6 +161,7 @@ const SignupPage = () => {
             id="outlined-select-state"
             select
             label="State *"
+            
             value={state}
             onChange={(e) => setState(e.target.value)}
           >

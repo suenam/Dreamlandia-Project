@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './UCard.css';
 import { useAuth } from '../../pages/auth/auth';
 import axios from 'axios';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { STATES } from '../../constants/stateOptions';
 
 const UCard = () => {
   const auth = useAuth();
@@ -64,7 +67,6 @@ const UCard = () => {
           disabled={!isEditing}
         />
       </div>
-      
       <div className="form-group">
         <label htmlFor="email">Email:</label>
         <input
@@ -88,15 +90,32 @@ const UCard = () => {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="state">State:</label>
+        <label htmlFor="city">City:</label>
         <input
           type="text"
-          id="state"
+          id="city"
+          name="city"
+          value={updatedUser?.city || ''}
+          onChange={handleChange}
+          disabled={!isEditing}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="state">State:</label>
+        <TextField className='state-emp'
+          id="outlined-select-state"
+          select
           name="state"
           value={updatedUser?.state || ''}
           onChange={handleChange}
           disabled={!isEditing}
-        />
+        >
+          {STATES.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
       </div>
       <div className="form-group">
         <label htmlFor="zipcode">Zipcode:</label>

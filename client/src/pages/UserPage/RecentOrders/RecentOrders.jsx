@@ -55,6 +55,7 @@ function RecentOrder() {
         if (response.ok) {
           const data = await response.json();
           setRecentOrders(data);
+          
         } else {
           const errorData = await response.json();
           console.error('Error retrieving recent orders:', errorData.message);
@@ -129,10 +130,9 @@ function RecentOrder() {
               <table className="contact-table">
                 <thead>
                   <tr>
+                    <th>Purchase Date</th>
                     <th>TicketID</th>
                     <th>Type</th>
-                    <th>Purchase Date</th>
-                    <th>Expiry Date</th>
                     <th>Price</th>
                   </tr>
                 </thead>
@@ -141,11 +141,10 @@ function RecentOrder() {
                     .filter((order) => order.TicketID)
                     .map((order) => (
                       <tr key={order.TicketID}>
+                         <td>{order.ticketDate}</td>
                         <td>{order.TicketID}</td>
                         <td>{order.TType}</td>
-                        <td>{order.TPurchaseDate}</td>
-                        <td>{order.TExpiryDate}</td>
-                        <td>{order.TPrice}</td>
+                        <td>${order.TPrice}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -163,12 +162,12 @@ function RecentOrder() {
               <table className="contact-table">
                 <thead>
                   <tr>
-                    <th>Merchandise ID</th>
-                    <th>Name</th>
                     <th>Transaction Date</th>
+                    <th>Transaction ID</th>
+                    <th>Name</th>
                     <th>Size</th>
                     <th>Quantity</th>
-                    <th>Total Cost</th>
+                    <th>Cost</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -176,12 +175,12 @@ function RecentOrder() {
                     .filter((order) => order.MerchandiseTransactionID)
                     .map((order) => (
                       <tr key={order.MerchandiseTransactionID}>
+                        <td>{order.merchDate}</td>
                         <td>{order.MerchandiseTransactionID}</td>
                         <td>{order.MName}</td>
-                        <td>{order.TransactionDate}</td>
                         <td>{order.Size}</td>
                         <td>{order.Quantity}</td>
-                        <td>{order.TotalCost}</td>
+                        <td>${order.TotalCost}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -199,11 +198,11 @@ function RecentOrder() {
               <table className="contact-table">
                 <thead>
                   <tr>
+                    <th>Transaction Date</th>
                     <th>Transaction ID</th>
                     <th>Restaurant Name</th>
                     <th>Restaurant Type</th>
                     <th>Amount</th>
-                    <th>Transaction Time</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -211,11 +210,11 @@ function RecentOrder() {
                     .filter((order) => order.RestaurantTransactionID)
                     .map((order) => (
                       <tr key={order.RestaurantTransactionID}>
+                        <td>{order.restDate}</td>
                         <td>{order.RestaurantTransactionID}</td>
                         <td>{order.RestaurantName}</td>
                         <td>{order.RestaurantType}</td>
-                        <td>{order.Amount}</td>
-                        <td>{order.TransactionTimeStamp}</td>
+                        <td>${order.Amount}</td>
                       </tr>
                     ))}
                 </tbody>
@@ -234,10 +233,9 @@ function RecentOrder() {
                 <table className="contact-table">
                   <thead>
                     <tr>
+                      <th>Purchase Date</th>
                       <th>TicketID</th>
                       <th>Type</th>
-                      <th>Purchase Date</th>
-                      <th>Expiry Date</th>
                       <th>Price</th>
                     </tr>
                   </thead>
@@ -246,11 +244,10 @@ function RecentOrder() {
                       .filter((order) => order.TicketID)
                       .map((order) => (
                         <tr key={order.TicketID}>
+                          <td>{order.ticketDate}</td>
                           <td>{order.TicketID}</td>
                           <td>{order.TType}</td>
-                          <td>{order.TPurchaseDate}</td>
-                          <td>{order.TExpiryDate}</td>
-                          <td>{order.TPrice}</td>
+                          <td>${order.TPrice}</td>
                         </tr>
                       ))}
                   </tbody>
@@ -265,12 +262,12 @@ function RecentOrder() {
                 <table className="contact-table">
                   <thead>
                     <tr>
-                      <th>Merchandise ID</th>
-                      <th>Name</th>
                       <th>Transaction Date</th>
+                      <th>Transaction ID</th>
+                      <th>Name</th>
                       <th>Size</th>
                       <th>Quantity</th>
-                      <th>Total Cost</th>
+                      <th>Cost</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -278,12 +275,12 @@ function RecentOrder() {
                       .filter((order) => order.MerchandiseTransactionID)
                       .map((order) => (
                         <tr key={order.MerchandiseTransactionID}>
+                          <td>{order.merchDate}</td>
                           <td>{order.MerchandiseTransactionID}</td>
                           <td>{order.MName}</td>
-                          <td>{order.TransactionDate}</td>
                           <td>{order.Size}</td>
                           <td>{order.Quantity}</td>
-                          <td>{order.TotalCost}</td>
+                          <td>${order.TotalCost}</td>
                         </tr>
                       ))}
                   </tbody>
@@ -298,11 +295,11 @@ function RecentOrder() {
                 <table className="contact-table">
                   <thead>
                     <tr>
+                      <th>Transaction Date</th>
                       <th>Transaction ID</th>
                       <th>Restaurant Name</th>
                       <th>Restaurant Type</th>
                       <th>Amount</th>
-                      <th>Transaction Time</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -310,11 +307,11 @@ function RecentOrder() {
                       .filter((order) => order.RestaurantTransactionID)
                       .map((order) => (
                         <tr key={order.RestaurantTransactionID}>
+                          <td>{order.restDate}</td>
                           <td>{order.RestaurantTransactionID}</td>
                           <td>{order.RestaurantName}</td>
                           <td>{order.RestaurantType}</td>
-                          <td>{order.Amount}</td>
-                          <td>{order.TransactionTimeStamp}</td>
+                          <td>${order.Amount}</td>
                         </tr>
                       ))}
                   </tbody>
