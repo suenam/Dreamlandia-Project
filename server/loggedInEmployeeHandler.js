@@ -3,7 +3,7 @@ const pool = require('./database');
 async function loggedInEmployeeHandler(req, res, staffId) {
   try {
     const [result] = await pool.execute(
-      'SELECT StaffID, SName, SAddress, SPhoneNumber, SEmail FROM staff WHERE StaffID = ?',
+      'SELECT StaffID, SName, SAddress, SCity, SState, SZipcode, SPhoneNumber, SEmail FROM staff WHERE StaffID = ?',
       [staffId]
     );
 
@@ -12,9 +12,13 @@ async function loggedInEmployeeHandler(req, res, staffId) {
         id: result[0].StaffID,
         name: result[0].SName,
         address: result[0].SAddress,
+        city: result[0].SCity,
+        state: result[0].SState,
+        zipcode: result[0].SZipcode,
         phoneNumber: result[0].SPhoneNumber,
         email: result[0].SEmail,
       };
+
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ employee }));
     } else {

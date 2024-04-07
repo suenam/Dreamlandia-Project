@@ -12,16 +12,25 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link } from "react-router-dom";
 import Logo from '../../../../assets/dreamlandia_logo.svg';
+import TextField from '@mui/material/TextField'; 
+import MenuItem from '@mui/material/MenuItem';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const redirectPath = location.state?.path || '/';
+  const [openFailureModal, setOpenFailureModal] = useState(false);
+
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -33,7 +42,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Login failed:', error);
-      alert(error.message);
+      setError(error.message);
+      setOpenFailureModal(true);
     }
   };
 
@@ -42,7 +52,9 @@ const Login = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
+  const handleCloseFailureModal = () => {
+    setOpenFailureModal(false);
+  };
   return (
     <div className="login-container">
       <img src={Logo} />
@@ -98,6 +110,36 @@ const Login = () => {
           New user? <Link className="link" to='/auth/signup'>Sign up here</Link>
         </div>
       </div>
+      <Modal
+        open={openFailureModal}
+        onClose={handleCloseFailureModal}
+        aria-labelledby="submit-failure-modal-title"
+        aria-describedby="submit-failure-modal-description"
+        className="modal-container submit-failure-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="submit-failure-modal-title" className="modal-title">
+            Failed to Login
+          </h2>
+          <p id="submit-failure-modal-description" className="modal-description">
+          {error}
+          </p>
+          <button onClick={handleCloseFailureModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
     </div>
 
   );

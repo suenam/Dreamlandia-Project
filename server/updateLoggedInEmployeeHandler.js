@@ -8,10 +8,10 @@ async function updateLoggedInEmployeeHandler(req, res) {
     });
     req.on('end', async () => {
       try {
-        const { id, name, address, phoneNumber, email } = JSON.parse(body);
+        const { id, name, address, city, state, zipcode, phoneNumber, email } = JSON.parse(body);
         const [result] = await pool.execute(
-          'UPDATE staff SET SName = ?, SAddress = ?, SPhoneNumber = ?, SEmail = ? WHERE StaffID = ?',
-          [name, address, phoneNumber, email, id]
+          'UPDATE staff SET SName = ?, SAddress = ?, SCity = ?, SState = ?, SZipcode = ?, SPhoneNumber = ?, SEmail = ? WHERE StaffID = ?',
+          [name, address, city, state, zipcode, phoneNumber, email, id]
         );
 
         if (result.affectedRows > 0) {
@@ -24,23 +24,13 @@ async function updateLoggedInEmployeeHandler(req, res) {
       } catch (error) {
         console.error('Error in updateLoggedInEmployeeHandler:', error);
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(
-          JSON.stringify({
-            message: 'Error updating employee',
-            error: error.message
-          })
-        );
+        res.end(JSON.stringify({ message: 'Error updating employee', error: error.message }));
       }
     });
   } catch (error) {
     console.error('Error in updateLoggedInEmployeeHandler:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(
-      JSON.stringify({
-        message: 'Error updating employee',
-        error: error.message
-      })
-    );
+    res.end(JSON.stringify({ message: 'Error updating employee', error: error.message }));
   }
 }
 

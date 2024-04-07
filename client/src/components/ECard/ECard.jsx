@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import './ECard.css';
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import { STATES } from '../../constants/stateOptions';
+
 
 const ECard = () => {
   const [employee, setEmployee] = useState(null);
@@ -59,6 +63,7 @@ const ECard = () => {
       console.error('There was an error:', error);
     }
   };
+
   const handleEmployeeChange = (e) => {
     const { name, value } = e.target;
     setEmployee((prevEmployee) => ({
@@ -73,11 +78,7 @@ const ECard = () => {
 
   const handleSave = async () => {
     try {
-      const name = employee.name;
-      const phoneNumber = employee.phoneNumber;
-      const id = employee.id;
-      const address = employee.address;
-      const email = employee.email;
+      const { id, name, address, city, state, zipcode, phoneNumber, email } = employee;
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/updateLoggedInEmployee`,
         {
@@ -86,7 +87,7 @@ const ECard = () => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-          body: JSON.stringify({ id, name, address, phoneNumber, email }),
+          body: JSON.stringify({ id, name, address, city, state, zipcode, phoneNumber, email }),
         }
       );
   
@@ -144,17 +145,6 @@ const ECard = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="address">Address:</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={employee.address}
-              onChange={handleEmployeeChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div className="form-group">
             <label htmlFor="phoneNumber">Phone Number:</label>
             <input
               type="text"
@@ -176,12 +166,66 @@ const ECard = () => {
               disabled={!isEditing}
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="address">Address:</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={employee.address}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City:</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              value={employee.city}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="state">State:</label>
+            <TextField className='state-emp'
+              id="outlined-select-state"
+              select
+              value={employee.state}
+              onChange={(e) => {
+                setEmployee((prevEmployee) => ({
+                  ...prevEmployee,
+                  state: e.target.value,
+                }));
+              }}
+              disabled={!isEditing}
+            >
+              {STATES.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+          <div className="form-group">
+            <label htmlFor="zipcode">Zipcode:</label>
+            <input
+              type="text"
+              id="zipcode"
+              name="zipcode"
+              value={employee.zipcode}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          
         </>
       ) : (
         <p>Loading employee information...</p>
       )}
 
-      {/* Update Modal */}
       <Modal
         open={openUpdateModal}
         onClose={handleCloseUpdateModal}
