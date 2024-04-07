@@ -11,6 +11,7 @@ const Navbar = () => {
 
     const auth = useAuth();
 
+
     const [hover, setHover] = useState(false);
 
     return (
