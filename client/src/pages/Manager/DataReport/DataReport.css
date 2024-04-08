@@ -96,8 +96,9 @@
     border: 1px solid #000000;
     border-radius: 4px;
   }
-
   
+  
+
   .checkbox-group {
     display: flex;
     gap: 0.5rem;
@@ -105,3 +106,31 @@
   .helllooo{
     margin-left: 270px;
   }
+  .data-report-summary-container {
+    display: flex; 
+    justify-content: space-between; 
+  }
+  
+  .data-report-summary-box {
+    font-family: Montserrat;
+    padding: 20px;
+    margin-top: 50px;
+    width: 23%;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .data-report-summary-box p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  
+  .data-report-summary-box .data-report-summary-box-value {
+    margin: 0;
+    font-size: 15px;
+    font-weight: normal;
+  }
+  

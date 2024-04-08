@@ -12,6 +12,10 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link } from "react-router-dom";
 import Logo from '../../../../assets/dreamlandia_logo.svg'
+import TextField from '@mui/material/TextField'; 
+import MenuItem from '@mui/material/MenuItem';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 
 const EmployeeLogin = () => {
@@ -19,6 +23,7 @@ const EmployeeLogin = () => {
   const [password, setPassword] = useState('');
   const auth = useAuth();
   const navigate = useNavigate();
+  const [openFailureModal, setOpenFailureModal] = useState(false);
 
   useEffect(() => {
     if (auth.employee && auth.employee.SRole) {
@@ -33,7 +38,8 @@ const EmployeeLogin = () => {
       console.log("employeeLogin.jsx is called");
     } catch (error) {
       console.error('employee Login failed:', error);
-      alert(error.message);
+      setOpenFailureModal(true);
+
     }
   };
 
@@ -42,7 +48,9 @@ const EmployeeLogin = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
+  const handleCloseFailureModal = () => {
+    setOpenFailureModal(false);
+  };
   return (
     <div className="employee-login-container">
         <img src={Logo} />
@@ -95,6 +103,36 @@ const EmployeeLogin = () => {
               Login
           </button>
       </div>
+      <Modal
+        open={openFailureModal}
+        onClose={handleCloseFailureModal}
+        aria-labelledby="submit-failure-modal-title"
+        aria-describedby="submit-failure-modal-description"
+        className="modal-container submit-failure-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="submit-failure-modal-title" className="modal-title">
+            Failed to Login
+          </h2>
+          <p id="submit-failure-modal-description" className="modal-description">
+            Wrong passowrd and/or email.
+          </p>
+          <button onClick={handleCloseFailureModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
     </div>
 
   );
