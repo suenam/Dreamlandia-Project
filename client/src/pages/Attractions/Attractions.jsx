@@ -69,9 +69,13 @@ const Attractions = () => {
   const [currentWeather, setCurrentWeather] = useState('sunny');
 
   useEffect(() => {
-    fetchAttractionStatus();
-    fetchCurrentWeather();
+    const setupWeatherAttractionStatus = async () => {
+      await fetchCurrentWeather();
+      await fetchAttractionStatus();
+    }
+    setupWeatherAttractionStatus();
   }, []);
+
 
   const fetchCurrentWeather = async () => {
     try {
@@ -80,6 +84,20 @@ const Attractions = () => {
       
       if (response.ok) {
         const currentWeather = data.requests[0]?.weatherStatus?? "sunny";
+        if (!data.requests[0]) {
+          const currentDate = new Date();
+          const month = `${currentDate.getMonth()+1}`.padStart(2, '0');
+          const day = `${currentDate.getDate()}`.padStart(2, '0');
+          const year = currentDate.getFullYear();
+          const formattedDate = `${year}-${month}-${day}`
+          await fetch(`${import.meta.env.VITE_SERVER_URL}/weatherform`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ WeatherCondition: "sunny", WDate: formattedDate }),
+          });
+        }
         setCurrentWeather(currentWeather);
       }
     } catch (error) {

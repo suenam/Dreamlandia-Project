@@ -6,12 +6,14 @@ import Logo from "../../assets/dreamlandia_logo.svg";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CartDropdown from "../ShoppingCart/CartDropdown";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Badge from '@mui/material/Badge';
+import { useShoppingCart } from "../ShoppingCart/ShoppingCart";
 
 const Navbar = () => {
 
     const auth = useAuth();
-
     const [hover, setHover] = useState(false);
+    const shoppingCartContext = useShoppingCart();
 
     return (
        <>
@@ -37,9 +39,11 @@ const Navbar = () => {
                         onMouseEnter={()=>setHover(true)} 
                         onMouseLeave={()=>setHover(false)}
                     >
-                        <NavLink className="link checkout" to='/checkout' style={{color: hover ? '#FFDE59' : 'white'}}>
-                            <ShoppingCartIcon/>
-                            </NavLink>
+                        <NavLink className="link checkout" to='/checkout' style={{color: hover ? '#FFDE59' : 'white', paddingRight: '10px'}}>
+                            <Badge badgeContent={shoppingCartContext.getCartCount()} color='info'>
+                                <ShoppingCartIcon/>
+                            </Badge>
+                        </NavLink>
                         {hover && <CartDropdown/>}
                     </div>
                     
