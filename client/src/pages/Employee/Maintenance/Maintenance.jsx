@@ -4,6 +4,7 @@ import './Maintenance.css';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 function Maintenance() {
 
@@ -16,12 +17,49 @@ function Maintenance() {
   const [dateResolved, setDateResolved] = useState('');
   const [showEditContainer, setShowEditContainer] = useState(false);
 
-  // Modal state variables
   const [openSubmitSuccessModal, setOpenSubmitSuccessModal] = useState(false);
   const [openSubmitFailureModal, setOpenSubmitFailureModal] = useState(false);
   const [openEditSuccessModal, setOpenEditSuccessModal] = useState(false);
   const [openEditFailureModal, setOpenEditFailureModal] = useState(false);
+  const [unresolvedMaintenanceRequests, setUnresolvedMaintenanceRequests] = useState([
+    
+  ]);
+  const [showUnresolvedMaintenanceModal, setShowUnresolvedMaintenanceModal] = useState(false);  
 
+  useEffect(() => {
+    const fetchUnresolvedMaintenanceRequests = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/get-unresolved-maintenance-requests`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            date: new Date().toISOString().slice(0, 10),
+            subject: 'Maintenance Required',
+          }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          if (data.requests) {
+            console.log(data.requests);
+            setUnresolvedMaintenanceRequests(data.requests);
+            setShowUnresolvedMaintenanceModal(unresolvedMaintenanceRequests.length > 0);
+          } else {
+            console.error('No unresolved maintenance requests found');
+          }
+          
+        } else {
+          console.error('Failed to fetch unresolved maintenance requests:', data.message);
+        }
+      } catch (error) {
+        console.error('There was an error:', error);
+      }
+    };
+  
+    fetchUnresolvedMaintenanceRequests();
+  }, []);
   useEffect(() => {
     fetchMaintenanceRequests();
   }, []);
@@ -324,7 +362,6 @@ function Maintenance() {
        )}
      </div>
 
-     {/* Submit Success Modal */}
      <Modal
        open={openSubmitSuccessModal}
        onClose={handleCloseSubmitSuccessModal}
@@ -350,7 +387,6 @@ function Maintenance() {
        </Box>
      </Modal>
 
-     {/* Submit Failure Modal */}
      <Modal
        open={openSubmitFailureModal}
        onClose={handleCloseSubmitFailureModal}
@@ -376,7 +412,6 @@ function Maintenance() {
        </Box>
      </Modal>
 
-     {/* Edit Success Modal */}
      <Modal
        open={openEditSuccessModal}
        onClose={handleCloseEditSuccessModal}
@@ -402,7 +437,6 @@ function Maintenance() {
        </Box>
      </Modal>
 
-     {/* Edit Failure Modal */}
      <Modal
        open={openEditFailureModal}
        onClose={handleCloseEditFailureModal}
@@ -427,6 +461,45 @@ function Maintenance() {
        <button onClick={handleCloseEditFailureModal} className="modal-button">Close</button>
        </Box>
        </Modal>
+       
+
+       {unresolvedMaintenanceRequests.length > 0 && (
+      <Modal
+        open={true}
+        onClose={() => setUnresolvedMaintenanceRequests([])}
+        aria-labelledby="unresolved-maintenance-modal-title"
+        aria-describedby="unresolved-maintenance-modal-description"
+        className="modal-container unresolved-maintenance-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="unresolved-maintenance-modal-title" className="modal-title">URGENT!</h2>
+          <p id="unresolved-maintenance-modal-description" className="modal-description">
+            These requests were created due to lack of maintenance in the past 30 days:
+          </p>
+          <ul>
+            {unresolvedMaintenanceRequests.map((request) => (
+              <li key={request.id}>
+                <p>RID: <span style={{ fontWeight: 'bold' }}>{request.id}</span> </p>
+               
+            </li>
+            ))}
+          </ul>
+          <button onClick={() => setUnresolvedMaintenanceRequests([])} className="modal-button">Close</button>
+        </Box>
+      </Modal>
+          )}
+
        </>
        );
        }

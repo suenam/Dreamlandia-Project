@@ -32,6 +32,7 @@ const updateUserProfileHandler = require('./updateUserProfileHandler');
 const getRecentTicketOrdersHandler = require("./getRecentTicketOrdersHandler");
 const getAttractionStatusHandler = require('./getAttractionStatusHandler');
 const getCurrentWeatherHandler = require('./getCurrentWeatherHandler');
+const unresolvedMaintenanceHandler = require("./unresolvedMaintenanceHandler");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -196,6 +197,8 @@ const server = http.createServer((req, res) => {
     }
     else if(req.url === '/current-weather' && req.method === 'GET') {
       getCurrentWeatherHandler(req, res);
+    }else if(req.url === '/get-unresolved-maintenance-requests' && req.method === 'POST' ){
+      unresolvedMaintenanceHandler(req,res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

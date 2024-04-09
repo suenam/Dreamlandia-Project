@@ -18,8 +18,7 @@
     align-items: center;
     z-index: 1000;
   
-    
-  
+
     .modal-content {
       background-color: white;
       padding: 20px;
@@ -34,6 +33,15 @@
         font-weight: bold;
         margin-bottom: 1rem;
       }
+      ul {
+        margin-top: 20px;
+      }
+      li{
+        list-style: none;
+        margin-bottom: 10px;
+
+      }
+      
   
       .modal-description {
         font-size: 1rem;
