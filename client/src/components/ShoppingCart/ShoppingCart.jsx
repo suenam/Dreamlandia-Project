@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import dayjs from 'dayjs';
 
 const ShoppingCartContext = createContext({});
@@ -47,6 +47,26 @@ export const ShoppingCartProvider = ({ children }) => {
         }, 
     })
 
+    const [cartCount, setCartCount] = useState(0);
+
+    useEffect(() => {
+        setCartCount(()=> {
+            let localCartCount = 0;
+            if (Object.values(tickets).some((ticketCount)=>ticketCount > 0)) {
+                localCartCount+=1;
+            }
+            if (Object.values(mealTickets).some((mealTicketCount)=>mealTicketCount > 0)) {
+                localCartCount+=1;
+            }
+            Object.values(merch).forEach((merchItem)=>{
+                if (merchItem.quantity > 0) {
+                    localCartCount+=1;
+                }
+            })
+            return localCartCount;
+        }) 
+    }, [tickets, mealTickets, merch]);
+
     const getTickets = () => {
         return tickets;
     }
@@ -65,6 +85,10 @@ export const ShoppingCartProvider = ({ children }) => {
 
     const getMerch = () => {
         return merch;
+    }
+
+    const getCartCount = () => {
+        return cartCount;
     }
 
     const resetTicketPage = () => {
@@ -95,6 +119,7 @@ export const ShoppingCartProvider = ({ children }) => {
             setAttractions, getAttractions,
             setDate, getDate,
             setMerch, getMerch,
+            getCartCount,
             resetTicketPage
             }}>
             {children}

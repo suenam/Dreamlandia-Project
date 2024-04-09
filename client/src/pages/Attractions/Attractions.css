@@ -10,7 +10,29 @@
       margin-bottom: 10px;
       color: var(--primary);
     }
-  
+
+    .weather-banner {
+      padding-top: 30px;
+      /* background-color: red; */
+      width: 1020px;
+      /* width: 100%; */
+      overflow: hidden;
+
+
+      .weather-banner-text {
+        font-size: 20px;
+        display: flex;
+      }
+    }
+
+    .moving {
+      animation: left-to-right 11s linear infinite;
+    }
+
+    .good-moving {
+      animation: good-left-to-right 10s linear infinite;
+    }
+
     .attractions-header {
       display: flex;
       flex-direction: column;
@@ -32,7 +54,8 @@
   
     .attractions-content {
       margin-inline: 20%;
-      margin-block: 50px;
+      margin-top: 30px;
+      margin-bottom: 50px;
       align-items: center;
       width: 1020px;
       display: grid;
@@ -115,5 +138,23 @@
           }
         }
       }
+    }
+  }
+
+  @keyframes left-to-right {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes good-left-to-right {
+    from {
+      transform: translateX(-40%);
+    }
+    to {
+      transform: translateX(100%);
     }
   }
