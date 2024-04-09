@@ -1,7 +1,10 @@
 import './ContactUs.css';
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState } from 'react';
 import Sparkles from '../../components/SparkleCursor/Sparkles';
 import { useAuth } from '../auth/auth';
+import axios from 'axios';
+
+
 
 const ContactUs = () => {
   const [name, setName] = useState('');
@@ -10,20 +13,51 @@ const ContactUs = () => {
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
   const auth = useAuth();
-  // const userID = auth.user?.UserID ?? null;
-  const userID = auth.user.UserID;
+  const userIdRef = useRef(null);
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        if (response.ok) {
+          const userData = await response.json();
+          if (userData && userData.UserID) {
+            userIdRef.current = userData.UserID;
+            console.log('New userId:', userIdRef.current);
+          } else {
+            setUserId(null);
+          }
+        } else {
+          setUserId(null);
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+        setUserId(null);
+      }
+    };
+    fetchUserId();
+  }, []);
 
   const handleSubmit = async (e) => {
-    let submittedTicketId = !ticketId ? null : ticketId;
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/contact-us`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, type, message, submittedTicketId, userID }),
+      const submittedTicketId = ticketId || null;
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/contact-us`, {
+        name,
+        email,
+        type,
+        message,
+        submittedTicketId,
+      }, {
+        withCredentials: true,
       });
-
-      if (response.ok) {
+  
+      if (response.status === 201) {
         alert('Message submitted successfully!');
         console.log('Message submitted successfully!');
         // Clear input fields after submission

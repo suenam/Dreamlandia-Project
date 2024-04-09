@@ -12,11 +12,19 @@ async function updateUserProfileHandler(req, res) {
       }
 
       const updatedUser = await getPostData(req);
-      console.log("updatedUser:", updatedUser);
+      console.log('updatedUser:', updatedUser);
 
       const [result] = await pool.execute(
-        'UPDATE user SET UName = ?, UEmail = ? WHERE UserID = ?',
-        [updatedUser.UName, updatedUser.UEmail, updatedUser.UserID]
+        'UPDATE user SET UName = ?, UEmail = ?, address = ?, city = ?, state = ?, zipcode = ? WHERE UserID = ?',
+        [
+          updatedUser.UName,
+          updatedUser.UEmail,
+          updatedUser.address,
+          updatedUser.city,
+          updatedUser.state,
+          updatedUser.zipcode,
+          req.user.UserID,
+        ]
       );
 
       if (result.affectedRows === 1) {

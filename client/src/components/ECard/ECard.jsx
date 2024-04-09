@@ -1,12 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ECard.css';
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import { STATES } from '../../constants/stateOptions';
+
 
 const ECard = () => {
   const [employee, setEmployee] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false); 
+  const staffIdRef = useRef(null);
+
+  useEffect(() => {
+    const fetchStaffId = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/employee`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', 
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          if (userData && userData.StaffID) {
+            staffIdRef.current = userData.StaffID; 
+            console.log('staffid:', staffIdRef.current);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+      }
+    };
+    console.log('staffid:', staffIdRef.current);
+    fetchStaffId();
+  }, []);
 
   useEffect(() => {
     fetchLoggedInEmployee();
@@ -14,7 +45,14 @@ const ECard = () => {
 
   const fetchLoggedInEmployee = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/loggedInEmployee`);
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/loggedInEmployee`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        credentials: 'include',
+      });
       const data = await response.json();
       if (response.ok) {
         setEmployee(data.employee);
@@ -40,21 +78,28 @@ const ECard = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/updateLoggedInEmployee`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(employee),
-      });
-
+      const { id, name, address, city, state, zipcode, phoneNumber, email } = employee;
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/updateLoggedInEmployee`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify({ id, name, address, city, state, zipcode, phoneNumber, email }),
+        }
+      );
+  
       if (response.ok) {
-        console.log('Employee updated successfully');
+        const data = await response.json();
+        console.log('Employee updated successfully:', data);
         setIsEditing(false);
         setOpenUpdateModal(true);
-        fetchLoggedInEmployee();
+        await fetchLoggedInEmployee();
       } else {
-        console.error('Failed to update employee');
+        const errorData = await response.json();
+        console.error('Failed to update employee:', errorData);
       }
     } catch (error) {
       console.error('There was an error:', error);
@@ -100,17 +145,6 @@ const ECard = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="address">Address:</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={employee.address}
-              onChange={handleEmployeeChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div className="form-group">
             <label htmlFor="phoneNumber">Phone Number:</label>
             <input
               type="text"
@@ -132,12 +166,66 @@ const ECard = () => {
               disabled={!isEditing}
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="address">Address:</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={employee.address}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City:</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              value={employee.city}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="state">State:</label>
+            <TextField className='state-emp'
+              id="outlined-select-state"
+              select
+              value={employee.state}
+              onChange={(e) => {
+                setEmployee((prevEmployee) => ({
+                  ...prevEmployee,
+                  state: e.target.value,
+                }));
+              }}
+              disabled={!isEditing}
+            >
+              {STATES.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+          <div className="form-group">
+            <label htmlFor="zipcode">Zipcode:</label>
+            <input
+              type="text"
+              id="zipcode"
+              name="zipcode"
+              value={employee.zipcode}
+              onChange={handleEmployeeChange}
+              disabled={!isEditing}
+            />
+          </div>
+          
         </>
       ) : (
         <p>Loading employee information...</p>
       )}
 
-      {/* Update Modal */}
       <Modal
         open={openUpdateModal}
         onClose={handleCloseUpdateModal}

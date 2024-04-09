@@ -4,9 +4,11 @@ import MSidebar from "../../../components/MSidebar/MSidebar";
 import "./ManageEmp.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import { STATES } from '../../../constants/stateOptions';
 
 function ManageEmp() {
- 
   function generatePassword(firstName, lastName, birthYear) {
     const firstLetter = firstName.charAt(0).toUpperCase();
     const password = `${firstLetter}${lastName}${birthYear}`;
@@ -16,7 +18,11 @@ function ManageEmp() {
 
   const [openAddEmployeeModal, setOpenAddEmployeeModal] = useState(false);
   const [showFailedToAddModal, setShowFailedToAddModal] = useState(false);
-const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
+  const [showFailedToArchiveModal, setShowFailedToArchiveModal] =
+    useState(false);
+  const [newEmployeeCity, setNewEmployeeCity] = useState("");
+  const [newEmployeeState, setNewEmployeeState] = useState("");
+  const [newEmployeeZipcode, setNewEmployeeZipcode] = useState("");
 
   const handleCloseAddEmployeeModal = () => {
     setOpenAddEmployeeModal(false);
@@ -37,7 +43,6 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
   const [employeeToArchive, setEmployeeToArchive] = useState("");
   const [formattedPhoneNumber, setFormattedPhoneNumber] = useState("");
 
-
   const fetchActiveEmployees = async () => {
     try {
       const response = await fetch(
@@ -48,7 +53,6 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
         setActiveEmployees(data.employees);
       } else {
         console.error("Failed to fetch active employees:", data.message);
-
       }
     } catch (error) {
       console.error("There was an error:", error);
@@ -64,27 +68,27 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
       newEmployeeName.split(" ")[1],
       newEmployeeDOB.split("-")[0]
     );
-
+  
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/addEmp`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fullname: newEmployeeName,
-            address: newEmployeeAddress,
-            role: newEmployeeRole,
-            email: newEmployeeEmail,
-            phoneNum: formattedPhoneNumber,
-            password: newPassword,
-            DOB: newEmployeeDOB
-          }),
-        }
-      );
-
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/addEmp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullname: newEmployeeName,
+          address: newEmployeeAddress,
+          role: newEmployeeRole,
+          email: newEmployeeEmail,
+          phoneNum: formattedPhoneNumber,
+          password: newPassword,
+          DOB: newEmployeeDOB,
+          city: newEmployeeCity,
+          state: newEmployeeState,
+          zipcode: newEmployeeZipcode,
+        }),
+      });
+  
       if (response.ok) {
         console.log("New Employee Added Successfully");
         setOpenAddEmployeeModal(true);
@@ -96,9 +100,12 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
         setNewEmployeeRole("");
         setFormattedPhoneNumber("");
         setNewEmployeeDOB("");
+        setNewEmployeeCity("");
+        setNewEmployeeState("");
+        setNewEmployeeZipcode("");
       } else {
         console.error("Failed to add new employee");
-        setShowFailedToAddModal(true); 
+        setShowFailedToAddModal(true);
       }
     } catch (error) {
       console.error("There was an error:", error);
@@ -127,7 +134,6 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
         } else {
           console.error("Failed to archive employee");
           setShowFailedToArchiveModal(true);
-
         }
       } catch (error) {
         console.error("There was an error:", error);
@@ -165,7 +171,9 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 </i>{" "}
               </div>
               <div className="form-row">
-                <label>Name:<span className="required">*</span></label>
+                <label>
+                  Name:<span className="required">*</span>
+                </label>
                 <input
                   type="text"
                   value={newEmployeeName}
@@ -173,7 +181,9 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Date of Birth:<span className="required">*</span></label>
+                <label>
+                  Date of Birth:<span className="required">*</span>
+                </label>
                 <input
                   type="date"
                   value={newEmployeeDOB}
@@ -181,15 +191,9 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Address:<span className="required">*</span></label>
-                <input
-                  type="text"
-                  value={newEmployeeAddress}
-                  onChange={(e) => setNewEmployeeAddress(e.target.value)}
-                />
-              </div>
-              <div className="form-row">
-                <label>Email:<span className="required">*</span></label>
+                <label>
+                  Email:<span className="required">*</span>
+                </label>
                 <input
                   type="email"
                   value={newEmployeeEmail}
@@ -197,7 +201,9 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Phone Number:<span className="required">*</span></label>
+                <label>
+                  Phone Number:<span className="required">*</span>
+                </label>
                 <input
                   type="tel"
                   value={formattedPhoneNumber}
@@ -208,7 +214,57 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 />
               </div>
               <div className="form-row">
-                <label>Role:<span className="required">*</span></label>
+                <label>
+                  Address:<span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newEmployeeAddress}
+                  onChange={(e) => setNewEmployeeAddress(e.target.value)}
+                />
+              </div>
+              <div className="form-row">
+                <label>
+                  City:<span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newEmployeeCity}
+                  onChange={(e) => setNewEmployeeCity(e.target.value)}
+                />
+              </div>
+              <div className="form-row">
+                <label>
+                  State:<span className="required">*</span>
+                </label>
+                <TextField
+                  id="outlined-select-state"
+                  select
+                  value={newEmployeeState}
+                  onChange={(e) => setNewEmployeeState(e.target.value)}
+                  className="state-emp"
+                >
+                  {STATES.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+              <div className="form-row">
+                <label>
+                  Zipcode:<span className="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newEmployeeZipcode}
+                  onChange={(e) => setNewEmployeeZipcode(e.target.value)}
+                />
+              </div>
+              <div className="form-row">
+                <label>
+                  Role:<span className="required">*</span>
+                </label>
                 <select
                   value={newEmployeeRole}
                   onChange={(e) => setNewEmployeeRole(e.target.value)}
@@ -239,7 +295,9 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
                 </i>
               </div>
               <div className="form-row">
-                <label>Employee:<span className="required">*</span></label>
+                <label>
+                  Employee:<span className="required">*</span>
+                </label>
                 <select
                   value={employeeToArchive}
                   onChange={(e) => setEmployeeToArchive(e.target.value)}
@@ -324,66 +382,75 @@ const [showFailedToArchiveModal, setShowFailedToArchiveModal] = useState(false);
         </Box>
       </Modal>
       <Modal
-  open={showFailedToAddModal}
-  onClose={() => setShowFailedToAddModal(false)}
-  aria-labelledby="failed-to-add-modal-title"
-  aria-describedby="failed-to-add-modal-description"
-  className="modal-container failed-to-add-modal"
->
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      bgcolor: "background.paper",
-      boxShadow: 24,
-      p: 4,
-    }}
-    className="modal-content"
-  >
-    <h2 id="failed-to-add-modal-title" className="modal-title">
-      Failed to Add Employee
-    </h2>
-    <p id="failed-to-add-modal-description" className="modal-description">
-      There was an error while adding the new employee.
-    </p>
-    <button onClick={() => setShowFailedToAddModal(false)} className="modal-button">
-      Close
-    </button>
-  </Box>
-</Modal>
+        open={showFailedToAddModal}
+        onClose={() => setShowFailedToAddModal(false)}
+        aria-labelledby="failed-to-add-modal-title"
+        aria-describedby="failed-to-add-modal-description"
+        className="modal-container failed-to-add-modal"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="failed-to-add-modal-title" className="modal-title">
+            Failed to Add Employee
+          </h2>
+          <p id="failed-to-add-modal-description" className="modal-description">
+            There was an error while adding the new employee.
+          </p>
+          <button
+            onClick={() => setShowFailedToAddModal(false)}
+            className="modal-button"
+          >
+            Close
+          </button>
+        </Box>
+      </Modal>
 
-<Modal
-  open={showFailedToArchiveModal}
-  onClose={() => setShowFailedToArchiveModal(false)}
-  aria-labelledby="failed-to-archive-modal-title"
-  aria-describedby="failed-to-archive-modal-description"
-  className="modal-container failed-to-archive-modal"
->
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      bgcolor: "background.paper",
-      boxShadow: 24,
-      p: 4,
-    }}
-    className="modal-content"
-  >
-    <h2 id="failed-to-archive-modal-title" className="modal-title">
-      Failed to Archive Employee
-    </h2>
-    <p id="failed-to-archive-modal-description" className="modal-description">
-      There was an error while archiving the employee.
-    </p>
-    <button onClick={() => setShowFailedToArchiveModal(false)} className="modal-button">
-      Close
-    </button>
-  </Box>
-</Modal>
+      <Modal
+        open={showFailedToArchiveModal}
+        onClose={() => setShowFailedToArchiveModal(false)}
+        aria-labelledby="failed-to-archive-modal-title"
+        aria-describedby="failed-to-archive-modal-description"
+        className="modal-container failed-to-archive-modal"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="failed-to-archive-modal-title" className="modal-title">
+            Failed to Archive Employee
+          </h2>
+          <p
+            id="failed-to-archive-modal-description"
+            className="modal-description"
+          >
+            There was an error while archiving the employee.
+          </p>
+          <button
+            onClick={() => setShowFailedToArchiveModal(false)}
+            className="modal-button"
+          >
+            Close
+          </button>
+        </Box>
+      </Modal>
     </>
   );
 }

@@ -12,7 +12,7 @@ const WeatherForm = () => {
   const [WeatherCondition, setWeather] = useState('');
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailureModal, setOpenFailureModal] = useState(false);
-
+  const [openNoUpdateModal, setOpenNoUpdateModal] = useState(false);
 
   const handleWeatherSubmit = async (event) => {
     event.preventDefault();
@@ -28,9 +28,14 @@ const WeatherForm = () => {
         setOpenSuccessModal(true); // Open success modal
         console.log('Weather input successful');
       } else {
-        setOpenFailureModal(true); // Open failure modal
         const result = await response.json();
-        console.error('Weather input failed:', result.message);
+        if (result.message === 'No update needed: The weather condition is the same as the existing record.') {
+          setOpenNoUpdateModal(true); // Open "no update" modal
+          console.log(result.message);
+        } else {
+          setOpenFailureModal(true); // Open failure modal
+          console.error('Weather input failed:', result.message);
+        }
       }
     } catch (error) {
       console.error('There was an error:', error);
@@ -43,6 +48,9 @@ const WeatherForm = () => {
 
   const handleCloseFailureModal = () => {
     setOpenFailureModal(false);
+  };
+  const handleCloseNoUpdateModal = () => {
+    setOpenNoUpdateModal(false);
   };
 
   return (
@@ -145,6 +153,36 @@ const WeatherForm = () => {
             There was an error while submitting the weather input.
           </p>
           <button onClick={handleCloseFailureModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
+      <Modal
+        open={openNoUpdateModal}
+        onClose={handleCloseNoUpdateModal}
+        aria-labelledby="no-update-modal-title"
+        aria-describedby="no-update-modal-description"
+        className="modal-container no-update-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="no-update-modal-title" className="modal-title">
+            No Update Needed
+          </h2>
+          <p id="no-update-modal-description" className="modal-description">
+            The weather condition is the same as the existing record.
+          </p>
+          <button onClick={handleCloseNoUpdateModal} className="modal-button">
             Close
           </button>
         </Box>

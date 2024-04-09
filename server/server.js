@@ -29,6 +29,7 @@ const maintenanceGetterEditHandler = require("./maintenanceGetterEditHandler");
 const updateMaintenanceHandler = require("./updateMaintenanceHandler");
 const contactUsPageHandler = require("./contactUsPageHandler");
 const updateUserProfileHandler = require('./updateUserProfileHandler');
+const getRecentTicketOrdersHandler = require("./getRecentTicketOrdersHandler");
 const getAttractionStatusHandler = require('./getAttractionStatusHandler');
 const getCurrentWeatherHandler = require('./getCurrentWeatherHandler');
 
@@ -36,7 +37,22 @@ const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
   credentials: true,
 };
-
+async function getPostData(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      try {
+        const parsedBody = JSON.parse(body);
+        resolve(parsedBody);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+}
 const server = http.createServer((req, res) => {
   cors(corsOptions)(req, res, () => {
     if (req.method === 'OPTIONS') {
@@ -129,19 +145,52 @@ const server = http.createServer((req, res) => {
       addEmpHandler(req, res);
     }else if (req.url === '/archiveEmp' && req.method === 'POST') { 
       archiveEmpHandler(req, res);
-    }else if (req.url === '/loggedInEmployee' && req.method === 'GET') { 
-      loggedInEmployeeHandler(req, res);
-    }else if (req.url === '/updateLoggedInEmployee' && req.method === 'POST') { 
-      updateLoggedInEmployeeHandler(req, res);
+    }else if (req.url === '/loggedInEmployee' && req.method === 'GET') {
+      authenticateToken(req, res, () => {
+        if (req.user) {
+          if (req.user.userType === 'employee') {
+            console.log("server -> passAuth -> valid employee(200) pass to frontend employee");
+            const staffId = req.user.StaffID;
+            loggedInEmployeeHandler(req, res, staffId);
+          } else {
+            console.log("server -> passAuth -> null(403) pass to frontend employee");
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(null));
+          }
+        } else {
+          console.log("no token provided null(200) pass to frontend employee");
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(null));
+        }
+      });
+    }else if (req.url.startsWith('/updateLoggedInEmployee') && req.method === 'POST') {
+      updateLoggedInEmployeeHandler(req,res);
     }
     else if (req.url === '/get-maintenancerequests' && req.method === 'GET') { 
       maintenanceGetterEditHandler(req, res);
     }
     else if (req.url === '/updateMaintenanceRequest' && req.method === 'POST') { 
       updateMaintenanceHandler(req, res);
-    }else if(req.url === '/contact-us' && req.method == 'POST') {
-      contactUsPageHandler(req, res);
     }
+    else if (req.url === '/getRecentTicketOrders' && req.method === 'POST') {
+      // Parse the request body as JSON
+      getPostData(req)
+        .then((body) => {
+          console.log('Request Body:', body);
+          const { userId, months, orderType } = body;
+          getRecentTicketOrdersHandler(req, res, userId, months, orderType);
+        })
+        .catch((err) => {
+          console.error('Error parsing request body:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
+        });
+    }
+    else if(req.url === '/contact-us' && req.method == 'POST') {
+      contactUsPageHandler(req, res);
+
+    }
+
     else if(req.url === '/attraction-status' && req.method === 'GET') {
       getAttractionStatusHandler(req, res);
     }

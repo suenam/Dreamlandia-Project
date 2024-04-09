@@ -308,10 +308,7 @@ function DataReport() {
     }
   };
   const generateMaintenanceTable = (data) => {
-    const totalExpense = data.reduce(
-      (sum, row) => sum + parseFloat(row.MRCost),
-      0
-    );
+    
 
     if (Array.isArray(data) && data.length > 0) {
       return (
@@ -334,6 +331,7 @@ function DataReport() {
               <span className="datareport-date-range">
                 ({maintenanceStartDate} - {maintenanceEndDate})
               </span>
+             
             </h3>
             <table className="contact-table">
               <thead>
@@ -357,15 +355,6 @@ function DataReport() {
                     <td>${row.MRCost}</td>
                   </tr>
                 ))}
-                <tr>
-                  <td
-                    colSpan="5"
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
-                    Total Expense:
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>${totalExpense}</td>
-                </tr>
               </tbody>
             </table>
           </PDFExport>
@@ -386,14 +375,12 @@ function DataReport() {
     }
   };
   const generateFinanceTable = (data) => {
-    const totalRevenue = data.reduce(
-      (sum, row) => sum + parseFloat(row.Ticket_Price),
-      0
-    );
+  
 
     if (Array.isArray(data) && data.length > 0) {
       return (
         <>
+        
           <button
             onClick={exportToPDF}
             className="data-report-exportPdf-dr-butt"
@@ -413,6 +400,22 @@ function DataReport() {
                 ({financeStartDate} - {financeEndDate})
               </span>
             </h3>
+            <div className="data-report-summary-container">
+
+            <div className="data-report-summary-box">
+            <p>Average Daily Tickets:</p>
+            <p className="data-report-summary-box-value">{parseFloat(data[0].AvgDailyTickets).toFixed(2)}</p>
+
+            </div>
+            <div className="data-report-summary-box">
+            <p>Average Daily Revenue:</p>
+              <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgDailyRevenue).toFixed(2)}</p>
+            </div>
+            <div className="data-report-summary-box">
+            <p>Total Revenue: </p>
+              <p className="data-report-summary-box-value">${parseFloat(data[0].TotalRevenue).toFixed(2)}</p>
+            </div>
+            </div>
 
             <table className="contact-table">
               <thead>
@@ -420,7 +423,7 @@ function DataReport() {
                   <th>Date</th>
                   <th>Ticket Type</th>
                   <th>Quantity Sold</th>
-                  <th>Total Revenue</th>
+                  <th>Revenue</th>
                 </tr>
               </thead>
               <tbody>
@@ -432,15 +435,7 @@ function DataReport() {
                     <td>${row.Ticket_Price}</td>
                   </tr>
                 ))}
-                <tr>
-                  <td
-                    colSpan="3"
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
-                    Total Revenue:
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>${totalRevenue}</td>
-                </tr>
+                
               </tbody>
             </table>
           </PDFExport>
@@ -459,7 +454,7 @@ function DataReport() {
   };
   const generateDiningReport = (data) => {
     if (financeType === "") {
-      return null; // Don't render anything if financeType is empty
+      return null; 
     }
     if (Array.isArray(data) && data.length > 0) {
       const totalAmount = data.reduce(
@@ -494,6 +489,37 @@ function DataReport() {
                 ({financeStartDate} - {financeEndDate})
               </span>
             </h3>
+            {financeType === "diningExpense" && (
+            <div className="data-report-summary-container">
+           
+<div className="data-report-summary-box">
+<p>Average Daily Expense:</p>
+  <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgDailyExpenseAmt).toFixed(2)}</p>
+</div>
+<div className="data-report-summary-box">
+<p>Total Expense: </p>
+  <p className="data-report-summary-box-value">${parseFloat(data[0].TotalExpense).toFixed(2)}</p>
+</div>
+</div>
+)}
+{financeType === "diningRev" && (
+            <div className="data-report-summary-container">
+           
+
+<div className="data-report-summary-box">
+<p>Average Daily Sales:</p>
+  <p className="data-report-summary-box-value"> {parseFloat(data[0].AvgDailySales).toFixed(2)}</p>
+</div>
+<div className="data-report-summary-box">
+<p>Average Daily Revenue:</p>
+  <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgDailyRevenue).toFixed(2)}</p>
+</div>
+<div className="data-report-summary-box">
+<p>Total Revenue: </p>
+  <p className="data-report-summary-box-value">${parseFloat(data[0].TotalRevenue).toFixed(2)}</p>
+</div>
+</div>
+)}
 
             <table className="contact-table">
               <thead>
@@ -512,27 +538,19 @@ function DataReport() {
                     <td>{row.Date}</td>
                     <td>{row.RestaurantType}</td>
                     <td>{row.RestaurantName}</td>
-                    {financeType === "diningRev" && <td>{row.QuantitySold}</td>}
+                    {financeType === "diningRev" && <td>{row.Number_Transactions}</td>}
                     {financeType === "diningExpense" && (
                       <td>{row.ExpenseType}</td>
                     )}
                     <td>
                       $
                       {financeType === "diningRev"
-                        ? row.TotalRevenue
-                        : row.ExpenseAmt}
+                        ? row.Total_Revenue
+                        : row.Total_Expense}
                     </td>
                   </tr>
                 ))}
-                <tr>
-                  <td
-                    colSpan={financeType === "diningRev" ? 4 : 4}
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
-                    {amountLabel}:
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>${totalAmount}</td>
-                </tr>
+                
               </tbody>
             </table>
           </PDFExport>
@@ -552,14 +570,7 @@ function DataReport() {
     if (financeType === "") {
       return null;
     }
-    const totalAmount = data.reduce(
-      (sum, row) =>
-        sum +
-        parseFloat(
-          financeType === "merchRevenue" ? row.TotalRevenue : row.ExpenseAmt
-        ),
-      0
-    );
+    
     const amountLabel =
       financeType === "merchRevenue" ? "Total Revenue" : "Total Expense";
 
@@ -585,6 +596,36 @@ function DataReport() {
                 ({financeStartDate} - {financeEndDate})
               </span>
             </h3>
+            {financeType === "merchExpense" && (
+            <div className="data-report-summary-container">
+
+              <div className="data-report-summary-box">
+              <p>Average Daily Expense:</p>
+                <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgCost).toFixed(2)}</p>
+              </div>
+              <div className="data-report-summary-box">
+              <p>Total Expense: </p>
+                <p className="data-report-summary-box-value">${parseFloat(data[0].TotalExpense).toFixed(2)}</p>
+              </div>
+              </div>
+              )}
+              {financeType === "merchRevenue" && (
+            <div className="data-report-summary-container">
+              <div className="data-report-summary-box">
+              <p>Average Daily Sales:</p>
+              <p className="data-report-summary-box-value">{parseFloat(data[0].AvgDailyTransactions).toFixed(2)}</p>
+
+              </div>
+              <div className="data-report-summary-box">
+              <p>Average Daily Revenue:</p>
+                <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgRevenue).toFixed(2)}</p>
+              </div>
+              <div className="data-report-summary-box">
+              <p>Total Revenue: </p>
+                <p className="data-report-summary-box-value">${parseFloat(data[0].TotalRevenuePeriod).toFixed(2)}</p>
+              </div>
+              </div>
+              )}
 
             <table className="contact-table">
               <thead>
@@ -617,15 +658,7 @@ function DataReport() {
                     </td>
                   </tr>
                 ))}
-                <tr>
-                  <td
-                    colSpan={financeType === "merchRevenue" ? 4 : 4}
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
-                    {amountLabel}:
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>${totalAmount}</td>
-                </tr>
+                
               </tbody>
             </table>
           </PDFExport>
@@ -642,10 +675,7 @@ function DataReport() {
   };
 
   const generateMaintExpense = (data) => {
-    const totalExpense = data.reduce(
-      (sum, row) => sum + parseFloat(row.Cost),
-      0
-    );
+   
 
     if (Array.isArray(data) && data.length > 0) {
       return (
@@ -669,7 +699,22 @@ function DataReport() {
                 ({financeStartDate} - {financeEndDate})
               </span>
             </h3>
+            <div className="data-report-summary-container">
 
+<div className="data-report-summary-box">
+<p>Average Daily Submits:</p>
+<p className="data-report-summary-box-value">{parseFloat(data[0].AvgDailySubmits).toFixed(2)}</p>
+
+</div>
+<div className="data-report-summary-box">
+<p>Average Daily Expense:</p>
+  <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgCost).toFixed(2)}</p>
+</div>
+<div className="data-report-summary-box">
+<p>Total Expense: </p>
+  <p className="data-report-summary-box-value">${parseFloat(data[0].TotalCost).toFixed(2)}</p>
+</div>
+</div>
             <table className="contact-table">
               <thead>
                 <tr>
@@ -688,15 +733,7 @@ function DataReport() {
                     <td>${row.Cost}</td>
                   </tr>
                 ))}
-                <tr>
-                  <td
-                    colSpan="3"
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
-                    Total Expense:
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>${totalExpense}</td>
-                </tr>
+                
               </tbody>
             </table>
           </PDFExport>
@@ -714,15 +751,21 @@ function DataReport() {
 
   const generateProfitTable = (data) => {
     if (Array.isArray(data) && data.length > 0) {
+      let totalProfit = 0;
+      let totalRevenue = 0;
+      let totalExpense = 0;
+  
+      for (const entry of data) {
+        totalProfit += parseFloat(entry.Profit);
+        totalRevenue += parseFloat(entry.Revenue);
+        totalExpense += parseFloat(entry.Expense);
+      }
+  
       return (
         <>
-          <button
-            onClick={exportToPDF}
-            className="data-report-exportPdf-dr-butt"
-          >
+          <button onClick={exportToPDF} className="data-report-exportPdf-dr-butt">
             Export to PDF
           </button>
-
           <PDFExport
             paperSize="auto"
             fileName="data_report.pdf"
@@ -735,7 +778,26 @@ function DataReport() {
                 ({financeStartDate} - {financeEndDate})
               </span>
             </h3>
-
+            <div className="data-report-summary-container">
+              <div className="data-report-summary-box">
+                <p>Total Revenue:</p>
+                <p className="data-report-summary-box-value">
+                  ${totalRevenue}
+                </p>
+              </div>
+              <div className="data-report-summary-box">
+                <p>Total Expense:</p>
+                <p className="data-report-summary-box-value">
+                  ${totalExpense}
+                </p>
+              </div>
+              <div className="data-report-summary-box">
+                <p>Total Profit:</p>
+                <p className="data-report-summary-box-value">
+                  ${totalProfit}
+                </p>
+              </div>
+            </div>
             <table className="contact-table">
               <thead>
                 <tr>
@@ -762,32 +824,6 @@ function DataReport() {
                     <td>${row.Profit}</td>
                   </tr>
                 ))}
-                <tr>
-                  <td
-                    colSpan="2"
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
-                    Total:
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>
-                    $
-                    {data.reduce(
-                      (sum, row) => sum + parseFloat(row.Revenue),
-                      0
-                    )}
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>
-                    $
-                    {data.reduce(
-                      (sum, row) => sum + parseFloat(row.Expense),
-                      0
-                    )}
-                  </td>
-                  <td style={{ fontWeight: "bold" }}>
-                    $
-                    {data.reduce((sum, row) => sum + parseFloat(row.Profit), 0)}
-                  </td>
-                </tr>
               </tbody>
             </table>
           </PDFExport>
@@ -1141,7 +1177,10 @@ function DataReport() {
                       generateFinanceTable(financeReportData)}
                     {financeCategory === "dining" &&
                       financeType !== "default" && (
-                        <div>{generateDiningReport(financeReportData)}</div>
+                        <div>{generateDiningReport(financeReportData)}
+                                              
+</div>
+
                       )}
                     {financeCategory === "merch" && (
                       <div>{generateMerchReport(financeReportData)}</div>

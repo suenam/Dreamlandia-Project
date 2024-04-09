@@ -2,6 +2,10 @@
     background-color: #0056b3;
     cursor: pointer;
 }
+.report-section .state-emp{
+  width: 1000px;
+  margin-left: 12px;
+}
 .modal-container {
     position: absolute;
     top: 0;
@@ -14,7 +18,7 @@
     align-items: center;
     z-index: 1000;
   
-   
+    
   
     .modal-content {
       background-color: white;

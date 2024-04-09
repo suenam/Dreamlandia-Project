@@ -26,7 +26,6 @@
   font-family: Montserrat;
   width: 150px;
   text-align: left;
-  margin-right: 10px;
   color: #000000;
 }
 
@@ -39,7 +38,15 @@
   border-radius: 4px;
   transition: border-color 0.3s ease;
 }
+.employee-profile .state-emp{
+  width: 1000px;
+  margin-left: 10px;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+  font-family: Montserrat;
 
+
+}
 .employee-profile .form-group input:focus {
   border-color: #4caf50;
 }
