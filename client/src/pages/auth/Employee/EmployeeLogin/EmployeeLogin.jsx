@@ -126,7 +126,7 @@ const EmployeeLogin = () => {
             Failed to Login
           </h2>
           <p id="submit-failure-modal-description" className="modal-description">
-            Wrong passowrd and/or email.
+            Wrong password and/or email.
           </p>
           <button onClick={handleCloseFailureModal} className="modal-button">
             Close

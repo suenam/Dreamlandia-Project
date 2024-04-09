@@ -28,7 +28,7 @@ import { AuthProvider } from './pages/auth/auth';
 import UserPage from './pages/UserPage/UserPage';
 import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders'
 
-import { RequireUserAuth } from './pages/auth/requireAuth';
+import { RequireUserAuth, RequireStaffAuth } from './pages/auth/requireAuth';
 import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
 
 const Layout = () => {
@@ -101,7 +101,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/employee/profile",
-            element: <Employee />
+            element: <RequireStaffAuth><Employee /></RequireStaffAuth>
           },
           {
             path: "/employee/login",
@@ -109,19 +109,19 @@ const router = createBrowserRouter([
           },
           {
             path: "/employee/dashboard",
-            element: <Dashboard />
+            element: <RequireStaffAuth><Dashboard /></RequireStaffAuth>
           },
           {
             path: "/employee/maintenance",
-            element: <Maintenance />
+            element: <RequireStaffAuth><Maintenance /></RequireStaffAuth>
           },
           {
             path: "/employee/weather-form",
-            element: <WeatherForm />
+            element: <RequireStaffAuth><WeatherForm /></RequireStaffAuth>
           },
           {
             path: "/employee/HR",
-            element: <HR />
+            element: <RequireStaffAuth><HR /></RequireStaffAuth>
           },
         ]
       },
@@ -130,35 +130,35 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/manager/profile",
-            element: <Manager />
+            element: <RequireStaffAuth><Manager /></RequireStaffAuth>
           },
           {
             path: "/manager/maintenance",
-            element: <MMaintenance />
+            element: <RequireStaffAuth><MMaintenance /></RequireStaffAuth>
           },
           {
             path: "/manager/HR",
-            element: <MHR />
+            element: <RequireStaffAuth><MHR /></RequireStaffAuth>
           },
           {
             path: "/manager/manage-employees",
-            element: <ManageEmp />
+            element: <RequireStaffAuth><ManageEmp /></RequireStaffAuth>
           },
           {
             path: "/manager/expense-form",
-            element: <ExpenseForm />
+            element: <RequireStaffAuth><ExpenseForm /></RequireStaffAuth>
           },
           {
             path: "/manager/data-reports",
-            element: <DataReport />
+            element: <RequireStaffAuth><DataReport /></RequireStaffAuth>
           },
           {
             path: "/manager/view-contact-forms",
-            element: <ViewContact />
+            element: <RequireStaffAuth><ViewContact /></RequireStaffAuth>
           },
           {
             path: "/manager/dashboard",
-            element: <MDashboard />
+            element: <RequireStaffAuth><MDashboard /></RequireStaffAuth>
           },
         ]
       },
