@@ -6,31 +6,21 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import EmailIcon from '@mui/icons-material/Email';
-import HouseIcon from '@mui/icons-material/House';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import TextField from '@mui/material/TextField'; 
-import MenuItem from '@mui/material/MenuItem';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-
-
 import { Link } from "react-router-dom";
 import Logo from '../../../../assets/dreamlandia_logo.svg';
-import { STATES } from '../../../../constants/stateOptions';
 
 
 const SignupPage = () => {
-  const [username, setUsername] = useState('');
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [address, setAddress] = useState('');
-  const [state, setState] = useState('');
-  const [zipcode, setZipcode] = useState('');
-  const [city, setCity] = useState('');
+ 
 
   const navigate = useNavigate();
   const [openFailureModal, setOpenFailureModal] = useState(false);
@@ -44,7 +34,7 @@ const SignupPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, fullname, email, password, address, city, state, zipcode }),
+        body: JSON.stringify({fullname, email, password }),
       });
 
       if (response.ok) {
@@ -72,21 +62,8 @@ const SignupPage = () => {
       <img src={Logo} />
       <div className="signup-form">
         <h1>Sign Up</h1>
-        <FormControl required sx={{ m: 1, width: '75%', marginTop: '35px' }} variant="outlined">
-          <OutlinedInput
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            id="outlined-adornment-username"
-            type='text'
-            placeholder="Username *"
-            startAdornment={
-              <InputAdornment position="start">
-                <PersonIcon fontSize="medium" />
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <FormControl required sx={{ m: 1, width: '75%', marginTop: '10px' }} variant="outlined">
+        
+        <FormControl required sx={{ m: 1, width: '75%', marginTop: '40px' }} variant="outlined">
           <OutlinedInput
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -114,64 +91,9 @@ const SignupPage = () => {
             }
           />
         </FormControl>
-        <FormControl required sx={{ m: 1, width: '75%', marginTop: '10px' }} variant="outlined">
-          <OutlinedInput
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            id="outlined-adornment-address"
-            type='text'
-            placeholder="Address *"
-            startAdornment={
-              <InputAdornment position="start">
-                <HouseIcon fontSize="medium" />
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <FormControl required sx={{ m: 1, width: '75%', marginTop: '10px' }} variant="outlined">
-          <OutlinedInput
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            id="outlined-adornment-city"
-            type='text'
-            placeholder="City *"
-            startAdornment={
-              <InputAdornment position="start">
-                <HouseIcon fontSize="medium" />
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <FormControl required sx={{ m: 1, width: '75%', marginTop: '10px' }} variant="outlined">
-          <OutlinedInput
-            value={zipcode}
-            onChange={(e) => setZipcode(e.target.value)}
-            id="outlined-adornment-zipcode"
-            type='text'
-            placeholder="Zipcode *"
-            startAdornment={
-              <InputAdornment position="start">
-                <HouseIcon fontSize="medium" />
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <FormControl required sx={{ m: 1, width: '75%', marginTop: '10px' }} variant="outlined">
-          <TextField
-            id="outlined-select-state"
-            select
-            label="State *"
-            
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-          >
-            {STATES.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </FormControl>
+        
+        
+       
         <FormControl required sx={{ m: 1, width: '75%', marginBottom: '8px' }} variant="outlined">
           <OutlinedInput
             value={password}
