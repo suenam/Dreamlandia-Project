@@ -55,7 +55,7 @@ async function dashboardDataHandler(req, res) {
                 SUM(MRCost) AS TotalMaintenanceExpenses,
                 COUNT(*) AS TotalActiveMaintenanceRequests
             FROM maintenance_request
-            WHERE DATE(MRDateSubmitted) BETWEEN ? AND ?;
+            WHERE DATE(MRDateSubmitted) BETWEEN ? AND ? AND MRStatus != "Completed";
         `;
         const [maintenanceData] = await pool.execute(maintenanceQuery, [startDate, endDate]);
         // Combine all data

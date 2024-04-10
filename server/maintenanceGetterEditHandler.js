@@ -3,7 +3,7 @@ const pool = require('./database');
 async function maintenanceGetterEditHandler(req, res) {
   try {
     const [result] = await pool.execute(
-      'SELECT * FROM maintenance_request'
+      'SELECT * FROM maintenance_request WHERE MRStatus != "Completed"'
     );
 
     const requests = result.map((row) => ({

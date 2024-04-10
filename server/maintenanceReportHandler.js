@@ -11,7 +11,7 @@ async function maintenanceReportHandler(req, res) {
       SELECT mr.*, DATE_FORMAT(MRDateSubmitted, '%Y-%m-%d') AS Date,  a.AName
       FROM maintenance_request mr
       INNER JOIN attraction a ON mr.AttractionID = a.AttractionID
-      WHERE MRDateSubmitted BETWEEN ? AND ?
+      WHERE DATE(MRDateSubmitted) BETWEEN ? AND ?
     `;
 
     const maintenanceQueryParams = [startDate, endDate];

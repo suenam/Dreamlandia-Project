@@ -38,7 +38,7 @@ async function financeDataHandler(req, res) {
         FROM
           ticket
         WHERE
-          TPurchaseDate BETWEEN ? AND ?
+        DATE(TPurchaseDate) BETWEEN ? AND ?
       `;
 
         let ticketQueryParams;
@@ -48,7 +48,7 @@ async function financeDataHandler(req, res) {
       }else{
          ticketQueryParams = [startDate, endDate, endDate, startDate, startDate, endDate, endDate, startDate,startDate, endDate, startDate, endDate];
       }
-      ticketQuery += ' GROUP BY TPurchaseDate, TType';
+      ticketQuery += ' GROUP BY TPurchaseDate, TType ORDER BY TPurchaseDate';
       const [ticketData] = await pool.execute(ticketQuery, ticketQueryParams);
       financeData.TicketData = ticketData;
       
@@ -93,7 +93,7 @@ async function financeDataHandler(req, res) {
         } else {
           diningExpenseQueryParams = [startDate, endDate, endDate, startDate, startDate, endDate, endDate, startDate, ,startDate, endDate,startDate, endDate];
         }
-        diningExpenseQuery += ' GROUP BY ExpenseDate, RestaurantType, RestaurantName, ExpenseType, ExpenseAmt ORDER BY ExpenseDate DESC';
+        diningExpenseQuery += ' GROUP BY Date, RestaurantType, RestaurantName, ExpenseType, ExpenseAmt ORDER BY Date';
         const [diningData] = await pool.execute(diningExpenseQuery, diningExpenseQueryParams);
         financeData.diningData = diningData;
 
@@ -124,7 +124,7 @@ async function financeDataHandler(req, res) {
         restaurant_transaction
         JOIN restaurant ON restaurant.RestaurantID = restaurant_transaction.RestaurantID
       WHERE
-        TransactionTimeStamp BETWEEN ? AND ?
+      DATE(TransactionTimeStamp) BETWEEN ? AND ?
         `;
     
         let diningRevenueQueryParams;
@@ -134,7 +134,7 @@ async function financeDataHandler(req, res) {
         } else {
           diningRevenueQueryParams = [startDate, endDate, endDate, startDate,startDate, endDate, endDate, startDate, startDate, endDate, startDate, endDate];
         }
-        diningRevenueQuery += ' GROUP BY Date, RestaurantType, RestaurantName';
+        diningRevenueQuery += ' GROUP BY Date, RestaurantType, RestaurantName ORDER BY Date ';
 
         const [diningData] = await pool.execute(diningRevenueQuery, diningRevenueQueryParams);
         financeData.diningData = diningData;
@@ -231,7 +231,7 @@ async function financeDataHandler(req, res) {
           ) AS TotalCost
         FROM maintenance_request
         JOIN attraction ON attraction.AttractionID = maintenance_request.AttractionID
-        WHERE MRDateSubmitted BETWEEN ? AND ?
+        WHERE DATE(MRDateSubmitted) BETWEEN ? AND ?
         ORDER BY Date;
       `;
       const maintQueryParams = [startDate, endDate, endDate, startDate, startDate, endDate, endDate, startDate, startDate, endDate, startDate, endDate];
@@ -254,7 +254,7 @@ FROM (
         0 AS Expense,
         SUM(TPrice) AS Revenue
     FROM ticket
-    WHERE TPurchaseDate BETWEEN ? AND ?
+    WHERE DATE(TPurchaseDate) BETWEEN ? AND ?
     GROUP BY Date
     
     UNION ALL
@@ -266,7 +266,7 @@ FROM (
         SUM(Amount) AS Revenue
     FROM restaurant, restaurant_expense
     WHERE restaurant.RestaurantID= restaurant_expense.RestaurantID 
-    AND ExpenseDate between ? AND ?
+    AND DATE(ExpenseDate) between ? AND ?
     GROUP BY Date
     
     UNION ALL
@@ -278,7 +278,7 @@ FROM (
         SUM(SellingCost) AS Revenue
     FROM merchandise
     JOIN merchandise_order_detail ON merchandise.ItemID = merchandise_order_detail.ItemID
-    WHERE merchandise_order_detail.TransactionDate BETWEEN ? AND ?
+    WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
     GROUP BY Date
     
     UNION ALL
@@ -290,10 +290,11 @@ FROM (
         0 AS Revenue
     FROM maintenance_request
     JOIN attraction ON attraction.AttractionID = maintenance_request.AttractionID 
-    WHERE MRDateSubmitted BETWEEN ? AND ?
+    WHERE DATE(MRDateSubmitted) BETWEEN ? AND ?
     GROUP BY Date
 ) AS ProfitData
-GROUP BY Date, Department;
+GROUP BY Date, Department 
+ORDER BY Date;
 
 `;
       const profitQueryParams = [startDate, endDate,startDate, endDate,startDate, endDate,startDate, endDate];

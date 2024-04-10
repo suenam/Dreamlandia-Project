@@ -545,8 +545,8 @@ function DataReport() {
                     <td>
                       $
                       {financeType === "diningRev"
-                        ? row.Total_Revenue
-                        : row.Total_Expense}
+                        ? parseFloat(row.Total_Revenue).toFixed(2)
+                        :  parseFloat(row.Total_Expense).toFixed(2)}
                     </td>
                   </tr>
                 ))}
@@ -730,7 +730,7 @@ function DataReport() {
                     <td>{row.Date}</td>
                     <td>{row.Subject}</td>
                     <td>{row.AttractionN}</td>
-                    <td>${row.Cost}</td>
+                    <td>${parseFloat(row.Cost).toFixed(2)}</td>
                   </tr>
                 ))}
                 
@@ -782,19 +782,19 @@ function DataReport() {
               <div className="data-report-summary-box">
                 <p>Total Revenue:</p>
                 <p className="data-report-summary-box-value">
-                  ${totalRevenue}
+                  ${totalRevenue.toFixed(2)}
                 </p>
               </div>
               <div className="data-report-summary-box">
                 <p>Total Expense:</p>
                 <p className="data-report-summary-box-value">
-                  ${totalExpense}
+                  ${totalExpense.toFixed(2)}
                 </p>
               </div>
               <div className="data-report-summary-box">
                 <p>Total Profit:</p>
                 <p className="data-report-summary-box-value">
-                  ${totalProfit}
+                  ${totalProfit.toFixed(2)}
                 </p>
               </div>
             </div>
