@@ -32,6 +32,8 @@ const updateUserProfileHandler = require('./updateUserProfileHandler');
 const getRecentTicketOrdersHandler = require("./getRecentTicketOrdersHandler");
 const getAttractionStatusHandler = require('./getAttractionStatusHandler');
 const getCurrentWeatherHandler = require('./getCurrentWeatherHandler');
+const resetPasswordHandler = require('./resetPasswordHandler');
+const resetStaffPasswordHandler = require('./resetStaffPasswordHandler');
 const unresolvedMaintenanceHandler = require("./unresolvedMaintenanceHandler");
 
 const corsOptions = {
@@ -191,7 +193,6 @@ const server = http.createServer((req, res) => {
       contactUsPageHandler(req, res);
 
     }
-
     else if(req.url === '/attraction-status' && req.method === 'GET') {
       getAttractionStatusHandler(req, res);
     }
@@ -199,6 +200,12 @@ const server = http.createServer((req, res) => {
       getCurrentWeatherHandler(req, res);
     }else if(req.url === '/get-unresolved-maintenance-requests' && req.method === 'POST' ){
       unresolvedMaintenanceHandler(req,res);
+    }
+    else if(req.url === '/reset-password' && req.method === 'PUT') {
+      resetPasswordHandler(req, res);
+    }
+    else if(req.url === '/reset-staff-password' && req.method === 'PUT') {
+      resetStaffPasswordHandler(req, res);
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

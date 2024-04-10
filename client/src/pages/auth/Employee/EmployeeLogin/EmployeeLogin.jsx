@@ -97,7 +97,7 @@ const EmployeeLogin = () => {
           />
         </FormControl>
         <div className="forgotPassword">
-          <Link className="link" to='/contactus'>Forgot password?</Link>
+          <Link className="link" to='/employee/forgot-password'>Forgot password?</Link>
         </div>
           <button className="login-button" onClick={handleLogin}>
               Login
@@ -126,7 +126,7 @@ const EmployeeLogin = () => {
             Failed to Login
           </h2>
           <p id="submit-failure-modal-description" className="modal-description">
-            Wrong passowrd and/or email.
+            Wrong password and/or email.
           </p>
           <button onClick={handleCloseFailureModal} className="modal-button">
             Close
