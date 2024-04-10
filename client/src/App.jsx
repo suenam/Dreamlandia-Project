@@ -26,7 +26,9 @@ import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
 import Checkout from './pages/Checkout/Checkout'
 import { AuthProvider } from './pages/auth/auth';
 import UserPage from './pages/UserPage/UserPage';
-import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders'
+import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders';
+import ForgotPass from './pages/auth/ForgotPass/ForgotPass';
+import ForgotPassStaff from './pages/auth/ForgotPassStaff/ForgotPassStaff';
 
 import { RequireUserAuth, RequireStaffAuth } from './pages/auth/requireAuth';
 import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
@@ -108,6 +110,10 @@ const router = createBrowserRouter([
             element: <EmployeeLogin />
           },
           {
+            path: "/employee/forgot-password",
+            element: <ForgotPassStaff/>
+          },
+          {
             path: "/employee/dashboard",
             element: <RequireStaffAuth><Dashboard /></RequireStaffAuth>
           },
@@ -186,6 +192,10 @@ const router = createBrowserRouter([
     path: "/checkout",
     element: <RequireUserAuth><Checkout /></RequireUserAuth>
   },
+  {
+    path: "/forgot-password",
+    element: <ForgotPass/>
+  }
 ]);
 
 
