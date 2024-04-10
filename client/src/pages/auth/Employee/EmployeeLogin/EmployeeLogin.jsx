@@ -97,7 +97,7 @@ const EmployeeLogin = () => {
           />
         </FormControl>
         <div className="forgotPassword">
-          <Link className="link" to='/contactus'>Forgot password?</Link>
+          <Link className="link" to='/employee/forgot-password'>Forgot password?</Link>
         </div>
           <button className="login-button" onClick={handleLogin}>
               Login
