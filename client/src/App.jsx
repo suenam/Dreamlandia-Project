@@ -26,7 +26,8 @@ import EmployeeLogin from './pages/auth/Employee/EmployeeLogin/EmployeeLogin';
 import Checkout from './pages/Checkout/Checkout'
 import { AuthProvider } from './pages/auth/auth';
 import UserPage from './pages/UserPage/UserPage';
-import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders'
+import RecentOrders from './pages/UserPage/RecentOrders/RecentOrders';
+import ForgotPass from './pages/auth/ForgotPass/ForgotPass';
 
 import { RequireUserAuth, RequireStaffAuth } from './pages/auth/requireAuth';
 import { ShoppingCartProvider } from './components/ShoppingCart/ShoppingCart';
@@ -186,6 +187,10 @@ const router = createBrowserRouter([
     path: "/checkout",
     element: <RequireUserAuth><Checkout /></RequireUserAuth>
   },
+  {
+    path: "/forgot-password",
+    element: <ForgotPass/>
+  }
 ]);
 
 
