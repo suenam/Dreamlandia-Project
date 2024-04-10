@@ -189,7 +189,7 @@ function MDashboard() {
                             </div>
                             <div className='value-container'>
                                 <span className='big-value'>{dashboardData.activeMaintenanceRequests}</span>
-                                <span className='small-text'>ACTIVE REQUESTS</span>
+                                <span className='small-text'>REQUESTS SUBMITTED</span>
                             </div>
                         </div>
                     </div>
