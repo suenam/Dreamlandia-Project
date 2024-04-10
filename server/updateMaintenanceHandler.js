@@ -11,7 +11,7 @@ async function updateMaintenanceHandler(req, res) {
       try {
         const { RequestID, status, comment, cost, dateResolved } = JSON.parse(body);
         if (!RequestID) {
-          console.log("!!!!!!"); // You can remove this line if not needed
+          console.log("!!!!!!"); 
         }
 
         let resolvedDate = null;

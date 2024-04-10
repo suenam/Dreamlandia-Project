@@ -34,6 +34,7 @@ const getAttractionStatusHandler = require('./getAttractionStatusHandler');
 const getCurrentWeatherHandler = require('./getCurrentWeatherHandler');
 const resetPasswordHandler = require('./resetPasswordHandler');
 const resetStaffPasswordHandler = require('./resetStaffPasswordHandler');
+const unresolvedMaintenanceHandler = require("./unresolvedMaintenanceHandler");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -197,6 +198,8 @@ const server = http.createServer((req, res) => {
     }
     else if(req.url === '/current-weather' && req.method === 'GET') {
       getCurrentWeatherHandler(req, res);
+    }else if(req.url === '/get-unresolved-maintenance-requests' && req.method === 'POST' ){
+      unresolvedMaintenanceHandler(req,res);
     }
     else if(req.url === '/reset-password' && req.method === 'PUT') {
       resetPasswordHandler(req, res);
