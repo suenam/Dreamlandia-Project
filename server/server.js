@@ -35,27 +35,13 @@ const getCurrentWeatherHandler = require('./getCurrentWeatherHandler');
 const resetPasswordHandler = require('./resetPasswordHandler');
 const resetStaffPasswordHandler = require('./resetStaffPasswordHandler');
 const unresolvedMaintenanceHandler = require("./unresolvedMaintenanceHandler");
+const getPostData = require('./postDataParser');
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
   credentials: true,
 };
-async function getPostData(req) {
-  return new Promise((resolve, reject) => {
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      try {
-        const parsedBody = JSON.parse(body);
-        resolve(parsedBody);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  });
-}
+
 const server = http.createServer((req, res) => {
   cors(corsOptions)(req, res, () => {
     if (req.method === 'OPTIONS') {
@@ -141,12 +127,12 @@ const server = http.createServer((req, res) => {
       financeReportHandler(req, res);
     }else if (req.url === '/checkout' && req.method === 'POST') {
       checkoutHandler(req, res);
-    }else if (req.url === '/employees' && req.method === 'GET') { 
+    }else if (req.url === '/employees' && req.method === 'GET') {
       getEmployeesHandler(req, res);
     }
-    else if (req.url === '/addEmp' && req.method === 'POST') { 
+    else if (req.url === '/addEmp' && req.method === 'POST') {
       addEmpHandler(req, res);
-    }else if (req.url === '/archiveEmp' && req.method === 'POST') { 
+    }else if (req.url === '/archiveEmp' && req.method === 'POST') {
       archiveEmpHandler(req, res);
     }else if (req.url === '/loggedInEmployee' && req.method === 'GET') {
       authenticateToken(req, res, () => {
@@ -169,10 +155,10 @@ const server = http.createServer((req, res) => {
     }else if (req.url.startsWith('/updateLoggedInEmployee') && req.method === 'POST') {
       updateLoggedInEmployeeHandler(req,res);
     }
-    else if (req.url === '/get-maintenancerequests' && req.method === 'GET') { 
+    else if (req.url === '/get-maintenancerequests' && req.method === 'GET') {
       maintenanceGetterEditHandler(req, res);
     }
-    else if (req.url === '/updateMaintenanceRequest' && req.method === 'POST') { 
+    else if (req.url === '/updateMaintenanceRequest' && req.method === 'POST') {
       updateMaintenanceHandler(req, res);
     }
     else if (req.url === '/getRecentTicketOrders' && req.method === 'POST') {
@@ -213,6 +199,7 @@ const server = http.createServer((req, res) => {
     }
   });
 });
+
 
 server.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
