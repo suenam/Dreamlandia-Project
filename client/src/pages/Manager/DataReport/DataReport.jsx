@@ -14,7 +14,6 @@ function DataReport() {
     }
   };
 
-
   const [diningType, setDiningType] = useState("allDining");
   const generateVisitTableSingleAttraction = (data) => {
     if (Array.isArray(data) && data.length > 0) {
@@ -309,7 +308,6 @@ function DataReport() {
   };
   const generateMaintenanceTable = (data) => {
     
-
     if (Array.isArray(data) && data.length > 0) {
       return (
         <>
@@ -331,7 +329,6 @@ function DataReport() {
               <span className="datareport-date-range">
                 ({maintenanceStartDate} - {maintenanceEndDate})
               </span>
-             
             </h3>
             <table className="contact-table">
               <thead>
@@ -375,12 +372,12 @@ function DataReport() {
     }
   };
   const generateFinanceTable = (data) => {
-  
-
+    if (financeType === "") {
+      return null;
+    }
     if (Array.isArray(data) && data.length > 0) {
       return (
         <>
-        
           <button
             onClick={exportToPDF}
             className="data-report-exportPdf-dr-butt"
@@ -401,41 +398,77 @@ function DataReport() {
               </span>
             </h3>
             <div className="data-report-summary-container">
-
-            <div className="data-report-summary-box">
-            <p>Average Daily Tickets:</p>
-            <p className="data-report-summary-box-value">{parseFloat(data[0].AvgDailyTickets).toFixed(2)}</p>
-
-            </div>
-            <div className="data-report-summary-box">
-            <p>Average Daily Revenue:</p>
-              <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgDailyRevenue).toFixed(2)}</p>
-            </div>
-            <div className="data-report-summary-box">
-            <p>Total Revenue: </p>
-              <p className="data-report-summary-box-value">${parseFloat(data[0].TotalRevenue).toFixed(2)}</p>
-            </div>
+              <div className="data-report-summary-box">
+                <p>Average Daily Tickets:</p>
+                <p className="data-report-summary-box-value">
+                  {parseFloat(data[0].AvgDailyTickets).toFixed(2)}
+                </p>
+              </div>
+              <div className="data-report-summary-box">
+                <p>Average Daily Revenue:</p>
+                <p className="data-report-summary-box-value">
+                  {" "}
+                  ${parseFloat(data[0].AvgDailyRevenue).toFixed(2)}
+                </p>
+              </div>
+              <div className="data-report-summary-box">
+                <p>Total Revenue: </p>
+                <p className="data-report-summary-box-value">
+                  ${parseFloat(data[0].TotalRevenue).toFixed(2)}
+                </p>
+              </div>
             </div>
 
             <table className="contact-table">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>Ticket Type</th>
-                  <th>Quantity Sold</th>
-                  <th>Revenue</th>
+                  {(ticketType === "Standard" ||
+                    ticketType === "allTicket") && <th>Standard</th>}
+                  {(ticketType === "Express" || ticketType === "allTicket") && (
+                    <th>Express</th>
+                  )}
+                  {(ticketType === "Child" || ticketType === "allTicket") && (
+                    <th>Child</th>
+                  )}
+                  {(ticketType === "Standard" ||
+                    ticketType === "allTicket") && <th>Standard Revenue</th>}
+                  {(ticketType === "Express" || ticketType === "allTicket") && (
+                    <th>Express Revenue</th>
+                  )}
+                  {(ticketType === "Child" || ticketType === "allTicket") && (
+                    <th>Child Revenue</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {data.map((row, index) => (
                   <tr key={index}>
                     <td>{row.Date}</td>
-                    <td>{row.Ticket_Type}</td>
-                    <td>{row.Number_Tickets}</td>
-                    <td>${row.Ticket_Price}</td>
+                    {(ticketType === "Standard" ||
+                      ticketType === "allTicket") && (
+                      <td>{row.Standard_Tickets}</td>
+                    )}
+                    {(ticketType === "Express" ||
+                      ticketType === "allTicket") && (
+                      <td>{row.Express_Tickets}</td>
+                    )}
+                    {(ticketType === "Child" || ticketType === "allTicket") && (
+                      <td>{row.Child_Tickets}</td>
+                    )}
+                    {(ticketType === "Standard" ||
+                      ticketType === "allTicket") && (
+                      <td>${row.Standard_Ticket_Price}</td>
+                    )}
+                    {(ticketType === "Express" ||
+                      ticketType === "allTicket") && (
+                      <td>${row.Express_Ticket_Price}</td>
+                    )}
+                    {(ticketType === "Child" || ticketType === "allTicket") && (
+                      <td>${row.Child_Ticket_Price}</td>
+                    )}
                   </tr>
                 ))}
-                
               </tbody>
             </table>
           </PDFExport>
@@ -444,9 +477,7 @@ function DataReport() {
     } else {
       return (
         <>
-          <h3>
-            Finance Report 
-          </h3>
+          <h3>Finance Report</h3>
           <div>No finance report found for the selected date and type.</div>
         </>
       );
@@ -454,17 +485,20 @@ function DataReport() {
   };
   const generateDiningReport = (data) => {
     if (financeType === "") {
-      return null; 
+      return null;
     }
+
     if (Array.isArray(data) && data.length > 0) {
-      const totalAmount = data.reduce(
-        (sum, row) =>
-          sum +
-          parseFloat(
-            row[financeType === "diningRev" ? "TotalRevenue" : "ExpenseAmt"]
-          ),
+      const totalRevenue = data.reduce(
+        (sum, row) => sum + parseFloat(row.TotalRevenue),
         0
       );
+
+      const totalExpense = data.reduce(
+        (sum, row) => sum + parseFloat(row.TotalExpense),
+        0
+      );
+
       const amountLabel =
         financeType === "diningRev" ? "Total Revenue" : "Total Expense";
 
@@ -476,7 +510,6 @@ function DataReport() {
           >
             Export to PDF
           </button>
-
           <PDFExport
             paperSize="auto"
             fileName="data_report.pdf"
@@ -489,68 +522,165 @@ function DataReport() {
                 ({financeStartDate} - {financeEndDate})
               </span>
             </h3>
-            {financeType === "diningExpense" && (
-            <div className="data-report-summary-container">
-           
-<div className="data-report-summary-box">
-<p>Average Daily Expense:</p>
-  <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgDailyExpenseAmt).toFixed(2)}</p>
-</div>
-<div className="data-report-summary-box">
-<p>Total Expense: </p>
-  <p className="data-report-summary-box-value">${parseFloat(data[0].TotalExpense).toFixed(2)}</p>
-</div>
-</div>
-)}
-{financeType === "diningRev" && (
-            <div className="data-report-summary-container">
-           
 
-<div className="data-report-summary-box">
-<p>Average Daily Sales:</p>
-  <p className="data-report-summary-box-value"> {parseFloat(data[0].AvgDailySales).toFixed(2)}</p>
-</div>
-<div className="data-report-summary-box">
-<p>Average Daily Revenue:</p>
-  <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgDailyRevenue).toFixed(2)}</p>
-</div>
-<div className="data-report-summary-box">
-<p>Total Revenue: </p>
-  <p className="data-report-summary-box-value">${parseFloat(data[0].TotalRevenue).toFixed(2)}</p>
-</div>
-</div>
-)}
+            {financeType === "diningRev" && (
+              <div className="data-report-summary-container">
+                <div className="data-report-summary-box">
+                  <p>Average Daily Sales:</p>
+                  <p className="data-report-summary-box-value">
+                    {parseFloat(data[0].AvgDailySales).toFixed(2)}
+                  </p>
+                </div>
+                <div className="data-report-summary-box">
+                  <p>Average Daily Revenue:</p>
+                  <p className="data-report-summary-box-value">
+                    ${parseFloat(data[0].AvgDailyRevenue).toFixed(2)}
+                  </p>
+                </div>
+                <div className="data-report-summary-box">
+                  <p>
+                    {diningType === "allDining"
+                      ? "Total Revenue"
+                      : `Total ${diningType} Revenue`}
+                  </p>
+                  <p className="data-report-summary-box-value">
+                    ${parseFloat(data[0].TotalRevenue).toFixed(2)}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {financeType === "diningExpense" && (
+              <div className="data-report-summary-container">
+                <div className="data-report-summary-box">
+                  <p>Average Daily Expenses:</p>
+                  <p className="data-report-summary-box-value">
+                    ${parseFloat(data[0].AvgDailyExpenseAmt).toFixed(2)}
+                  </p>
+                </div>
+                <div className="data-report-summary-box">
+                  <p>
+                    {diningType === "allDining"
+                      ? "Total Expense"
+                      : `Total Expense`}
+                  </p>
+                  <p className="data-report-summary-box-value">
+                    ${parseFloat(data[0].TotalExpense).toFixed(2)}
+                  </p>
+                </div>
+              </div>
+            )}
 
             <table className="contact-table">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>Restaurant Type</th>
-                  <th>Restaurant Name</th>
-                  {financeType === "diningRev" && <th>Quantity Sold</th>}
-                  {financeType === "diningExpense" && <th>Expense Type</th>}
-                  <th>{amountLabel}</th>
+                  {financeType === "diningRev" && (
+                    <>
+                      {diningType === "allDining" ||
+                      diningType === "Standard" ? (
+                        <th>Standard</th>
+                      ) : null}
+                      {diningType === "allDining" || diningType === "Deluxe" ? (
+                        <th>Deluxe</th>
+                      ) : null}
+                      {diningType === "allDining" ||
+                      diningType === "Special" ? (
+                        <th>Special</th>
+                      ) : null}
+                      {diningType === "allDining" ||
+                      diningType === "Standard" ? (
+                        <th>Standard Revenue</th>
+                      ) : null}
+                      {diningType === "allDining" || diningType === "Deluxe" ? (
+                        <th>Deluxe Revenue</th>
+                      ) : null}
+                      {diningType === "allDining" ||
+                      diningType === "Special" ? (
+                        <th>Special Revenue</th>
+                      ) : null}
+                    </>
+                  )}
+
+                  {financeType === "diningExpense" && (
+                    <>
+                      {diningType === "allDining" ? <th>Type</th> : null}
+                      <th>Produce Expense</th>
+                      <th>Supplies Expense</th>
+                      <th>Utilities Expense</th>
+                      {diningType === "allDining" ? (
+                        <th>Total Expense</th>
+                      ) : null}
+                      {diningType === "Standard" ? (
+                        <th>Total Expense</th>
+                      ) : null}
+                      {diningType === "Deluxe" ? <th>Total Expense</th> : null}
+                      {diningType === "Special" ? <th>Total Expense</th> : null}
+                    </>
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {data.map((row, index) => (
                   <tr key={index}>
                     <td>{row.Date}</td>
-                    <td>{row.RestaurantType}</td>
-                    <td>{row.RestaurantName}</td>
-                    {financeType === "diningRev" && <td>{row.Number_Transactions}</td>}
-                    {financeType === "diningExpense" && (
-                      <td>{row.ExpenseType}</td>
+                    {financeType === "diningRev" && (
+                      <>
+                        {diningType === "allDining" ||
+                        diningType === "Standard" ? (
+                          <td>{row.Standard_Transactions}</td>
+                        ) : null}
+                        {diningType === "allDining" ||
+                        diningType === "Deluxe" ? (
+                          <td>{row.Deluxe_Transactions}</td>
+                        ) : null}
+                        {diningType === "allDining" ||
+                        diningType === "Special" ? (
+                          <td>{row.Special_Transactions}</td>
+                        ) : null}
+                        {diningType === "allDining" ||
+                        diningType === "Standard" ? (
+                          <td>
+                            ${parseFloat(row.Standard_Revenue).toFixed(2)}
+                          </td>
+                        ) : null}
+                        {diningType === "allDining" ||
+                        diningType === "Deluxe" ? (
+                          <td>${parseFloat(row.Deluxe_Revenue).toFixed(2)}</td>
+                        ) : null}
+                        {diningType === "allDining" ||
+                        diningType === "Special" ? (
+                          <td>${parseFloat(row.Special_Revenue).toFixed(2)}</td>
+                        ) : null}
+                      </>
                     )}
-                    <td>
-                      $
-                      {financeType === "diningRev"
-                        ? parseFloat(row.Total_Revenue).toFixed(2)
-                        :  parseFloat(row.Total_Expense).toFixed(2)}
-                    </td>
+                    {financeType === "diningExpense" && (
+                      <>
+                        {diningType === "allDining" ? (
+                          <td>{row.rtype}</td>
+                        ) : null}
+                        <td>${parseFloat(row.Produce_Expense).toFixed(2)}</td>
+                        <td>${parseFloat(row.Supplies_Expense).toFixed(2)}</td>
+                        <td>${parseFloat(row.Utilities_Expense).toFixed(2)}</td>
+
+                        {diningType === "allDining" ? (
+                          <td>${parseFloat(row.Total_Expense).toFixed(2)}</td>
+                        ) : null}
+                        {diningType === "Standard" ? (
+                          <td>
+                            ${parseFloat(row.Standard_Expense).toFixed(2)}
+                          </td>
+                        ) : null}
+                        {diningType === "Deluxe" ? (
+                          <td>${parseFloat(row.Total_Expense).toFixed(2)}</td>
+                        ) : null}
+                        {diningType === "Special" ? (
+                          <td>${parseFloat(row.Total_Expense).toFixed(2)}</td>
+                        ) : null}
+                      </>
+                    )}
                   </tr>
                 ))}
-                
               </tbody>
             </table>
           </PDFExport>
@@ -565,12 +695,11 @@ function DataReport() {
       );
     }
   };
-
   const generateMerchReport = (data) => {
     if (financeType === "") {
       return null;
     }
-    
+
     const amountLabel =
       financeType === "merchRevenue" ? "Total Revenue" : "Total Expense";
 
@@ -597,35 +726,45 @@ function DataReport() {
               </span>
             </h3>
             {financeType === "merchExpense" && (
-            <div className="data-report-summary-container">
-
-              <div className="data-report-summary-box">
-              <p>Average Daily Expense:</p>
-                <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgCost).toFixed(2)}</p>
+              <div className="data-report-summary-container">
+                <div className="data-report-summary-box">
+                  <p>Average Daily Expense:</p>
+                  <p className="data-report-summary-box-value">
+                    {" "}
+                    ${parseFloat(data[0].AvgCost).toFixed(2)}
+                  </p>
+                </div>
+                <div className="data-report-summary-box">
+                  <p>Total Expense: </p>
+                  <p className="data-report-summary-box-value">
+                    ${parseFloat(data[0].TotalExpense).toFixed(2)}
+                  </p>
+                </div>
               </div>
-              <div className="data-report-summary-box">
-              <p>Total Expense: </p>
-                <p className="data-report-summary-box-value">${parseFloat(data[0].TotalExpense).toFixed(2)}</p>
+            )}
+            {financeType === "merchRevenue" && (
+              <div className="data-report-summary-container">
+                <div className="data-report-summary-box">
+                  <p>Average Daily Sales:</p>
+                  <p className="data-report-summary-box-value">
+                    {parseFloat(data[0].AvgDailyTransactions).toFixed(2)}
+                  </p>
+                </div>
+                <div className="data-report-summary-box">
+                  <p>Average Daily Revenue:</p>
+                  <p className="data-report-summary-box-value">
+                    {" "}
+                    ${parseFloat(data[0].AvgRevenue).toFixed(2)}
+                  </p>
+                </div>
+                <div className="data-report-summary-box">
+                  <p>Total Revenue: </p>
+                  <p className="data-report-summary-box-value">
+                    ${parseFloat(data[0].TotalRevenuePeriod).toFixed(2)}
+                  </p>
+                </div>
               </div>
-              </div>
-              )}
-              {financeType === "merchRevenue" && (
-            <div className="data-report-summary-container">
-              <div className="data-report-summary-box">
-              <p>Average Daily Sales:</p>
-              <p className="data-report-summary-box-value">{parseFloat(data[0].AvgDailyTransactions).toFixed(2)}</p>
-
-              </div>
-              <div className="data-report-summary-box">
-              <p>Average Daily Revenue:</p>
-                <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgRevenue).toFixed(2)}</p>
-              </div>
-              <div className="data-report-summary-box">
-              <p>Total Revenue: </p>
-                <p className="data-report-summary-box-value">${parseFloat(data[0].TotalRevenuePeriod).toFixed(2)}</p>
-              </div>
-              </div>
-              )}
+            )}
 
             <table className="contact-table">
               <thead>
@@ -658,7 +797,6 @@ function DataReport() {
                     </td>
                   </tr>
                 ))}
-                
               </tbody>
             </table>
           </PDFExport>
@@ -675,8 +813,9 @@ function DataReport() {
   };
 
   const generateMaintExpense = (data) => {
-   
-
+    if (financeType === "") {
+      return null;
+    }
     if (Array.isArray(data) && data.length > 0) {
       return (
         <>
@@ -700,21 +839,26 @@ function DataReport() {
               </span>
             </h3>
             <div className="data-report-summary-container">
-
-<div className="data-report-summary-box">
-<p>Average Daily Submits:</p>
-<p className="data-report-summary-box-value">{parseFloat(data[0].AvgDailySubmits).toFixed(2)}</p>
-
-</div>
-<div className="data-report-summary-box">
-<p>Average Daily Expense:</p>
-  <p className="data-report-summary-box-value"> ${parseFloat(data[0].AvgCost).toFixed(2)}</p>
-</div>
-<div className="data-report-summary-box">
-<p>Total Expense: </p>
-  <p className="data-report-summary-box-value">${parseFloat(data[0].TotalCost).toFixed(2)}</p>
-</div>
-</div>
+              <div className="data-report-summary-box">
+                <p>Average Daily Submits:</p>
+                <p className="data-report-summary-box-value">
+                  {parseFloat(data[0].AvgDailySubmits).toFixed(2)}
+                </p>
+              </div>
+              <div className="data-report-summary-box">
+                <p>Average Daily Expense:</p>
+                <p className="data-report-summary-box-value">
+                  {" "}
+                  ${parseFloat(data[0].AvgCost).toFixed(2)}
+                </p>
+              </div>
+              <div className="data-report-summary-box">
+                <p>Total Expense: </p>
+                <p className="data-report-summary-box-value">
+                  ${parseFloat(data[0].TotalCost).toFixed(2)}
+                </p>
+              </div>
+            </div>
             <table className="contact-table">
               <thead>
                 <tr>
@@ -733,7 +877,6 @@ function DataReport() {
                     <td>${parseFloat(row.Cost).toFixed(2)}</td>
                   </tr>
                 ))}
-                
               </tbody>
             </table>
           </PDFExport>
@@ -754,16 +897,19 @@ function DataReport() {
       let totalProfit = 0;
       let totalRevenue = 0;
       let totalExpense = 0;
-  
+
       for (const entry of data) {
         totalProfit += parseFloat(entry.Profit);
         totalRevenue += parseFloat(entry.Revenue);
         totalExpense += parseFloat(entry.Expense);
       }
-  
+
       return (
         <>
-          <button onClick={exportToPDF} className="data-report-exportPdf-dr-butt">
+          <button
+            onClick={exportToPDF}
+            className="data-report-exportPdf-dr-butt"
+          >
             Export to PDF
           </button>
           <PDFExport
@@ -887,11 +1033,11 @@ function DataReport() {
         requestBody.ticketType = ticketType;
       } else if (financeCategory === "dining") {
         if (financeType === "") {
-          console.log("!!!!!!!!!!");
+          console.log("!!!!!!!!!!!");
         } else {
           requestBody.financeType = financeType;
+          requestBody.diningType = diningType;
         }
-        requestBody.diningType = diningType;
       } else if (financeCategory === "merch") {
         requestBody.financeType = financeType;
       } else if (financeCategory === "maintenance") {
@@ -914,6 +1060,7 @@ function DataReport() {
       if (response.ok) {
         const reportData = await response.json();
         console.log("Finance report data:", reportData);
+
         if (financeCategory === "tickets") {
           setFinanceReportData(reportData.TicketData);
         } else if (financeCategory === "dining") {
@@ -1059,7 +1206,9 @@ function DataReport() {
                   </i>
                 </div>
                 <div className="form-row">
-                  <label>Start Date:<span className="required">*</span></label>
+                  <label>
+                    Start Date:<span className="required">*</span>
+                  </label>
                   <input
                     type="date"
                     value={financeStartDate}
@@ -1067,7 +1216,9 @@ function DataReport() {
                   />
                 </div>
                 <div className="form-row">
-                  <label>End Date:<span className="required">*</span></label>
+                  <label>
+                    End Date:<span className="required">*</span>
+                  </label>
                   <input
                     type="date"
                     value={financeEndDate}
@@ -1076,7 +1227,9 @@ function DataReport() {
                 </div>
 
                 <div className="form-row">
-                  <label>Category:<span className="required">*</span></label>
+                  <label>
+                    Category:<span className="required">*</span>
+                  </label>
                   <select
                     value={financeCategory}
                     onChange={(e) => setFinanceCategory(e.target.value)}
@@ -1091,14 +1244,18 @@ function DataReport() {
                 </div>
                 {financeCategory === "tickets" && (
                   <div className="form-row">
-                    <label>Type:<span className="required">*</span></label>
+                    <label>
+                      Type:<span className="required">*</span>
+                    </label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
                     >
                       <option value="financeType">Revenue</option>
                     </select>
-                    <label>Ticket Type:<span className="required">*</span></label>
+                    <label>
+                      Ticket Type:<span className="required">*</span>
+                    </label>
                     <select
                       value={ticketType}
                       onChange={(e) => setTicketType(e.target.value)}
@@ -1112,7 +1269,9 @@ function DataReport() {
                 )}
                 {financeCategory === "dining" && (
                   <div className="form-row">
-                    <label>Type:<span className="required">*</span></label>
+                    <label>
+                      Type:<span className="required">*</span>
+                    </label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
@@ -1121,7 +1280,9 @@ function DataReport() {
                       <option value="diningRev">Revenue</option>
                       <option value="diningExpense">Expense</option>
                     </select>
-                    <label>Dining Type:<span className="required">*</span></label>
+                    <label>
+                      Dining Type:<span className="required">*</span>
+                    </label>
                     <select
                       value={diningType}
                       onChange={(e) => setDiningType(e.target.value)}
@@ -1136,12 +1297,16 @@ function DataReport() {
 
                 {financeCategory === "merch" && (
                   <div className="form-row">
-                    <label>Type:<span className="required">*</span></label>
+                    <label>
+                      Type:<span className="required">*</span>
+                    </label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
                     >
-                      <option value="default">Select Type<span className="required">*</span></option>
+                      <option value="">
+                        Select Type
+                      </option>
 
                       <option value="merchRevenue">Revenue</option>
                       <option value="merchExpense">Expense</option>
@@ -1150,7 +1315,9 @@ function DataReport() {
                 )}
                 {financeCategory === "maintenance" && (
                   <div className="form-row">
-                    <label>Type:<span className="required">*</span></label>
+                    <label>
+                      Type:<span className="required">*</span>
+                    </label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
@@ -1161,7 +1328,9 @@ function DataReport() {
                 )}
                 {financeCategory === "all" && (
                   <div className="form-row">
-                    <label>Type:<span className="required">*</span></label>
+                    <label>
+                      Type:<span className="required">*</span>
+                    </label>
                     <select
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
@@ -1176,16 +1345,13 @@ function DataReport() {
                     {financeCategory === "tickets" &&
                       generateFinanceTable(financeReportData)}
                     {financeCategory === "dining" &&
-                      financeType !== "default" && (
-                        <div>{generateDiningReport(financeReportData)}
-                                              
-</div>
-
+                      (financeType === "diningRev" || financeType === "diningExpense") &&(
+                        <div>{generateDiningReport(financeReportData)}</div>
                       )}
-                    {financeCategory === "merch" && (
+                    {financeCategory === "merch" && (financeType === "merchRevenue" || financeType === "merchExpense") &&(
                       <div>{generateMerchReport(financeReportData)}</div>
                     )}
-                    {financeCategory === "maintenance" && (
+                    {financeCategory === "maintenance" &&  financeType !== "default" &&(
                       <div>{generateMaintExpense(financeReportData)}</div>
                     )}
                     {financeCategory === "all" && (
@@ -1214,7 +1380,9 @@ function DataReport() {
                 </i>
               </div>
               <div className="form-row">
-                <label>Start Date:<span className="required">*</span></label>
+                <label>
+                  Start Date:<span className="required">*</span>
+                </label>
                 <input
                   type="date"
                   value={maintenanceStartDate}
@@ -1222,7 +1390,9 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>End Date:<span className="required">*</span></label>
+                <label>
+                  End Date:<span className="required">*</span>
+                </label>
                 <input
                   type="date"
                   value={maintenanceEndDate}
@@ -1239,7 +1409,9 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>Status:<span className="required">*</span></label>
+                <label>
+                  Status:<span className="required">*</span>
+                </label>
                 <select
                   value={maintenanceStatus}
                   onChange={(e) => setMaintenanceStatus(e.target.value)}
@@ -1249,7 +1421,9 @@ function DataReport() {
                   <option value="inProgress">In Progress</option>
                   <option value="completed">Completed</option>
                 </select>
-                <label>Attraction Name:<span className="required">*</span></label>
+                <label>
+                  Attraction Name:<span className="required">*</span>
+                </label>
                 <select
                   value={attractionName}
                   onChange={(e) => setAttractionName(e.target.value)}
@@ -1285,7 +1459,9 @@ function DataReport() {
                 </i>
               </div>
               <div className="form-row">
-                <label>Start Date:<span className="required">*</span></label>
+                <label>
+                  Start Date:<span className="required">*</span>
+                </label>
                 <input
                   type="date"
                   value={visitStartDate}
@@ -1293,7 +1469,9 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>End Date:<span className="required">*</span></label>
+                <label>
+                  End Date:<span className="required">*</span>
+                </label>
                 <input
                   type="date"
                   value={visitEndDate}
@@ -1301,7 +1479,9 @@ function DataReport() {
                 />
               </div>
               <div className="form-row">
-                <label>Category:<span className="required">*</span></label>
+                <label>
+                  Category:<span className="required">*</span>
+                </label>
                 <select
                   value={visitCategory}
                   onChange={(e) => setVisitCategory(e.target.value)}
@@ -1313,7 +1493,9 @@ function DataReport() {
               </div>
               {visitCategory === "attractions" && (
                 <div className="form-row">
-                  <label>Attraction:<span className="required">*</span></label>
+                  <label>
+                    Attraction:<span className="required">*</span>
+                  </label>
                   <select
                     value={attractionName}
                     onChange={(e) => setAttractionName(e.target.value)}
@@ -1329,7 +1511,9 @@ function DataReport() {
               )}
               {visitCategory === "dining" && (
                 <div className="form-row">
-                  <label>Dining:<span className="required">*</span></label>
+                  <label>
+                    Dining:<span className="required">*</span>
+                  </label>
                   <select
                     value={diningName}
                     onChange={(e) => setDiningName(e.target.value)}

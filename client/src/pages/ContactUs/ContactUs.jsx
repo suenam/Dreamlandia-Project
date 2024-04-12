@@ -3,6 +3,10 @@ import React, {useEffect, useRef, useState } from 'react';
 import Sparkles from '../../components/SparkleCursor/Sparkles';
 import { useAuth } from '../auth/auth';
 import axios from 'axios';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+
+
 
 
 
@@ -14,6 +18,17 @@ const ContactUs = () => {
   const [message, setMessage] = useState('');
   const auth = useAuth();
   const userIdRef = useRef(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showFailureModal, setShowFailureModal] = useState(false);
+
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
+
+  const handleCloseFailureModal = () => {
+    setShowFailureModal(false);
+  };
+
   useEffect(() => {
     const fetchUserId = async () => {
       try {
@@ -28,15 +43,17 @@ const ContactUs = () => {
           const userData = await response.json();
           if (userData && userData.UserID) {
             userIdRef.current = userData.UserID;
-            console.log('New userId:', userIdRef.current);
           } else {
             setUserId(null);
+
           }
         } else {
           setUserId(null);
         }
       } catch (error) {
         console.error('Error fetching user ID:', error);
+        setShowFailureModal(true);
+
         setUserId(null);
       }
     };
@@ -58,16 +75,15 @@ const ContactUs = () => {
       });
   
       if (response.status === 201) {
-        alert('Message submitted successfully!');
+        setShowSuccessModal(true);
         console.log('Message submitted successfully!');
-        // Clear input fields after submission
         setName('');
         setTicketId('');
         setEmail('');
         setType('');
         setMessage('');
       } else {
-        alert('Failed to submit message.');
+        setShowFailureModal(true);
         console.error('Failed to submit message.');
       }
     } catch (error) {
@@ -80,7 +96,7 @@ const ContactUs = () => {
       <div className="contact-header">
         <Sparkles />
         <h1>Contact Us</h1>
-        <p>Note that only accounts with registered emails and at least one purchase order actually have their message sent to us</p>
+        <p>Please feel free to contact us!</p>
       </div>
       <form className="contact-form" onSubmit={handleSubmit}>
         <div className="input-group">
@@ -139,6 +155,67 @@ const ContactUs = () => {
           Submit
         </button>
       </form>
+      <Modal
+        open={showSuccessModal}
+        onClose={handleCloseSuccessModal}
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
+        className="modal-container success-modal"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="success-modal-title" className="modal-title">
+            Message Submitted Successfully
+          </h2>
+          <p id="success-modal-description" className="modal-description">
+            Your message has been submitted successfully.
+          </p>
+          <button onClick={handleCloseSuccessModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={showFailureModal}
+        onClose={handleCloseFailureModal}
+        aria-labelledby="failure-modal-title"
+        aria-describedby="failure-modal-description"
+        className="modal-container failure-modal"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="failure-modal-title" className="modal-title">
+            Failed to Submit Message
+          </h2>
+          <p id="failure-modal-description" className="modal-description">
+            There was an error while submitting your message. Please try again.
+          </p>
+          <button onClick={handleCloseFailureModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
     </div>
   );
 };
