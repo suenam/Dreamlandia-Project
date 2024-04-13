@@ -239,29 +239,29 @@ financeData.diningData = diningData;
     } else if (category === "merch") {
       if (financeType === "merchExpense") {
         let merchExpenseQuery = `
-          SELECT 
-            DATE_FORMAT(DATE(merchandise_order_detail.TransactionDate), '%Y-%m-%d') AS Date,
-            merchandise.MType AS ItemType,
-            merchandise.MName AS ItemName,
-            COUNT(*) AS QuantitySold,
-            SUM(merchandise.SupplierCost) AS ExpenseAmt,
-            (
-              SELECT SUM(merchandise.SupplierCost)
-              FROM merchandise_order_detail
-              JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
-              WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-            ) / DATEDIFF(?, ?) AS AvgCost,
-            (
-              SELECT SUM(merchandise.SupplierCost)
-              FROM merchandise_order_detail
-              JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
-              WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-            ) AS TotalExpense
-          FROM merchandise
-          JOIN merchandise_order_detail ON merchandise.ItemID = merchandise_order_detail.ItemID
-          WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-          GROUP BY Date, ItemType, ItemName
-          ORDER BY Date;
+        SELECT
+        DATE_FORMAT(DATE(merchandise_order_detail.TransactionDate), '%Y-%m-%d') AS Date,
+        merchandise.MType AS ItemType,
+        merchandise.MName AS ItemName,
+        SUM(merchandise_order_detail.quantity) AS QuantitySold,
+        SUM(merchandise.SupplierCost * merchandise_order_detail.quantity) AS ExpenseAmt,
+        (
+            SELECT SUM(merchandise.SupplierCost * merchandise_order_detail.quantity)
+            FROM merchandise_order_detail
+            JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
+            WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
+        ) / DATEDIFF(?, ?) AS AvgCost,
+        (
+            SELECT SUM(merchandise.SupplierCost * merchandise_order_detail.quantity)
+            FROM merchandise_order_detail
+            JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
+            WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
+        ) AS TotalExpense
+    FROM merchandise_order_detail
+    JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
+    WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
+    GROUP BY Date, ItemType, ItemName
+    ORDER BY Date;
         `;
 
         const merchExpenseQueryParams = [
@@ -282,34 +282,34 @@ financeData.diningData = diningData;
         financeData.merchData = merchData;
       } else {
         let merchRevenueQuery = `
-          SELECT 
-            DATE_FORMAT(DATE(merchandise_order_detail.TransactionDate), '%Y-%m-%d') AS Date,
-            merchandise.MType AS ItemType,
-            merchandise.MName AS ItemName,
-            COUNT(*) AS QuantitySold,
-            SUM(merchandise.SellingCost) AS TotalRevenue,
-            (
-              SELECT COUNT(*)
-              FROM merchandise_order_detail
-              WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-            ) / DATEDIFF(?, ?) AS AvgDailyTransactions,
-            (
-              SELECT SUM(merchandise.SellingCost)
-              FROM merchandise_order_detail
-              JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
-              WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-            ) / DATEDIFF(?, ?) AS AvgRevenue,
-            (
-              SELECT SUM(merchandise.SellingCost)
-              FROM merchandise_order_detail
-              JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
-              WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-            ) AS TotalRevenuePeriod
-          FROM merchandise
-          JOIN merchandise_order_detail ON merchandise.ItemID = merchandise_order_detail.ItemID
-          WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-          GROUP BY Date, ItemType, ItemName
-          ORDER BY Date;
+        SELECT
+        DATE_FORMAT(DATE(merchandise_order_detail.TransactionDate), '%Y-%m-%d') AS Date,
+        merchandise.MType AS ItemType,
+        merchandise.MName AS ItemName,
+        SUM(merchandise_order_detail.quantity) AS QuantitySold,
+        SUM(merchandise.SellingCost * merchandise_order_detail.quantity) AS TotalRevenue,
+        (
+            SELECT SUM(merchandise_order_detail.quantity)
+            FROM merchandise_order_detail
+            WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
+        ) / DATEDIFF(?, ?) AS AvgDailyTransactions,
+        (
+            SELECT SUM(merchandise.SellingCost * merchandise_order_detail.quantity)
+            FROM merchandise_order_detail
+            JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
+            WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
+        ) / DATEDIFF(?, ?) AS AvgRevenue,
+        (
+            SELECT SUM(merchandise.SellingCost * merchandise_order_detail.quantity)
+            FROM merchandise_order_detail
+            JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
+            WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
+        ) AS TotalRevenuePeriod
+    FROM merchandise_order_detail
+    JOIN merchandise ON merchandise.ItemID = merchandise_order_detail.ItemID
+    WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
+    GROUP BY Date, ItemType, ItemName
+    ORDER BY Date;
         `;
         const merchRevenueQueryParams = [
           startDate,
@@ -377,102 +377,86 @@ financeData.diningData = diningData;
       const [maintData] = await pool.execute(maintQuery, maintQueryParams);
       financeData.maintData = maintData;
     } else if (category === "all") {
-      let profitQuery = `
+      const profitQuery = `
+      WITH profit_data AS (
+        SELECT
+          DATE(TransactionTimeStamp) AS date,
+          'Dining' AS department,
+          SUM(TotalAmount) AS revenue,
+          0 AS expenses
+        FROM view_restaurant_transaction_extended
+        GROUP BY DATE(TransactionTimeStamp)
+        UNION ALL
+        SELECT
+          DATE(TransactionDate),
+          'Merchandise' AS department,
+          SUM(mo.quantity * merch.SellingCost) AS revenue,
+          SUM(mo.quantity * merch.SupplierCost) AS expenses
+        FROM merchandise_order_detail AS mo
+        JOIN merchandise AS merch ON mo.ItemID = merch.ItemID
+        GROUP BY DATE(TransactionDate)
+        UNION ALL
+        SELECT
+          DATE(MRDateSubmitted),
+          'Maintenance' AS department,
+          0 AS revenue,
+          SUM(MRCost) AS expenses
+        FROM maintenance_request
+        GROUP BY DATE(MRDateSubmitted)
+        UNION ALL
+        SELECT
+          DATE(ExpenseDate),
+          'Dining' AS department,
+          0 AS revenue,
+          SUM(ExpenseAmt) AS expenses
+        FROM restaurant_expense
+        GROUP BY DATE(ExpenseDate)
+        UNION ALL
+        SELECT
+          DATE(TPurchaseDate),
+          'Tickets' AS department,
+          SUM(TPrice) AS revenue,
+          0 AS expenses
+        FROM ticket
+        GROUP BY DATE(TPurchaseDate)
+      ),
+      totals AS (
+        SELECT
+          SUM(revenue) AS total_revenue,
+          SUM(expenses) AS total_expenses,
+          SUM(revenue) - SUM(expenses) AS total_profit
+        FROM profit_data
+        WHERE date BETWEEN ? AND ?
+      )
       SELECT
-      DATE_FORMAT(TPurchaseDate, '%Y-%m-%d') AS Date,
-    'Tickets' AS Department,
-    COALESCE(Tickets_Revenue, 0) AS Revenue,
-    0 AS Expense,
-    COALESCE(Tickets_Revenue, 0) AS Profit
-FROM (
-    SELECT
-        DATE_FORMAT(TPurchaseDate, '%Y-%m-%d') AS Date,
-        SUM(TPrice) AS Tickets_Revenue
-    FROM ticket
-    WHERE DATE(TPurchaseDate) BETWEEN ? AND ?
-    GROUP BY Date
-) AS TicketsData
+      DATE_FORMAT(date, '%Y-%m-%d') AS date,
+              department,
+        SUM(revenue) AS revenue,
+        SUM(expenses) AS expenses,
+        SUM(revenue) - SUM(expenses) AS profit,
+        (SELECT total_revenue FROM totals) AS total_revenue,
+        (SELECT total_expenses FROM totals) AS total_expenses,
+        (SELECT total_profit FROM totals) AS total_profit
+      FROM profit_data
+      WHERE date BETWEEN ? AND ?
+      GROUP BY date, department
+      ORDER BY date;
+    `;
 
-UNION ALL
+    const profitQueryParams = [
+      startDate,
+      endDate,
+      startDate,
+      endDate,
+    ];
 
-SELECT
-    Date,
-    'Dining' AS Department,
-    COALESCE(Dining_Revenue, 0) AS Revenue,
-    COALESCE(Dining_Expense, 0) AS Expense,
-    COALESCE(Dining_Revenue, 0) - COALESCE(Dining_Expense, 0) AS Profit
-FROM (
-    SELECT
-        DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS Date,
-        SUM(TotalAmount) AS Dining_Revenue,
-        SUM(ExpenseAmt) AS Dining_Expense
-    FROM view_restaurant_transaction_extended
-    JOIN restaurant_expense ON view_restaurant_transaction_extended.RestaurantID = restaurant_expense.RestaurantID
-    WHERE DATE(TransactionTimeStamp) BETWEEN ? AND ?
-    GROUP BY Date
-) AS DiningData
+  
 
-UNION ALL
-
-SELECT
-    Date,
-    'Merchandise' AS Department,
-    COALESCE(Merchandise_Revenue, 0) AS Revenue,
-    COALESCE(Merchandise_Expense, 0) AS Expense,
-    COALESCE(Merchandise_Revenue, 0) - COALESCE(Merchandise_Expense, 0) AS Profit
-FROM (
-    SELECT
-        DATE_FORMAT(merchandise_order_detail.TransactionDate, '%Y-%m-%d') AS Date,
-        SUM(SellingCost) AS Merchandise_Revenue,
-        SUM(SupplierCost) AS Merchandise_Expense
-    FROM merchandise
-    JOIN merchandise_order_detail ON merchandise.ItemID = merchandise_order_detail.ItemID
-    WHERE DATE(merchandise_order_detail.TransactionDate) BETWEEN ? AND ?
-    GROUP BY Date
-) AS MerchandiseData
-
-UNION ALL
-
-SELECT
-    Date,
-    'Maintenance' AS Department,
-    0 AS Revenue,
-    COALESCE(SUM(MRCost), 0) AS Expense,
-    -COALESCE(SUM(MRCost), 0) AS Profit
-FROM maintenance_request
-WHERE DATE(MRDateSubmitted) BETWEEN ? AND ?
-GROUP BY Date
-
-ORDER BY Date, Department;
-`;
-      const profitQueryParams = [
-        startDate,
-        endDate,
-        startDate,
-        endDate,
-        startDate,
-        endDate,
-        startDate,
-        endDate,
-        startDate,
-        endDate,
-      ];
-      let totalProfit = 0;
-      let totalRevenue = 0;
-      let totalExpense = 0;
-
-      const [profitData] = await pool.execute(profitQuery, profitQueryParams);
-      financeData.profitData = profitData;
-      for (const entry of financeData.profitData) {
-        totalProfit += parseFloat(entry.Profit);
-        totalRevenue += parseFloat(entry.Revenue);
-        totalExpense += parseFloat(entry.Expense);
-      }
-
-      console.log(`Total Profit: ${totalProfit}`);
-      console.log(`Total Revenue: ${totalRevenue}`);
-      console.log(`Total Expense: ${totalExpense}`);
-    }
+    const [profitData] = await pool.execute(profitQuery, profitQueryParams);
+    financeData.profitData = profitData;
+    
+    
+  }
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(financeData));

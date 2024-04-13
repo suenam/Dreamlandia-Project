@@ -894,15 +894,7 @@ function DataReport() {
 
   const generateProfitTable = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-      let totalProfit = 0;
-      let totalRevenue = 0;
-      let totalExpense = 0;
-
-      for (const entry of data) {
-        totalProfit += parseFloat(entry.Profit);
-        totalRevenue += parseFloat(entry.Revenue);
-        totalExpense += parseFloat(entry.Expense);
-      }
+      
 
       return (
         <>
@@ -928,19 +920,19 @@ function DataReport() {
               <div className="data-report-summary-box">
                 <p>Total Revenue:</p>
                 <p className="data-report-summary-box-value">
-                  ${totalRevenue.toFixed(2)}
+                  ${parseFloat(data[0].total_revenue).toFixed(2)}
                 </p>
               </div>
               <div className="data-report-summary-box">
                 <p>Total Expense:</p>
                 <p className="data-report-summary-box-value">
-                  ${totalExpense.toFixed(2)}
+                ${parseFloat(data[0].total_expenses).toFixed(2)}
                 </p>
               </div>
               <div className="data-report-summary-box">
                 <p>Total Profit:</p>
                 <p className="data-report-summary-box-value">
-                  ${totalProfit.toFixed(2)}
+                ${parseFloat(data[0].total_profit).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -950,24 +942,24 @@ function DataReport() {
                   <th>Date</th>
                   <th>Department</th>
                   <th>
-                    <div>Revenue</div>
+                    Revenue
                   </th>
                   <th>
-                    <div>Expense</div>
+                   Expense
                   </th>
                   <th>
-                    <div>Profit</div>
+                    Profit
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {data.map((row, index) => (
                   <tr key={index}>
-                    <td>{row.Date}</td>
-                    <td>{row.Department}</td>
-                    <td>${row.Revenue}</td>
-                    <td>${row.Expense}</td>
-                    <td>${row.Profit}</td>
+                    <td>{row.date}</td>
+                    <td>{row.department}</td>
+                    <td>${row.revenue}</td>
+                    <td>${row.expenses}</td>
+                    <td>${row.profit}</td>
                   </tr>
                 ))}
               </tbody>
