@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MSidebar from '../../../components/MSidebar/MSidebar';
-import { useOutletContext } from 'react-router-dom';
 import { PDFExport } from "@progress/kendo-react-pdf";
 import './MDashboard.css';
 
@@ -119,10 +118,7 @@ function MDashboard() {
                                 <span className='big-value'>${dashboardData.ticketRevenue}</span>
                                 <span className='small-text'>REVENUE</span>
                             </div>
-                            <div className='value-container'>
-                                <span className='big-value'>{dashboardData.ticketTransactions}</span>
-                                <span className='small-text'>TRANSACTIONS</span>
-                            </div>
+                            
                             <div className='small-value-container'>
                                 <div className='small-value-item'>
                                     <span className='small-value'>{dashboardData.standardTickets}</span>
@@ -155,10 +151,7 @@ function MDashboard() {
                                 <span className='big-value'>${dashboardData.restaurantExpense}</span>
                                 <span className='small-text'>EXPENSE</span>
                             </div>
-                            <div className='value-container'>
-                                <span className='big-value'>{dashboardData.restaurantTransactions}</span>
-                                <span className='small-text'>TRANSACTIONS</span>
-                            </div>
+                            
                             <div className='small-value-container'>
                                 <div className='small-value-item'>
                                     <span className='small-value'>{dashboardData.standardRestaurantTransactions}</span>
@@ -189,7 +182,7 @@ function MDashboard() {
                             </div>
                             <div className='value-container'>
                                 <span className='big-value'>{dashboardData.activeMaintenanceRequests}</span>
-                                <span className='small-text'>ACTIVE REQUESTS</span>
+                                <span className='small-text'>REQUESTS SUBMITTED</span>
                             </div>
                         </div>
                     </div>

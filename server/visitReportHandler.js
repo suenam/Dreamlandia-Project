@@ -53,40 +53,34 @@ async function visitReportHandler(req, res) {
     } else if (category === 'dining') {
       if (diningName === 'all') {
         query = `
-          SELECT 
-          DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate, 
-              SUM(CASE WHEN r.RestaurantName = "Bella\\'s Fairy Tale Feast" THEN 1 ELSE 0 END) AS "Bella\'s Fairy Tale Feast",
-              SUM(CASE WHEN r.RestaurantName = 'Burger Castle' THEN 1 ELSE 0 END) AS 'Burger Castle',
-              SUM(CASE WHEN r.RestaurantName = 'HerHarmony Eatery' THEN 1 ELSE 0 END) AS "HerHarmony Eatery",
-              SUM(CASE WHEN r.RestaurantName = 'Silver Spoon Serenade' THEN 1 ELSE 0 END) AS "Silver Spoon Serenade",
-              SUM(CASE WHEN r.RestaurantName = 'The Velvet Vineyard' THEN 1 ELSE 0 END) AS "The Velvet Vineyard",
-              SUM(CASE WHEN r.RestaurantName = 'WhataSandwich' THEN 1 ELSE 0 END) AS "WhataSandwich",
-              SUM(1) AS Total
-          FROM 
-          restaurant_transaction t
-          INNER JOIN 
-            restaurant r ON t.RestaurantID = r.RestaurantID
-          WHERE 
-          DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
-          GROUP BY 
-          DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d');
+        SELECT
+            DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate,
+            SUM(CASE WHEN rt.RestaurantName = "Bella's Fairy Tale Feast" THEN rt.quantity ELSE 0 END) AS "Bella's Fairy Tale Feast",
+            SUM(CASE WHEN rt.RestaurantName = 'Burger Castle' THEN rt.quantity ELSE 0 END) AS 'Burger Castle',
+            SUM(CASE WHEN rt.RestaurantName = 'HerHarmony Eatery' THEN rt.quantity ELSE 0 END) AS "HerHarmony Eatery",
+            SUM(CASE WHEN rt.RestaurantName = 'Silver Spoon Serenade' THEN rt.quantity ELSE 0 END) AS "Silver Spoon Serenade",
+            SUM(CASE WHEN rt.RestaurantName = 'The Velvet Vineyard' THEN rt.quantity ELSE 0 END) AS "The Velvet Vineyard",
+            SUM(CASE WHEN rt.RestaurantName = 'WhataSandwich' THEN rt.quantity ELSE 0 END) AS "WhataSandwich",
+            SUM(rt.quantity) AS Total
+        FROM view_restaurant_transaction_extended rt
+        WHERE DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
+        GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d');
         `;
         queryParams = [startDate, endDate];
       } else {
         query = `
-          SELECT 
-          DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate, 
-              COUNT(rt.UserID) AS Visitors,
-              RestaurantName AS DiningName
-          FROM 
-              restaurant_transaction rt
-          INNER JOIN 
-              restaurant r ON rt.RestaurantID = r.RestaurantID
-          WHERE 
-              r.RestaurantName = ? AND DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
-          GROUP BY 
-          DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d'), DiningName;
-        `;
+SELECT
+    DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate,
+    COUNT(DISTINCT rt.UserID) AS Quantity,
+    SUM(rt.quantity) AS Visitors,
+    rt.RestaurantName AS DiningName
+FROM view_restaurant_transaction_extended rt
+WHERE rt.RestaurantName = ?
+  AND DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
+GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d'), rt.RestaurantName;
+`;
+        
+        
         queryParams = [diningName, startDate, endDate];
       }
     } else {

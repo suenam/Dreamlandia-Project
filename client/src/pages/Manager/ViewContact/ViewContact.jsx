@@ -76,7 +76,7 @@ function ViewContact() {
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Date</th>
+                  <th>Date (UTC)</th>
                   <th>Type</th>
                   <th>Message</th>
                   <th>TicketID</th>
