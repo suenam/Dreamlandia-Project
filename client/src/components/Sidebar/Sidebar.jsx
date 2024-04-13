@@ -32,7 +32,6 @@ const Sidebar = () => {
       </div>
       <nav className="sidebar-links">
         <NavLink className="sidebar-link" to="/employee/profile" >My Profile</NavLink>
-        <NavLink className="sidebar-link" to="/employee/dashboard" >Dashboard</NavLink>
         <NavLink className="sidebar-link" to="/employee/maintenance" >Maintenance Requests</NavLink>
         <NavLink className="sidebar-link" to="/employee/HR" >HR</NavLink>
         <NavLink className="sidebar-link" to="/employee/weather-form" >Weather Form</NavLink>

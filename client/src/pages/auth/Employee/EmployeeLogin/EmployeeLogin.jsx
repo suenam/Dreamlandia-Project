@@ -27,7 +27,7 @@ const EmployeeLogin = () => {
 
   useEffect(() => {
     if (auth.employee && auth.employee.SRole) {
-      navigate(`/${auth.employee.SRole === "Staff" ? "employee" : "manager"}/dashboard`, { replace: true });
+      navigate(`/${auth.employee.SRole === "Staff" ? "employee/profile" : "manager/dashboard"}`, { replace: true });
     }
   }, [auth.employee, navigate]);
 
