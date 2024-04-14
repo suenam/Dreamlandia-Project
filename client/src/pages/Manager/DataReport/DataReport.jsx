@@ -230,23 +230,27 @@ function DataReport() {
   };
 
   const generateVisitTable = (data) => {
-    console.log(data);
-
     if (Array.isArray(data) && data.length > 0) {
-      const totalVisitors = data.reduce(
+      // Transform the data to match the expected structure
+      const transformedData = data.map((row) => {
+        const { PurchaseDate, ...attractions } = row;
+        return {
+          PurchaseDate,
+          ...attractions,
+          Total: row.Total,
+        };
+      });
+  
+      const totalVisitors = transformedData.reduce(
         (sum, row) => sum + parseInt(row.Total),
         0
       );
-
+  
       return (
         <>
-          <button
-            onClick={exportToPDF}
-            className="data-report-exportPdf-dr-butt"
-          >
+          <button onClick={exportToPDF} className="data-report-exportPdf-dr-butt">
             Export to PDF
           </button>
-
           <PDFExport
             paperSize="auto"
             fileName="data_report.pdf"
@@ -259,32 +263,33 @@ function DataReport() {
                 ({visitStartDate} - {visitEndDate})
               </span>
             </h3>
-
             <table className="contact-table">
               <thead>
                 <tr>
                   <th>Date</th>
-                  {attractionList.map((attraction) => (
-                    <th key={attraction.attractionID}>{attraction.name}</th>
-                  ))}
+                  {Object.keys(transformedData[0]).map(
+                    (key) =>
+                      key !== "PurchaseDate" && key !== "Total" && (
+                        <th key={key}>{key}</th>
+                      )
+                  )}
                   <th>Total</th>
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, index) => (
+                {transformedData.map((row, index) => (
                   <tr key={index}>
                     <td>{row.PurchaseDate}</td>
-                    {attractionList.map((attraction) => (
-                      <td key={attraction.attractionID}>{row.VisitorsCount}</td>
-                    ))}
+                    {Object.keys(row)
+                      .filter((key) => key !== "PurchaseDate" && key !== "Total")
+                      .map((key) => (
+                        <td key={key}>{row[key]}</td>
+                      ))}
                     <td>{row.Total}</td>
                   </tr>
                 ))}
                 <tr>
-                  <td
-                    colSpan={attractionList.length + 1}
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
+                  <td colSpan={Object.keys(transformedData[0]).length - 1} style={{ textAlign: "right", fontWeight: "bold" }}>
                     Total Visitors:
                   </td>
                   <td style={{ fontWeight: "bold" }}>{totalVisitors}</td>
