@@ -36,6 +36,9 @@ const resetPasswordHandler = require('./resetPasswordHandler');
 const resetStaffPasswordHandler = require('./resetStaffPasswordHandler');
 const unresolvedMaintenanceHandler = require("./unresolvedMaintenanceHandler");
 const getPostData = require('./postDataParser');
+const getAttractions = require("./getAttractions");
+const insertNewAttractions = require("./insertNewAttractions");
+const deleteAttraction = require("./deleteAttraction");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -192,6 +195,24 @@ const server = http.createServer((req, res) => {
     }
     else if(req.url === '/reset-staff-password' && req.method === 'PUT') {
       resetStaffPasswordHandler(req, res);
+    }else if(req.url === '/attractions' && req.method === 'GET') {
+      getAttractions(req, res);
+    }
+    else if(req.url === '/insert-new-attractions' && req.method === 'POST') {
+      insertNewAttractions(req, res);
+    }
+    else if(req.url === '/delete-attraction' && req.method === 'DELETE') {
+      getPostData(req)
+        .then((body) => {
+          console.log(body);
+          const id = body.id;
+          deleteAttraction(req, res, id);
+        })
+        .catch((err) => {
+          console.error('Error parsing request body:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
+        });
     }
     else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

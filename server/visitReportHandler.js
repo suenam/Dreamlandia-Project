@@ -9,15 +9,19 @@ async function visitReportHandler(req, res) {
     let queryParams;
 
     if (category === 'attractions') {
-      if (attractionName === 'all') {
+        if (attractionName === 'all') {
+          // Retrieve all attraction names from the database
+          const attractions = await pool.query('SELECT AName FROM attraction');
+        console.log("Attractions", attractions);
+
+        // Construct the SUM(CASE ...) expressions dynamically
+        const sumExpressions = attractions[0].map(attraction => `SUM(CASE WHEN a.AName = '${attraction.AName}' THEN 1 ELSE 0 END) AS "${attraction.AName}"`).join(',');
+        console.log("Sum Expressions", sumExpressions); // Add this line to check the value of sumExpressions
+
         query = `
           SELECT 
               DATE_FORMAT(TPurchaseDate, '%Y-%m-%d') AS PurchaseDate,
-              SUM(CASE WHEN a.AName = 'Roller Coaster' THEN 1 ELSE 0 END) AS "Roller Coaster",
-              SUM(CASE WHEN a.AName = 'Carousel' THEN 1 ELSE 0 END) AS "Carousel",
-              SUM(CASE WHEN a.AName = 'Ferris Wheel' THEN 1 ELSE 0 END) AS "Ferris Wheel",
-              SUM(CASE WHEN a.AName = 'Themed Rides' THEN 1 ELSE 0 END) AS "Themed Rides",
-              SUM(CASE WHEN a.AName = 'Water Rides' THEN 1 ELSE 0 END) AS "Water Rides",
+              ${sumExpressions},
               SUM(1) AS Total
           FROM 
               ticket t
@@ -26,15 +30,16 @@ async function visitReportHandler(req, res) {
           INNER JOIN 
               attraction a ON aj.AttractionID = a.AttractionID
           WHERE 
-          DATE_FORMAT(TPurchaseDate, '%Y-%m-%d') BETWEEN ? AND ?
+              DATE_FORMAT(TPurchaseDate, '%Y-%m-%d') BETWEEN ? AND ?
           GROUP BY 
-          DATE_FORMAT(TPurchaseDate, '%Y-%m-%d');
+              DATE_FORMAT(TPurchaseDate, '%Y-%m-%d');
         `;
         queryParams = [startDate, endDate];
-      } else {
+
+        }else {
         query = `
           SELECT 
-          DATE_FORMAT(TPurchaseDate, '%Y-%m-%d') AS PurchaseDate,
+              DATE_FORMAT(TPurchaseDate, '%Y-%m-%d') AS PurchaseDate,
               COUNT(aj.AttractionJointID) AS VisitorsCount,
               a.AName AS AttractionName
           FROM 
@@ -46,41 +51,40 @@ async function visitReportHandler(req, res) {
           WHERE 
               a.AName = ? AND DATE(TPurchaseDate) BETWEEN ? AND ? 
           GROUP BY 
-          DATE_FORMAT(TPurchaseDate, '%Y-%m-%d'), a.AName;
+              DATE_FORMAT(TPurchaseDate, '%Y-%m-%d'), a.AName;
         `;
         queryParams = [attractionName, startDate, endDate];
       }
     } else if (category === 'dining') {
       if (diningName === 'all') {
+        // Retrieve all restaurant names from the database
+        const restaurants = await pool.query('SELECT DISTINCT RestaurantName FROM view_restaurant_transaction_extended');
+
+        // Construct the SUM(CASE ...) expressions dynamically
+        const sumExpressions = restaurants[0].map(restaurant => `SUM(CASE WHEN rt.RestaurantName = '${restaurant.RestaurantName}' THEN rt.quantity ELSE 0 END) AS "${restaurant.RestaurantName}"`).join(',');
+
         query = `
-        SELECT
-            DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate,
-            SUM(CASE WHEN rt.RestaurantName = "Bella's Fairy Tale Feast" THEN rt.quantity ELSE 0 END) AS "Bella's Fairy Tale Feast",
-            SUM(CASE WHEN rt.RestaurantName = 'Burger Castle' THEN rt.quantity ELSE 0 END) AS 'Burger Castle',
-            SUM(CASE WHEN rt.RestaurantName = 'HerHarmony Eatery' THEN rt.quantity ELSE 0 END) AS "HerHarmony Eatery",
-            SUM(CASE WHEN rt.RestaurantName = 'Silver Spoon Serenade' THEN rt.quantity ELSE 0 END) AS "Silver Spoon Serenade",
-            SUM(CASE WHEN rt.RestaurantName = 'The Velvet Vineyard' THEN rt.quantity ELSE 0 END) AS "The Velvet Vineyard",
-            SUM(CASE WHEN rt.RestaurantName = 'WhataSandwich' THEN rt.quantity ELSE 0 END) AS "WhataSandwich",
-            SUM(rt.quantity) AS Total
-        FROM view_restaurant_transaction_extended rt
-        WHERE DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
-        GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d');
+          SELECT
+              DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate,
+              ${sumExpressions},
+              SUM(rt.quantity) AS Total
+          FROM view_restaurant_transaction_extended rt
+          WHERE DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
+          GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d');
         `;
         queryParams = [startDate, endDate];
       } else {
         query = `
-SELECT
-    DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate,
-    COUNT(DISTINCT rt.UserID) AS Quantity,
-    SUM(rt.quantity) AS Visitors,
-    rt.RestaurantName AS DiningName
-FROM view_restaurant_transaction_extended rt
-WHERE rt.RestaurantName = ?
-  AND DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
-GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d'), rt.RestaurantName;
-`;
-        
-        
+          SELECT
+              DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') AS TransactionDate,
+              COUNT(DISTINCT rt.UserID) AS Quantity,
+              SUM(rt.quantity) AS Visitors,
+              rt.RestaurantName AS DiningName
+          FROM view_restaurant_transaction_extended rt
+          WHERE rt.RestaurantName = ?
+            AND DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d') BETWEEN ? AND ?
+          GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d'), rt.RestaurantName;
+        `;
         queryParams = [diningName, startDate, endDate];
       }
     } else {
@@ -90,6 +94,8 @@ GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d'), rt.RestaurantName;
     }
 
     const [reportData] = await pool.execute(query, queryParams);
+    console.log("Report Data", reportData);
+
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(reportData));
@@ -99,5 +105,6 @@ GROUP BY DATE_FORMAT(TransactionTimeStamp, '%Y-%m-%d'), rt.RestaurantName;
     res.end(JSON.stringify({ message: 'Error generating visit report', error: error.toString() }));
   }
 }
+
 
 module.exports = visitReportHandler;

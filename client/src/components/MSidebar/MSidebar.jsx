@@ -22,7 +22,7 @@ const Sidebar = () => {
         <NavLink className="sidebar-link" to="/manager/profile" >My Profile</NavLink>
         <NavLink className="sidebar-link" to="/manager/dashboard" >Dashboard</NavLink>
         <NavLink className="sidebar-link" to="/manager/data-reports" >Data Reports</NavLink>
-        <NavLink className="sidebar-link" to="/manager/expense-form" >Expense Form</NavLink>
+        <NavLink className="sidebar-link" to="/manager/expense-form" >Manage Departments</NavLink>
 
         <NavLink className="sidebar-link" to="/manager/maintenance">Maintenance Requests</NavLink>
         <NavLink className="sidebar-link" to="/manager/manage-employees">Manage Employees</NavLink>
