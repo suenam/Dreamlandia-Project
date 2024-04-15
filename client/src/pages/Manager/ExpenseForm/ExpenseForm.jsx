@@ -13,17 +13,18 @@ const ExpenseForm = () => {
   const [expenseType, setExpenseType] = useState('');
   const [attractionList, setAttractionList] = useState([]);
   const [selectedAttractionId, setSelectedAttractionId] = useState('');
-  const [openDeleteSuccessModal, setOpenDeleteSuccessModal] = useState(false);
-const [openDeleteFailureModal, setOpenDeleteFailureModal] = useState(false);
-
-const handleCloseDeleteSuccessModal = () => {
-  setOpenDeleteSuccessModal(false);
-};
-
-const handleCloseDeleteFailureModal = () => {
-  setOpenDeleteFailureModal(false);
-};
   
+  const [openDeleteSuccessModal, setOpenDeleteSuccessModal] = useState(false);
+  const [openDeleteFailureModal, setOpenDeleteFailureModal] = useState(false);
+
+ 
+  const handleCloseDeleteSuccessModal = () => {
+    setOpenDeleteSuccessModal(false);
+  };
+
+  const handleCloseDeleteFailureModal = () => {
+    setOpenDeleteFailureModal(false);
+  };
 
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailureModal, setOpenFailureModal] = useState(false);
@@ -40,6 +41,7 @@ const handleCloseDeleteFailureModal = () => {
 
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showAttractionForm, setShowAttractionForm] = useState(false);
+  const [showDeleteAttractionForm, setShowDeleteAttractionForm] = useState(false);
 
   useEffect(() => {
     const fetchStaffId = async () => {
@@ -105,7 +107,6 @@ const handleCloseDeleteFailureModal = () => {
     setOpenFailureModal(false);
   };
 
-  // Attraction Form
   const [formData, setFormData] = useState({
     name: '',
     type: '',
@@ -126,6 +127,7 @@ const handleCloseDeleteFailureModal = () => {
   const handleImageChange = (e) => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
+
   useEffect(() => {
     const fetchAttractionList = async () => {
       try {
@@ -145,18 +147,18 @@ const handleCloseDeleteFailureModal = () => {
         setAttractionList(data.attractions);
       } catch (error) {
         console.error('Error fetching attraction list:', error);
-        // Set attractionList to an empty array in case of error
         setAttractionList([]);
       }
     };
 
     fetchAttractionList();
   }, []);
+
+  const handleDeleteAttraction = async (e) => {
+    e.preventDefault();
   
-  
-  const handleDeleteAttraction = async () => {
     try {
-      console.log("Selected Attraction ID:", selectedAttractionId);
+      console.log('Selected Attraction ID:', selectedAttractionId);
   
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/delete-attraction`, {
         method: 'DELETE',
@@ -167,24 +169,99 @@ const handleCloseDeleteFailureModal = () => {
       });
   
       if (response.ok) {
-        setOpenDeleteSuccessModal(true); 
+        setOpenDeleteSuccessModal(true);
       } else {
-        setOpenDeleteFailureModal(true); 
-
+        setOpenDeleteFailureModal(true);
       }
     } catch (error) {
-      console.error('Error deleting attraction:', error);
-      console.log("!!!!!");
+        setOpenDeleteFailureModal(true);
 
-      setOpenDeleteFailureModal(true); // Update state variable for failure modal
+      console.error('Error deleting attraction:', error);
     }
   };
+  const [showAddMerchandiseForm, setShowAddMerchandiseForm] = useState(false);
+  const [merchandiseFormData, setMerchandiseFormData] = useState({
+    name: '',
+    type: '',
+    supplierCost: '',
+    sellingCost: '',
+    image: '',
+  });
   
- 
+  const [openMerchandiseSuccessModal, setOpenMerchandiseSuccessModal] = useState(false);
+  const [openMerchandiseFailureModal, setOpenMerchandiseFailureModal] = useState(false);
+  const [merchandiseMessage, setMerchandiseMessage] = useState('');
+  const handleMerchandiseInputChange = (e) => {
+    setMerchandiseFormData({
+      ...merchandiseFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleCloseMerchandiseSuccessModal = () => {
+    setOpenMerchandiseSuccessModal(false);
+  };
+
+  const handleCloseMerchandiseFailureModal = () => {
+    setOpenMerchandiseFailureModal(false);
+  };
+  const [showDeleteMerchandiseForm, setShowDeleteMerchandiseForm] = useState(false);
+  const [selectedMerchandiseId, setSelectedMerchandiseId] = useState('');
+  const [merchandiseList, setMerchandiseList] = useState([]);
+  const handleAddMerchandiseSubmit = async (e) => {
+    e.preventDefault();
+    console.log( merchandiseFormData.name);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/insert-new-merch`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: merchandiseFormData.name,
+          type: merchandiseFormData.type,
+          supplierCost: merchandiseFormData.supplierCost,
+          sellingCost: merchandiseFormData.sellingCost,
+          image: merchandiseFormData.image,
+        }),
+      });
   
+      if (response.ok) {
+        const data = await response.json();
+        setOpenMerchandiseSuccessModal(true);
+        setMerchandiseMessage(data.message);
+        setMerchandiseFormData({
+          name: '',
+          type: '',
+          supplierCost: '',
+          sellingCost: '',
+          image: '',
+        });
+      } else {
+        setOpenMerchandiseFailureModal(true);
+        setMerchandiseMessage('Error submitting merchandise. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error submitting merchandise:', error);
+      setOpenMerchandiseFailureModal(true);
+      setMerchandiseMessage('Error submitting merchandise. Please try again later.');
+    }
+  };
+
+  const handleDeleteMerchandise = async (e) => {
+    e.preventDefault();
+    try {
+      // Your logic to delete the selected merchandise
+      console.log('Deleting merchandise with ID:', selectedMerchandiseId);
+      // Refresh the merchandise list
+      await fetchMerchandiseList();
+    } catch (error) {
+      console.error('Error deleting merchandise:', error);
+    }
+  };
+
   const handleAttractionSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/insert-new-attractions`, {
         method: 'POST',
@@ -202,11 +279,10 @@ const handleCloseDeleteFailureModal = () => {
           image: formData.image,
         }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         setOpenAttractionSuccessModal(true);
-
         setMessage(data.message);
         setFormData({
           name: '',
@@ -220,7 +296,6 @@ const handleCloseDeleteFailureModal = () => {
         });
       } else {
         setOpenAttractionFailureModal(true);
-
         setMessage('Error submitting attraction. Please try again later.');
       }
     } catch (error) {
@@ -279,8 +354,9 @@ const handleCloseDeleteFailureModal = () => {
                 <option value="utilities">Utilities</option>
               </select>
             </div>
-            <button type="submit" onClick={handleExpenseSubmit}>Submit Expense</button>
-
+            <button type="submit" onClick={handleExpenseSubmit}>
+              Submit Expense
+            </button>
           </form>
         )}
       </div>
@@ -290,11 +366,10 @@ const handleCloseDeleteFailureModal = () => {
           onClick={() => setShowAttractionForm(!showAttractionForm)}
           className={`show-hide-button ${showAttractionForm ? 'hide' : 'show'}`}
         >
-          {showAttractionForm ? '▲ Attraction Form' : '▼ Attraction Form'}
+          {showAttractionForm ? '▲ Add Attraction' : '▼ Add Attraction'}
         </button>
 
         {showAttractionForm && (
-          <>
           <form onSubmit={handleAttractionSubmit}>
             <div className="form-header">
               <h3>Add Attraction</h3>
@@ -368,13 +443,24 @@ const handleCloseDeleteFailureModal = () => {
                 required
               />
             </div>
-            <button type="submit" onClick={handleAttractionSubmit}>Add Attraction</button>
-            </form>
-            <div className="form-header">
-              <h3>Delete Form</h3>
-              <i title="Form for managers to add new attractions.">&#9432;</i>
-            </div>
-            <div className="form-row">
+            <button type="submit" onClick={handleAttractionSubmit}>
+              Add Attraction
+            </button>
+          </form>
+        )}
+      </div>
+
+      <div className="expense-section">
+        <button
+          onClick={() => setShowDeleteAttractionForm(!showDeleteAttractionForm)}
+          className={`show-hide-button ${showDeleteAttractionForm ? 'hide' : 'show'}`}
+        >
+          {showDeleteAttractionForm ? '▲ Delete Attraction' : '▼ Delete Attraction'}
+        </button>
+
+        {showDeleteAttractionForm && (
+  <form onSubmit={handleDeleteAttraction}>
+    <div className="form-row">
       <label>Select Attraction:</label>
       <select
         value={selectedAttractionId}
@@ -391,13 +477,83 @@ const handleCloseDeleteFailureModal = () => {
           <option disabled>Loading...</option>
         )}
       </select>
-          <button onClick={handleDeleteAttraction}>Delete Attraction</button>
-          </div>
-            </>
-        )}
-          </div>
+    </div>
+    <button type="submit" onClick={handleDeleteAttraction}>Delete Attraction</button>
+  </form>
+)}
+<div className="expense-section">
+  <button
+    onClick={() => setShowAddMerchandiseForm(!showAddMerchandiseForm)}
+    className={`show-hide-button ${showAddMerchandiseForm ? 'hide' : 'show'}`}
+  >
+    {showAddMerchandiseForm ? '▲ Add Merchandise' : '▼ Add Merchandise'}
+  </button>
 
-      <Modal
+  {showAddMerchandiseForm && (
+    <form onSubmit={handleAddMerchandiseSubmit}>
+      <div className="form-header">
+        <h3>Add Merchandise</h3>
+        <i title="Form for managers to add new merchandise.">&#9432;</i>
+      </div>
+      <div className="form-row">
+        <label>Name:<span className="required">*</span></label>
+        <input type="text" name="name" value={merchandiseFormData.name} onChange={handleMerchandiseInputChange} required />
+      </div>
+      <div className="form-row">
+        <label>Type:<span className="required">*</span></label>
+        <input type="text" name="type" value={merchandiseFormData.type} onChange={handleMerchandiseInputChange} required />
+      </div>
+      <div className="form-row">
+        <label>Supplier Cost:<span className="required">*</span></label>
+        <input type="number" name="supplierCost" value={merchandiseFormData.supplierCost} onChange={handleMerchandiseInputChange} required />
+      </div>
+      <div className="form-row">
+        <label>Selling Cost:<span className="required">*</span></label>
+        <input type="number" name="sellingCost" value={merchandiseFormData.sellingCost} onChange={handleMerchandiseInputChange} required />
+      </div>
+      <div className="form-row">
+        <label>Image:<span className="required">*</span></label>
+        <input type="text" name="image" value={merchandiseFormData.image} onChange={handleMerchandiseInputChange} required />
+      </div>
+      <button type="submit" onClick={handleAddMerchandiseSubmit}>
+        Add Merchandise
+      </button>
+    </form>
+  )}
+</div>
+<div className="expense-section">
+  <button
+    onClick={() => setShowDeleteMerchandiseForm(!showDeleteMerchandiseForm)}
+    className={`show-hide-button ${showDeleteMerchandiseForm ? 'hide' : 'show'}`}
+  >
+    {showDeleteMerchandiseForm ? '▲ Delete Merchandise' : '▼ Delete Merchandise'}
+  </button>
+
+  {showDeleteMerchandiseForm && (
+    <form onSubmit={handleDeleteMerchandise}>
+      <div className="form-row">
+        <label>Select Merchandise:</label>
+        <select value={selectedMerchandiseId} onChange={(e) => setSelectedMerchandiseId(e.target.value)}>
+          <option value="">Select Merchandise</option>
+          {merchandiseList.length > 0 ? (
+            merchandiseList.map((merchandise) => (
+              <option key={merchandise.MId} value={merchandise.MId}>
+                {merchandise.MName}
+              </option>
+            ))
+          ) : (
+            <option disabled>Loading...</option>
+          )}
+        </select>
+      </div>
+      <button type="submit" onClick={handleDeleteMerchandise}>
+        Delete Merchandise
+      </button>
+    </form>
+  )}
+</div>
+      </div>
+<Modal
         open={openSuccessModal}
         onClose={handleCloseSuccessModal}
         aria-labelledby="success-modal-title"
@@ -581,6 +737,130 @@ const handleCloseDeleteFailureModal = () => {
     </button>
   </Box>
 </Modal>
+
+      <Modal
+        open={openDeleteSuccessModal}
+        onClose={handleCloseDeleteSuccessModal}
+        aria-labelledby="delete-success-modal-title"
+        aria-describedby="delete-success-modal-description"
+        className="modal-container success-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="delete-success-modal-title" className="modal-title">
+            Attraction Deleted
+          </h2>
+          <p id="delete-success-modal-description" className="modal-description">
+            The attraction has been deleted successfully.
+          </p>
+          <button onClick={handleCloseDeleteSuccessModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openDeleteFailureModal}
+        onClose={handleCloseDeleteFailureModal}
+        aria-labelledby="delete-failure-modal-title"
+        aria-describedby="delete-failure-modal-description"
+        className="modal-container failure-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="delete-failure-modal-title" className="modal-title">
+            Failed to Delete Attraction
+          </h2>
+          <p id="delete-failure-modal-description" className="modal-description">
+            There was an error while deleting the attraction. Please try again later.
+          </p>
+          <button onClick={handleCloseDeleteFailureModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
+      <Modal
+        open={openMerchandiseSuccessModal}
+        onClose={handleCloseMerchandiseSuccessModal}
+        aria-labelledby="merchandise-success-modal-title"
+        aria-describedby="merchandise-success-modal-description"
+        className="modal-container success-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="merchandise-success-modal-title" className="modal-title">
+            Merchandise Submitted
+          </h2>
+          <p id="merchandise-success-modal-description" className="modal-description">
+            {merchandiseMessage}
+          </p>
+          <button onClick={handleCloseMerchandiseSuccessModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openMerchandiseFailureModal}
+        onClose={handleCloseMerchandiseFailureModal}
+        aria-labelledby="merchandise-failure-modal-title"
+        aria-describedby="merchandise-failure-modal-description"
+        className="modal-container failure-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="merchandise-failure-modal-title" className="modal-title">
+            Failed to Submit Merchandise
+          </h2>
+          <p id="merchandise-failure-modal-description" className="modal-description">
+            {merchandiseMessage}
+          </p>
+          <button onClick={handleCloseMerchandiseFailureModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
+
 
     </div>
   );

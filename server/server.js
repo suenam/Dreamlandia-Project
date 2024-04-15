@@ -40,6 +40,7 @@ const getAttractions = require("./getAttractions");
 const insertNewAttractions = require("./insertNewAttractions");
 const deleteAttraction = require("./deleteAttraction");
 const getMerch = require("./getMerch");
+const addMerch = require("./addMerch");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -204,6 +205,9 @@ const server = http.createServer((req, res) => {
     }
     else if(req.url === '/insert-new-attractions' && req.method === 'POST') {
       insertNewAttractions(req, res);
+    }
+    else if(req.url === '/insert-new-merch' && req.method === 'POST') {
+      addMerch(req, res);
     }
     else if(req.url === '/delete-attraction' && req.method === 'DELETE') {
       getPostData(req)
