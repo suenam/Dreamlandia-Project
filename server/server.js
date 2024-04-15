@@ -41,6 +41,7 @@ const insertNewAttractions = require("./insertNewAttractions");
 const deleteAttraction = require("./deleteAttraction");
 const getMerch = require("./getMerch");
 const addMerch = require("./addMerch");
+const deleteMerch = require("./deleteMerch");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -215,6 +216,18 @@ const server = http.createServer((req, res) => {
           console.log(body);
           const id = body.id;
           deleteAttraction(req, res, id);
+        })
+        .catch((err) => {
+          console.error('Error parsing request body:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
+        });
+    }else if(req.url === '/delete-merch' && req.method === 'DELETE') {
+      getPostData(req)
+        .then((body) => {
+          console.log(body);
+          const id = body.id;
+          deleteMerch(req, res, id);
         })
         .catch((err) => {
           console.error('Error parsing request body:', err);

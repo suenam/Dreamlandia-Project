@@ -127,7 +127,31 @@ const ExpenseForm = () => {
   const handleImageChange = (e) => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
+  useEffect(() => {
+    const fetchMerchandiseList = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/get-merch`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
+        if (!response.ok) {
+          throw new Error('Failed to fetch merchandise list');
+        }
+
+        const data = await response.json();
+        console.log('merchandise list data:', data);
+        setMerchandiseList(data.merchandise);
+      } catch (error) {
+        console.error('Error fetching merchandise list:', error);
+        fetchMerchandiseList([]);
+      }
+    };
+
+    fetchMerchandiseList();
+  }, []);
   useEffect(() => {
     const fetchAttractionList = async () => {
       try {
@@ -153,7 +177,27 @@ const ExpenseForm = () => {
 
     fetchAttractionList();
   }, []);
+  const handleDeleteMerchandise = async (e) => {
+    e.preventDefault();
 
+    try {
+      console.log('Selected merch ID:', selectedMerchandiseId);
+
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/delete-merch`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: selectedMerchandiseId }),
+      });
+      if(response.ok){
+        console.log("done");
+      }
+    
+    } catch (error) {
+      console.error('Error deleting merchandise:', error);
+    }
+  };
   const handleDeleteAttraction = async (e) => {
     e.preventDefault();
   
@@ -247,17 +291,7 @@ const ExpenseForm = () => {
     }
   };
 
-  const handleDeleteMerchandise = async (e) => {
-    e.preventDefault();
-    try {
-      // Your logic to delete the selected merchandise
-      console.log('Deleting merchandise with ID:', selectedMerchandiseId);
-      // Refresh the merchandise list
-      await fetchMerchandiseList();
-    } catch (error) {
-      console.error('Error deleting merchandise:', error);
-    }
-  };
+  
 
   const handleAttractionSubmit = async (e) => {
     e.preventDefault();
@@ -305,10 +339,14 @@ const ExpenseForm = () => {
     }
   };
 
+const handleMerchandiseSelect = (e) => {
+  setSelectedMerchandiseId(e.target.value);
+};
+
   return (
     <div className="expense-form">
       <MSidebar />
-      <h1 className="h1-expense-form">Forms</h1>
+      <h1 className="h1-expense-form">Manage Departments</h1>
 
       <div className="expense-section">
         <button
@@ -533,18 +571,14 @@ const ExpenseForm = () => {
     <form onSubmit={handleDeleteMerchandise}>
       <div className="form-row">
         <label>Select Merchandise:</label>
-        <select value={selectedMerchandiseId} onChange={(e) => setSelectedMerchandiseId(e.target.value)}>
-          <option value="">Select Merchandise</option>
-          {merchandiseList.length > 0 ? (
-            merchandiseList.map((merchandise) => (
-              <option key={merchandise.MId} value={merchandise.MId}>
-                {merchandise.MName}
-              </option>
-            ))
-          ) : (
-            <option disabled>Loading...</option>
-          )}
-        </select>
+        <select value={selectedMerchandiseId} onChange={handleMerchandiseSelect}>
+    <option value="">Select Merchandise</option>
+    {merchandiseList.map((merchandise) => (
+      <option key={merchandise.MId} value={merchandise.MId}>
+        {merchandise.name}
+      </option>
+    ))}
+  </select>
       </div>
       <button type="submit" onClick={handleDeleteMerchandise}>
         Delete Merchandise

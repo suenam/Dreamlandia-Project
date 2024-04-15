@@ -5,6 +5,7 @@ async function getMerch(req, res) {
   try {
     const [result] = await pool.execute('SELECT * FROM merchandise');
     const merchandise = result.map((row) => ({
+      MId: row.ItemID,
       name: row.MName,
       image: row.MImage,
       type: row.MType,
