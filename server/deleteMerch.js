@@ -4,8 +4,7 @@ const getPostData = require('./postDataParser');
 async function deleteMerch(req, res, id) {
   try {
     console.log(id);
-    await pool.execute('DELETE FROM merchandise_order_detail WHERE ItemID = ?', [id]);
-    const [result] = await pool.execute('DELETE FROM merchandise WHERE ItemID = ?', [id]);
+    const [result] = await pool.execute('UPDATE merchandise set MActive=0 WHERE ItemID = ?', [id]);
   } catch (error) {
     console.error('Error deleting merch:', error);
   }

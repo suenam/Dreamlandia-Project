@@ -40,7 +40,12 @@ const ExpenseForm = () => {
   const staffIdRef = useRef(null);
 
   const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [showDeleteRestForm, setShowDeleteRestForm] = useState(false);
+
+  
   const [showAttractionForm, setShowAttractionForm] = useState(false);
+  const [showRestForm, setShowRestForm] = useState(false);
+
   const [showDeleteAttractionForm, setShowDeleteAttractionForm] = useState(false);
 
   useEffect(() => {
@@ -153,6 +158,31 @@ const ExpenseForm = () => {
     fetchMerchandiseList();
   }, []);
   useEffect(() => {
+    const fetchRestList = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/get-rest`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch merchandise list');
+        }
+
+        const data = await response.json();
+        console.log('rest list data:', data);
+        setRestList(data.restaurants);
+      } catch (error) {
+        console.error('Error fetching rest list:', error);
+        fetchRestList([]);
+      }
+    };
+
+    fetchRestList();
+  }, []);
+  useEffect(() => {
     const fetchAttractionList = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/attractions`, {
@@ -184,7 +214,7 @@ const ExpenseForm = () => {
       console.log('Selected merch ID:', selectedMerchandiseId);
 
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/delete-merch`, {
-        method: 'DELETE',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -198,6 +228,7 @@ const ExpenseForm = () => {
       console.error('Error deleting merchandise:', error);
     }
   };
+  
   const handleDeleteAttraction = async (e) => {
     e.preventDefault();
   
@@ -205,7 +236,7 @@ const ExpenseForm = () => {
       console.log('Selected Attraction ID:', selectedAttractionId);
   
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/delete-attraction`, {
-        method: 'DELETE',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -221,6 +252,32 @@ const ExpenseForm = () => {
         setOpenDeleteFailureModal(true);
 
       console.error('Error deleting attraction:', error);
+    }
+  };
+  const [selectedRestId, setSelectedRestId] = useState('');
+
+  const handleDeleteRest = async (e) => {
+    e.preventDefault();
+  
+    try {
+  
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/delete-rest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: selectedRestId }),
+      });
+  
+      if (response.ok) {
+        setOpenDeleteSuccessModal(true);
+      } else {
+        setOpenDeleteFailureModal(true);
+      }
+    } catch (error) {
+        setOpenDeleteFailureModal(true);
+
+      console.error('Error deleting rest:', error);
     }
   };
   const [showAddMerchandiseForm, setShowAddMerchandiseForm] = useState(false);
@@ -241,6 +298,12 @@ const ExpenseForm = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const handleRestInputChange = (e) => {
+    setrestFormData({
+      ...restFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
   const handleCloseMerchandiseSuccessModal = () => {
     setOpenMerchandiseSuccessModal(false);
   };
@@ -251,6 +314,8 @@ const ExpenseForm = () => {
   const [showDeleteMerchandiseForm, setShowDeleteMerchandiseForm] = useState(false);
   const [selectedMerchandiseId, setSelectedMerchandiseId] = useState('');
   const [merchandiseList, setMerchandiseList] = useState([]);
+  const [restList, setRestList] = useState([]);
+
   const handleAddMerchandiseSubmit = async (e) => {
     e.preventDefault();
     console.log( merchandiseFormData.name);
@@ -291,8 +356,60 @@ const ExpenseForm = () => {
     }
   };
 
+  const [showAddRestForm, setshowAddRestForm] = useState(false);
+  const [restFormData, setrestFormData] = useState({
+    name: '',
+    type: '',
+    amount: '',
+    description: '',
+    image: '',
+  });
   
+  const handleAddRestSubmit = async (e) => {
+    e.preventDefault();
+    console.log(restFormData.name);
+    try {
+      let amount = 0;
+      switch (restFormData.type.toLowerCase()) {
+        case 'standard':
+          amount = 10;
+          break;
+        case 'deluxe':
+          amount = 35;
+          break;
+        case 'special':
+          amount = 45;
+          break;
+        default:
+          amount = 0;
+          break;
+      }
 
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/insert-new-rest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: restFormData.name,
+          type: restFormData.type,
+          amount: amount,
+          description: restFormData.description,
+          image: restFormData.image,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setOpenMerchandiseSuccessModal(true);
+      } else {
+        setOpenMerchandiseFailureModal(true);
+      }
+    } catch (error) {
+      console.error('Error submitting rest:', error);
+      setOpenMerchandiseFailureModal(true);
+    }
+  };
   const handleAttractionSubmit = async (e) => {
     e.preventDefault();
 
@@ -341,6 +458,9 @@ const ExpenseForm = () => {
 
 const handleMerchandiseSelect = (e) => {
   setSelectedMerchandiseId(e.target.value);
+};
+const handleResteSelect = (e) => {
+  setSelectedRestId(e.target.value);
 };
 
   return (
@@ -587,6 +707,94 @@ const handleMerchandiseSelect = (e) => {
   )}
 </div>
       </div>
+
+      <div className="expense-section">
+        <button
+          onClick={() => setShowRestForm(!showRestForm)}
+          className={`show-hide-button ${showRestForm ? 'hide' : 'show'}`}
+        >
+          {showRestForm ? '▲ Add Restaurant' : '▼ Add Restaurant'}
+        </button>
+
+        {showRestForm && (
+          <form onSubmit={handleAddRestSubmit}>
+            <div className="form-header">
+              <h3>Add Restaurant</h3>
+              <i title="Form for managers to add new Restaurants.">&#9432;</i>
+            </div>
+            <div className="form-row">
+              <label>Name:<span className="required">*</span></label>
+              <input
+                type="text"
+                name="name"
+                value={restFormData.name}
+                onChange={handleRestInputChange}
+                required
+              />
+            </div>
+            <div className="form-row">
+              <label>Type:<span className="required">*</span></label>
+              <input
+                type="text"
+                name="type"
+                value={restFormData.type}
+                onChange={handleRestInputChange}
+                required
+              />
+            </div>
+            <div className="form-row">
+              <label>Description:<span className="required">*</span></label>
+              <textarea
+                name="description"
+                value={restFormData.description}
+                onChange={handleRestInputChange}
+                required
+              ></textarea>
+            </div>
+            
+            <div className="form-row">
+              <label>Image:<span className="required">*</span></label>
+              <input
+                type="text"
+                name="image"
+                value={restFormData.image}
+                onChange={handleRestInputChange}
+                required
+              />
+            </div>
+            <button type="submit" onClick={handleAddRestSubmit}>
+              Add Restaurant
+            </button>
+          </form>
+        )}
+      </div>
+      <div className="expense-section">
+  <button
+    onClick={() => setShowDeleteRestForm(!showDeleteRestForm)}
+    className={`show-hide-button ${showDeleteRestForm ? 'hide' : 'show'}`}
+  >
+    {showDeleteRestForm ? '▲ Delete Restaurant' : '▼ Delete Restaurant'}
+  </button>
+
+  {showDeleteRestForm && (
+  <form onSubmit={handleDeleteRest}>
+    <div className="form-row">
+      <label>Select Restaurant:</label>
+      <select value={selectedRestId} onChange={handleResteSelect}>
+        <option value="">Select Restaurant</option>
+        {restList.map((restaurant) => (
+          <option key={restaurant.id} value={restaurant.id}>
+            {restaurant.name}
+          </option>
+        ))}
+      </select>
+    </div>
+    <button type="submit" onClick={handleDeleteRest}>
+      Delete Rest
+    </button>
+  </form>
+)}
+</div>
 <Modal
         open={openSuccessModal}
         onClose={handleCloseSuccessModal}

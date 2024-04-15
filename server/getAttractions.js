@@ -3,7 +3,7 @@ const pool = require('./database');
 
 async function getAttractions(req, res) {
   try {
-    const [result] = await pool.execute('SELECT * FROM attraction');
+    const [result] = await pool.execute('SELECT * FROM attraction where AActive=1');
     const attractions = result.map((row) => ({
       name: row.AName,
       image: row.image,

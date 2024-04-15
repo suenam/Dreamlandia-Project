@@ -61,12 +61,32 @@ const Tickets = () => {
 
     fetchAttractions();
   }, []);
-  const updateMealTicket = (mealKey, value) => {
-    setFoodTickets((prevFoodTickets) => ({
+  const [restaurant, setRestaurant] = useState([]);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/get-rest`
+        );
+        const { restaurants } = await response.json();
+        setRestaurants(restaurants);
+      } catch (error) {
+        console.error("Error fetching restaurant:", error);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+  const updateMealTicket = (mealType, restaurantId, value) => {
+    const mealKey = `${mealType}Meal${restaurantId}`;
+    console.log(foodTickets);
+    setFoodTickets(prevFoodTickets => ({
       ...prevFoodTickets,
-      [mealKey]: prevFoodTickets[mealKey] + value,
+      [mealKey]: Math.max(0, prevFoodTickets[mealKey] + value) 
     }));
   };
+  
 
   const setAttractionFn = (newAttraction) => {
     if (!selectedAttractions.includes(newAttraction)) {
@@ -77,6 +97,7 @@ const Tickets = () => {
       );
     }
   };
+  const [restaurants, setRestaurants] = useState([]);
 
   const [errorState, setErrorState] = useState(false);
 
@@ -102,7 +123,7 @@ const Tickets = () => {
     shoppingCartContext.setMealTickets({
       ...foodTickets,
     });
-
+    
     shoppingCartContext.setAttractions(selectedAttractions);
     shoppingCartContext.setDate(visitDate);
     return true;
@@ -226,184 +247,139 @@ const Tickets = () => {
 
         <div className="meal-content">
           <div className="select-meals">
-            <h2>Select your meal vouchers (one per person) </h2>
+            <h2>Select your meal vouchers (one per person)</h2>
             <div className="meal-options">
               <div className="meal-options-col">
-                <h4>Standard ($10/ea) </h4>
+                <h4>Standard ($10/ea)</h4>
                 <i>Quick eats and quick service</i>
-                <div className="meal-option">
-                  <img src={Burger} />
-                  <h3> WhataSandwich </h3>
-                  <span>
-                    {" "}
-                    Step into WhataSandwich for a burst of flavor with every
-                    bite, where fast meets fresh in a celebration of the world's
-                    most beloved handheld delight!{" "}
-                  </span>
-                  <div className="remove-add-tickets">
-                    <RemoveCircleOutlineIcon
-                      fontSize="large"
-                      pointerEvents={
-                        foodTickets.standardMeal1 === 0 ? "none" : ""
-                      }
-                      color={foodTickets.standardMeal1 === 0 ? "action" : ""}
-                      onClick={() => updateMealTicket("standardMeal1", -1)}
-                    />
-                    <div className="ticket-count">
-                      {foodTickets.standardMeal1}
-                    </div>
-                    <AddCircleOutlineIcon
-                      fontSize="large"
-                      onClick={() => updateMealTicket("standardMeal1", 1)}
-                    />
-                  </div>
-                </div>
 
-                <div className="meal-option">
-                  <img src={WhiteCastle} />
-                  <h3> Burger Castle </h3>
-                  <span>
-                    {" "}
-                    Embark on a regal journey at Burger Castle, where every bite
-                    of our majestic burgers unlocks a kingdom of fresh flavors
-                    and unparalleled satisfaction!{" "}
-                  </span>
-                  <div className="remove-add-tickets">
-                    <RemoveCircleOutlineIcon
-                      fontSize="large"
-                      pointerEvents={
-                        foodTickets.standardMeal2 === 0 ? "none" : ""
-                      }
-                      color={foodTickets.standardMeal2 === 0 ? "action" : ""}
-                      onClick={() => updateMealTicket("standardMeal2", -1)}
-                    />
-                    <div className="ticket-count">
-                      {foodTickets.standardMeal2}
-                    </div>
-                    <AddCircleOutlineIcon
-                      fontSize="large"
-                      onClick={() => updateMealTicket("standardMeal2", 1)}
-                    />
-                  </div>
-                </div>
+                {restaurants.map((restaurant) => {
+                  if (restaurant.type === "Standard") {
+                    return (
+                      <div key={restaurant.id} className="meal-option">
+                        <img src={restaurant.image} />
+                        <h3>{restaurant.name}</h3>
+                        <span>{restaurant.description}</span>
+                        <div className="remove-add-tickets">
+                          <RemoveCircleOutlineIcon
+                            fontSize="large"
+                            pointerEvents={
+                              foodTickets[`standard${restaurant.id}`] === 0
+                                ? "none"
+                                : ""
+                            }
+                            color={
+                              foodTickets[`standard${restaurant.id}`] === 0
+                                ? "action"
+                                : ""
+                            }
+                            onClick={() =>
+                              updateMealTicket("standard", restaurant.id, -1)
+                            }
+                          />
+                          <div className="ticket-count">
+                            {foodTickets[`standardMeal${restaurant.id}`]}
+                          </div>
+                          <AddCircleOutlineIcon
+                            fontSize="large"
+                            onClick={() =>
+                              updateMealTicket("standard", restaurant.id, 1)
+                            }
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
               </div>
 
               <div className="meal-options-col">
                 <h4>Deluxe ($35/ea)</h4>
-                <i>Fine dining in luxury </i>
-                <div className="meal-option">
-                  <img src={Steak} />
-                  <h3> The Velvet Vineyard </h3>
-                  <span>
-                    {" "}
-                    Discover The Velvet Vineyard, where exquisite dishes meet
-                    the artistry of wine in an elegant symphony of flavors.{" "}
-                  </span>
-                  <div className="remove-add-tickets">
-                    <RemoveCircleOutlineIcon
-                      fontSize="large"
-                      pointerEvents={
-                        foodTickets.deluxeMeal1 === 0 ? "none" : ""
-                      }
-                      color={foodTickets.deluxeMeal1 === 0 ? "action" : ""}
-                      onClick={() => updateMealTicket("deluxeMeal1", -1)}
-                    />
-                    <div className="ticket-count">
-                      {foodTickets.deluxeMeal1}
-                    </div>
-                    <AddCircleOutlineIcon
-                      fontSize="large"
-                      onClick={() => updateMealTicket("deluxeMeal1", 1)}
-                    />
-                  </div>
-                </div>
-
-                <div className="meal-option">
-                  <img src={SilverSpoon} />
-                  <h3> Silver Spoon Serenade </h3>
-                  <span>
-                    {" "}
-                    Experience culinary poetry at Silver Spoon Serenade, where
-                    every dish is a masterpiece harmonizing with the symphony of
-                    upscale elegance.
-                  </span>
-                  <div className="remove-add-tickets">
-                    <RemoveCircleOutlineIcon
-                      fontSize="large"
-                      pointerEvents={
-                        foodTickets.deluxeMeal2 === 0 ? "none" : ""
-                      }
-                      color={foodTickets.deluxeMeal2 === 0 ? "action" : ""}
-                      onClick={() => updateMealTicket("deluxeMeal2", -1)}
-                    />
-                    <div className="ticket-count">
-                      {foodTickets.deluxeMeal2}
-                    </div>
-                    <AddCircleOutlineIcon
-                      fontSize="large"
-                      onClick={() => updateMealTicket("deluxeMeal2", 1)}
-                    />
-                  </div>
-                </div>
+                <i>Fine dining in luxury</i>
+                {restaurants.map((restaurant) => {
+                  if (restaurant.type === "Deluxe") {
+                    return (
+                      <div key={restaurant.id} className="meal-option">
+                        <img src={restaurant.image} />
+                        <h3>{restaurant.name}</h3>
+                        <span>{restaurant.description}</span>
+                        <div className="remove-add-tickets">
+                          <RemoveCircleOutlineIcon
+                            fontSize="large"
+                            pointerEvents={
+                              foodTickets[`deluxeMeal${restaurant.id}`] === 0
+                                ? "none"
+                                : ""
+                            }
+                            color={
+                              foodTickets[`deluxeMeal${restaurant.id}`] === 0
+                                ? "action"
+                                : ""
+                            }
+                            onClick={() =>
+                              updateMealTicket("deluxe", restaurant.id, -1)
+                            }
+                          />
+                          <div className="ticket-count">
+                            {foodTickets[`deluxeMeal${restaurant.id}`]}
+                          </div>
+                          <AddCircleOutlineIcon
+                            fontSize="large"
+                            onClick={() =>
+                              updateMealTicket("deluxe", restaurant.id, 1)
+                            }
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
               </div>
 
               <div className="meal-options-col">
                 <h4>Special ($45/ea)</h4>
                 <i>Themed character restaurants</i>
-                <div className="meal-option">
-                  <img src={MyMelody} />
-                  <h3> HerHarmony Eatery </h3>
-                  <span>
-                    {" "}
-                    Step into a world of whimsy at HerHarmony Eatery, where
-                    HerHarmony invites you to indulge in delightfully themed
-                    dishes in a magical setting.
-                  </span>
-                  <div className="remove-add-tickets">
-                    <RemoveCircleOutlineIcon
-                      fontSize="large"
-                      pointerEvents={
-                        foodTickets.specialMeal1 === 0 ? "none" : ""
-                      }
-                      color={foodTickets.specialMeal1 === 0 ? "action" : ""}
-                      onClick={() => updateMealTicket("specialMeal1", -1)}
-                    />
-                    <div className="ticket-count">
-                      {foodTickets.specialMeal1}
-                    </div>
-                    <AddCircleOutlineIcon
-                      fontSize="large"
-                      onClick={() => updateMealTicket("specialMeal1", 1)}
-                    />
-                  </div>
-                </div>
-
-                <div className="meal-option">
-                  <img src={BellaFood} />
-                  <h3> Bella's Fairy Tale Feast </h3>
-                  <span>
-                    {" "}
-                    Dine in enchantment at Bella's Fairy Tale Feast, where
-                    beloved tales inspire every magical, themed dish.
-                  </span>
-                  <div className="remove-add-tickets">
-                    <RemoveCircleOutlineIcon
-                      fontSize="large"
-                      pointerEvents={
-                        foodTickets.specialMeal2 === 0 ? "none" : ""
-                      }
-                      color={foodTickets.specialMeal2 === 0 ? "action" : ""}
-                      onClick={() => updateMealTicket("specialMeal2", -1)}
-                    />
-                    <div className="ticket-count">
-                      {foodTickets.specialMeal2}
-                    </div>
-                    <AddCircleOutlineIcon
-                      fontSize="large"
-                      onClick={() => updateMealTicket("specialMeal2", 1)}
-                    />
-                  </div>
-                </div>
+                {restaurants.map((restaurant) => {
+                  if (restaurant.type === "Special") {
+                    return (
+                      <div key={restaurant.id} className="meal-option">
+                        <img src={restaurant.image} />
+                        <h3>{restaurant.name}</h3>
+                        <span>{restaurant.description}</span>
+                        <div className="remove-add-tickets">
+                          <RemoveCircleOutlineIcon
+                            fontSize="large"
+                            pointerEvents={
+                              foodTickets[`specialMeal${restaurant.id}`] === 0
+                                ? "none"
+                                : ""
+                            }
+                            color={
+                              foodTickets[`specialMeal${restaurant.id}`] === 0
+                                ? "action"
+                                : ""
+                            }
+                            onClick={() =>
+                              updateMealTicket("special", restaurant.id, -1)
+                            }
+                          />
+                          <div className="ticket-count">
+                            {foodTickets[`specialMeal${restaurant.id}`]}
+                          </div>
+                          <AddCircleOutlineIcon
+                            fontSize="large"
+                            onClick={() =>
+                              updateMealTicket("special", restaurant.id, 1)
+                            }
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
               </div>
             </div>
           </div>

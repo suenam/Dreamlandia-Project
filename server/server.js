@@ -42,6 +42,9 @@ const deleteAttraction = require("./deleteAttraction");
 const getMerch = require("./getMerch");
 const addMerch = require("./addMerch");
 const deleteMerch = require("./deleteMerch");
+const getRestaurant = require("./getRestaurant");
+const addRestaurant = require("./addRestaurant");
+const deleteRestaurant = require("./deleteRestaurant");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -204,13 +207,19 @@ const server = http.createServer((req, res) => {
     else if(req.url === '/get-merch' && req.method === 'GET') {
       getMerch(req, res);
     }
+    else if(req.url === '/get-rest' && req.method === 'GET') {
+      getRestaurant(req, res);
+    }
     else if(req.url === '/insert-new-attractions' && req.method === 'POST') {
       insertNewAttractions(req, res);
     }
     else if(req.url === '/insert-new-merch' && req.method === 'POST') {
       addMerch(req, res);
     }
-    else if(req.url === '/delete-attraction' && req.method === 'DELETE') {
+    else if(req.url === '/insert-new-rest' && req.method === 'POST') {
+      addRestaurant(req, res);
+    }
+    else if(req.url === '/delete-attraction' && req.method === 'POST') {
       getPostData(req)
         .then((body) => {
           console.log(body);
@@ -222,12 +231,24 @@ const server = http.createServer((req, res) => {
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
         });
-    }else if(req.url === '/delete-merch' && req.method === 'DELETE') {
+    }else if(req.url === '/delete-merch' && req.method === 'POST') {
       getPostData(req)
         .then((body) => {
           console.log(body);
           const id = body.id;
           deleteMerch(req, res, id);
+        })
+        .catch((err) => {
+          console.error('Error parsing request body:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
+        });
+    }else if(req.url === '/delete-rest' && req.method === 'POST') {
+      getPostData(req)
+        .then((body) => {
+          console.log(body);
+          const id = body.id;
+          deleteRestaurant(req, res, id);
         })
         .catch((err) => {
           console.error('Error parsing request body:', err);
