@@ -85,19 +85,15 @@ function DataReport() {
 
   const generateVisitTableSingleDining = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-      const totalVisitors = data.reduce(
-        (sum, row) => sum + parseInt(row.Visitors),
-        0
-      );
+      // Calculate the total visitors for the date range
+      const totalVisitors = data.reduce((sum, row) => sum + parseFloat(row.Visitors), 0);
+  
       return (
         <>
-          <button
-            onClick={exportToPDF}
-            className="data-report-exportPdf-dr-butt"
-          >
+          <button onClick={exportToPDF} className="data-report-exportPdf-dr-butt">
             Export to PDF
           </button>
-
+  
           <PDFExport
             paperSize="auto"
             fileName="data_report.pdf"
@@ -111,7 +107,7 @@ function DataReport() {
               </span>
             </h3>
             <p>{diningName}</p>
-
+  
             <table className="contact-table">
               <thead>
                 <tr>
@@ -128,7 +124,7 @@ function DataReport() {
                 ))}
                 <tr>
                   <td style={{ textAlign: "right", fontWeight: "bold" }}>
-                    Total Visitors:
+                    Total Visitors :
                   </td>
                   <td style={{ fontWeight: "bold" }}>{totalVisitors}</td>
                 </tr>
@@ -151,19 +147,23 @@ function DataReport() {
 
   const generateVisitTableAllDining = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-      const totalVisitors = data.reduce(
-        (sum, row) => sum + parseInt(row.Total),
-        0
-      );
+        // Calculate the total visitors for the date range
+        const totalVisitors = data.reduce((sum, row) => sum + parseFloat(row.Total), 0);
+      const transformedData = data.map((row) => {
+        const { TransactionDate, ...restaurants } = row;
+        return {
+          TransactionDate,
+          ...restaurants,
+        };
+      });
+  
+  
       return (
         <>
-          <button
-            onClick={exportToPDF}
-            className="data-report-exportPdf-dr-butt"
-          >
+          <button onClick={exportToPDF} className="data-report-exportPdf-dr-butt">
             Export to PDF
           </button>
-
+  
           <PDFExport
             paperSize="auto"
             fileName="data_report.pdf"
@@ -176,38 +176,30 @@ function DataReport() {
                 ({visitStartDate} - {visitEndDate})
               </span>
             </h3>
-
+  
             <table className="contact-table">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>Bella's Fairy Tale Feast</th>
-                  <th>Burger Castle</th>
-                  <th>HerHarmony Eatery</th>
-                  <th>Silver Spoon Serenade</th>
-                  <th>The Velvet Vineyard</th>
-                  <th>WhataSandwich</th>
-                  <th>Total</th>
+                  {Object.keys(transformedData[0])
+                    .filter((key) => key !== 'TransactionDate')
+                    .map((key) => <th key={key}>{key}</th>)}
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, index) => (
+                {transformedData.map((row, index) => (
                   <tr key={index}>
                     <td>{row.TransactionDate}</td>
-                    <td>{row["Bellas Fairy Tale Feast"]}</td>
-                    <td>{row["Burger Castle"]}</td>
-                    <td>{row["HerHarmony Eatery"]}</td>
-                    <td>{row["Silver Spoon Serenade"]}</td>
-                    <td>{row["The Velvet Vineyard"]}</td>
-                    <td>{row.WhataSandwich}</td>
-                    <td>{row.Total}</td>
+                    {Object.keys(row)
+                      .filter((key) => key !== 'TransactionDate')
+                      .map((key) => (
+                        <td key={key}>{row[key] || 0}</td>
+                      ))}
+                   
                   </tr>
                 ))}
                 <tr>
-                  <td
-                    colSpan="7"
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
+                  <td colSpan={Object.keys(transformedData[0]).length} style={{ textAlign: "right", fontWeight: "bold" }}>
                     Total Visitors:
                   </td>
                   <td style={{ fontWeight: "bold" }}>{totalVisitors}</td>
@@ -967,7 +959,36 @@ function DataReport() {
       );
     }
   };
+  const [restList, setRestList] = useState([]);
 
+  useEffect(() => {
+    const fetchRestList = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/get-rest`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch rest list");
+        }
+
+        const data = await response.json();
+        console.log("rest list data:", data);
+        setRestList(data.restaurants);
+      } catch (error) {
+        console.error("Error fetching rest list:", error);
+        fetchRestList([]);
+      }
+    };
+
+    fetchRestList();
+  }, []);
   const [showFinance, setShowFinance] = useState(false);
   const [showVisitReports, setShowVisitReports] = useState(false);
 
@@ -1538,21 +1559,15 @@ function DataReport() {
                     value={diningName}
                     onChange={(e) => setDiningName(e.target.value)}
                   >
-                    <option value="all">All</option>
-                    <option value="WhataSandwich">WhataSandwich</option>
-                    <option value="Burger Castle">Burger Castle</option>
-                    <option value="The Velvet Vineyard">
-                      The Velvet Vineyard
-                    </option>
-                    <option value="Silver Spoon Serenade">
-                      Silver Spoon Serenade
-                    </option>
-                    <option value="HerHarmony Eatery">HerHarmony Eatery</option>
-                    <option value="Bellas Fairy Tale Feast">
-                      Bella's Fairy Tale Feast{" "}
-                    </option>
-                  </select>
-                </div>
+              
+                <option value="all">All</option>
+                {restList.map((restaurant) => (
+                  <option key={restaurant.id} value={restaurant.name}>
+                    {restaurant.name}
+                  </option>
+                ))}
+              </select>
+            </div>
               )}
 
               <div className="report-section">

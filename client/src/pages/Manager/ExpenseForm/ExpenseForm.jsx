@@ -321,7 +321,7 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch merchandise list");
+          throw new Error("Failed to fetch rest list");
         }
 
         const data = await response.json();
@@ -767,7 +767,7 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
         {showExpenseForm && (
           <form onSubmit={handleExpenseSubmit}>
             <div className="form-header">
-              <h3>Resturant Expense Form</h3>
+              <h3>Restaurant Expense Form</h3>
               <i title="Form for managers to submit restaurant expenses.">
                 &#9432;
               </i>
@@ -781,13 +781,12 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
                 value={restaurantId}
                 onChange={(e) => setRestaurantId(e.target.value)}
               >
-                <option value="">Select Restaurant</option>
-                <option value="1">WhataSandwich</option>
-                <option value="2">Burger Castle</option>
-                <option value="3">The Velvet Vineyard</option>
-                <option value="4">Silver Spoon Serenade</option>
-                <option value="5">HerHarmony Eatery</option>
-                <option value="6">Bella's Fairy Tale Feast</option>
+               <option value="">Select Restaurant</option>
+                {restList.map((restaurant) => (
+                  <option key={restaurant.id} value={restaurant.id}>
+                    {restaurant.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-row">

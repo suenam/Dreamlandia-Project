@@ -19,6 +19,7 @@ const Attractions = () => {
   const [selectedAttraction, setSelectedAttraction] = useState(null);
   const [attractions, setAttractions] = useState([]);
   const [currentWeather, setCurrentWeather] = useState('sunny');
+  const [attractionsLoading, setAttractionsLoading] = useState(true);
 
   useEffect(() => {
     const setupWeatherAttractionStatus = async () => {
@@ -63,11 +64,14 @@ const Attractions = () => {
 
       if (response.ok) {
         setAttractions(data.attractions);
+        setAttractionsLoading(false);
       } else {
         console.error("FAILED TO FETCH!", data.message);
+        setAttractionsLoading(false);
       }
     } catch (error) {
       console.error("There was an error: ", error);
+      setAttractionsLoading(false);
     }
   };
 
@@ -110,17 +114,21 @@ const Attractions = () => {
         </div>
       </div>
       <div className="attractions-content">
-        {attractions.map((attraction, index) => (
-          <div
-            key={index}
-            className="attraction-option"
-            onClick={() => handleAttractionClick(attraction)}
-          >
-            <img src={attraction.image || (attraction.name === 'Carousel' ? Carousel : attraction.name === 'Ferris Wheel' ? FerrisWheel : attraction.name === 'Roller Coaster' ? RollerCoaster : attraction.name === 'Themed Rides' ? ThemedRide : WaterRide)} alt={attraction.name} />
-            <h3>{attraction.name}{!attraction.status && <ErrorIcon style={{color: "red", fontSize: 'medium', verticalAlign: 'center', marginLeft: '1px'}}/>}</h3>
-            <p>{attraction.shortDescription}</p>
-          </div>
-        ))}
+        {attractionsLoading ? (
+          <div>Loading attractions...</div>
+        ) : (
+          attractions.map((attraction, index) => (
+            <div
+              key={index}
+              className="attraction-option"
+              onClick={() => handleAttractionClick(attraction)}
+            >
+              <img src={attraction.image || (attraction.name === 'Carousel' ? Carousel : attraction.name === 'Ferris Wheel' ? FerrisWheel : attraction.name === 'Roller Coaster' ? RollerCoaster : attraction.name === 'Themed Rides' ? ThemedRide : WaterRide)} alt={attraction.name} />
+              <h3>{attraction.name}{!attraction.status && <ErrorIcon style={{color: "red", fontSize: 'medium', verticalAlign: 'center', marginLeft: '1px'}}/>}</h3>
+              <p>{attraction.shortDescription}</p>
+            </div>
+          ))
+        )}
       </div>
       {showModal && (
         <div className="modal-overlay">
@@ -150,7 +158,3 @@ const Attractions = () => {
 };
 
 export default Attractions;
-
-
-
-

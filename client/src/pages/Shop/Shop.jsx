@@ -14,6 +14,7 @@ const Shop = () => {
   const shoppingCartContext = useShoppingCart();
   const [selectedItems, setSelectedItems] = useState({});
   const [merchandise, setMerchandise] = useState([]);
+  const [merchandiseLoading, setMerchandiseLoading] = useState(true);
 
   useEffect(() => {
     const fetchMerchandise = async () => {
@@ -32,11 +33,14 @@ const Shop = () => {
               return acc;
             }, {})
           );
+          setMerchandiseLoading(false);
         } else {
           console.error('FAILED TO FETCH MERCHANDISE!', data.message);
+          setMerchandiseLoading(false);
         }
       } catch (error) {
         console.error('There was an error:', error);
+        setMerchandiseLoading(false);
       }
     };
 
@@ -94,84 +98,84 @@ const Shop = () => {
         <p>Bring home a piece of the magic!</p>
       </div>
       <div className="shop-content">
-        {merchandise.map((item, index) => (
-          <div key={index} className="item-container">
-            <img
-              src={item.image
-              }
-              alt={item.name}
-            />
-            <h3>{item.name}</h3>
-            <p>${item.sellingCost}</p>
-            <div className="size-options">
-              <button
-                onClick={() => handleSizeChange(item.name, 'S')}
-                style={{
-                  backgroundColor:
-                    selectedItems[item.name]?.size === 'S' ? '#67C237' : '',
-                }}
-              >
-                S
-              </button>
-              <button
-                onClick={() => handleSizeChange(item.name, 'M')}
-                style={{
-                  backgroundColor:
-                    selectedItems[item.name]?.size === 'M' ? '#67C237' : '',
-                }}
-              >
-                M
-              </button>
-              <button
-                onClick={() => handleSizeChange(item.name, 'L')}
-                style={{
-                  backgroundColor:
-                    selectedItems[item.name]?.size === 'L' ? '#67C237' : '',
-                }}
-              >
-                L
-              </button>
-              <button
-                onClick={() => handleSizeChange(item.name, 'XL')}
-                style={{
-                  backgroundColor:
-                    selectedItems[item.name]?.size === 'XL' ? '#67C237' : '',
-                }}
-              >
-                XL
-              </button>
-            </div>
-            <div className="quantity-control">
-              <RemoveCircleOutlineIcon
-                fontSize="large"
-                pointerEvents={
-                  selectedItems[item.name]?.quantity === 0 ? 'none' : ''
-                }
-                color={
-                  selectedItems[item.name]?.quantity === 0 ? 'action' : ''
-                }
-                onClick={() => updateQuantity(item.name, -1)}
-              />
-              <div className="quantity-count">
-                {selectedItems[item.name]?.quantity}
+        {merchandiseLoading ? (
+          <div>Loading merchandise...</div>
+        ) : (
+          merchandise.map((item, index) => (
+            <div key={index} className="item-container">
+              <img src={item.image} alt={item.name} />
+              <h3>{item.name}</h3>
+              <p>${item.sellingCost}</p>
+              <div className="size-options">
+                <button
+                  onClick={() => handleSizeChange(item.name, 'S')}
+                  style={{
+                    backgroundColor:
+                      selectedItems[item.name]?.size === 'S' ? '#67C237' : '',
+                  }}
+                >
+                  S
+                </button>
+                <button
+                  onClick={() => handleSizeChange(item.name, 'M')}
+                  style={{
+                    backgroundColor:
+                      selectedItems[item.name]?.size === 'M' ? '#67C237' : '',
+                  }}
+                >
+                  M
+                </button>
+                <button
+                  onClick={() => handleSizeChange(item.name, 'L')}
+                  style={{
+                    backgroundColor:
+                      selectedItems[item.name]?.size === 'L' ? '#67C237' : '',
+                  }}
+                >
+                  L
+                </button>
+                <button
+                  onClick={() => handleSizeChange(item.name, 'XL')}
+                  style={{
+                    backgroundColor:
+                      selectedItems[item.name]?.size === 'XL' ? '#67C237' : '',
+                  }}
+                >
+                  XL
+                </button>
               </div>
-              <AddCircleOutlineIcon
-                fontSize="large"
-                onClick={() => updateQuantity(item.name, 1)}
-              />
+              <div className="quantity-control">
+                <RemoveCircleOutlineIcon
+                  fontSize="large"
+                  pointerEvents={
+                    selectedItems[item.name]?.quantity === 0 ? 'none' : ''
+                  }
+                  color={
+                    selectedItems[item.name]?.quantity === 0 ? 'action' : ''
+                  }
+                  onClick={() => updateQuantity(item.name, -1)}
+                />
+                <div className="quantity-count">
+                  {selectedItems[item.name]?.quantity}
+                </div>
+                <AddCircleOutlineIcon
+                  fontSize="large"
+                  onClick={() => updateQuantity(item.name, 1)}
+                />
+              </div>
+              <button
+                className="add-to-cart-btn"
+                disabled={
+                  !selectedItems[item.name]?.quantity ||
+                  !selectedItems[item.name]?.size
+                }
+                onClick={() => addToCart(item.name)}
+              >
+                <ShoppingCartIcon />
+              </button>
             </div>
-            <button
-              className="add-to-cart-btn"
-              disabled={
-                !selectedItems[item.name]?.quantity ||
-                !selectedItems[item.name]?.size
-              }
-              onClick={() => addToCart(item.name)}
-            >
-              <ShoppingCartIcon />
-            </button>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
