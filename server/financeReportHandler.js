@@ -171,7 +171,7 @@ if (diningType !== "allDining") {
         endDate
     ];
 }
-diningExpenseQuery +="GROUP BY Date, RestaurantType ORDER BY Date;";
+diningExpenseQuery +=" GROUP BY Date, RestaurantType ORDER BY Date;";
 
 const [diningData] = await pool.execute(
     diningExpenseQuery,

@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 async function employeeLoginHandler(req, res) {
   try {
     const { email, password } = await getPostData(req);
-    const query = 'SELECT * FROM staff WHERE SEmail = ?';
+    const query = 'SELECT * FROM staff WHERE SEmail = ? AND archive = 0';
     const [employees] = await pool.execute(query, [email]);
     const employee = employees[0];
     console.log('employee:', employee);

@@ -32,15 +32,15 @@ const Attractions = () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/current-weather`);
       const data = await response.json();
-
+      
       if (response.ok) {
-        const currentWeather = data.requests[0]?.weatherStatus ?? "sunny";
+        const currentWeather = data.requests[0]?.weatherStatus?? "sunny";
         if (!data.requests[0]) {
           const currentDate = new Date();
-          const month = `${currentDate.getMonth() + 1}`.padStart(2, '0');
+          const month = `${currentDate.getMonth()+1}`.padStart(2, '0');
           const day = `${currentDate.getDate()}`.padStart(2, '0');
           const year = currentDate.getFullYear();
-          const formattedDate = `${year}-${month}-${day}`;
+          const formattedDate = `${year}-${month}-${day}`
           await fetch(`${import.meta.env.VITE_SERVER_URL}/weatherform`, {
             method: 'POST',
             headers: {

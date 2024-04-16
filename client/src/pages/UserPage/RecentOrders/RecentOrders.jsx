@@ -199,7 +199,7 @@ function RecentOrder() {
                 <thead>
                   <tr>
                     <th>Transaction Date</th>
-                    <th>Transaction ID</th>
+                    <th>Meal Plan ID</th>
                     <th>Restaurant Name</th>
                     <th>Restaurant Type</th>
                     <th>Amount</th>
