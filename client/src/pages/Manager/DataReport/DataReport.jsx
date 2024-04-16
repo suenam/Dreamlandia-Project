@@ -194,7 +194,7 @@ function DataReport() {
                 {data.map((row, index) => (
                   <tr key={index}>
                     <td>{row.TransactionDate}</td>
-                    <td>{row["Bella's Fairy Tale Feast"]}</td>
+                    <td>{row["Bellas Fairy Tale Feast"]}</td>
                     <td>{row["Burger Castle"]}</td>
                     <td>{row["HerHarmony Eatery"]}</td>
                     <td>{row["Silver Spoon Serenade"]}</td>
@@ -231,19 +231,26 @@ function DataReport() {
 
   const generateVisitTable = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-      const totalVisitors = data.reduce(
+      // Transform the data to match the expected structure
+      const transformedData = data.map((row) => {
+        const { PurchaseDate, ...attractions } = row;
+        return {
+          PurchaseDate,
+          ...attractions,
+          Total: row.Total,
+        };
+      });
+  
+      const totalVisitors = transformedData.reduce(
         (sum, row) => sum + parseInt(row.Total),
         0
       );
+  
       return (
         <>
-          <button
-            onClick={exportToPDF}
-            className="data-report-exportPdf-dr-butt"
-          >
+          <button onClick={exportToPDF} className="data-report-exportPdf-dr-butt">
             Export to PDF
           </button>
-
           <PDFExport
             paperSize="auto"
             fileName="data_report.pdf"
@@ -256,36 +263,33 @@ function DataReport() {
                 ({visitStartDate} - {visitEndDate})
               </span>
             </h3>
-
             <table className="contact-table">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>Roller Coaster</th>
-                  <th>Carousel</th>
-                  <th>Ferris Wheel</th>
-                  <th>Themed Rides</th>
-                  <th>Water Rides</th>
+                  {Object.keys(transformedData[0]).map(
+                    (key) =>
+                      key !== "PurchaseDate" && key !== "Total" && (
+                        <th key={key}>{key}</th>
+                      )
+                  )}
                   <th>Total</th>
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, index) => (
+                {transformedData.map((row, index) => (
                   <tr key={index}>
                     <td>{row.PurchaseDate}</td>
-                    <td>{row["Roller Coaster"]}</td>
-                    <td>{row.Carousel}</td>
-                    <td>{row["Ferris Wheel"]}</td>
-                    <td>{row["Themed Rides"]}</td>
-                    <td>{row["Water Rides"]}</td>
+                    {Object.keys(row)
+                      .filter((key) => key !== "PurchaseDate" && key !== "Total")
+                      .map((key) => (
+                        <td key={key}>{row[key]}</td>
+                      ))}
                     <td>{row.Total}</td>
                   </tr>
                 ))}
                 <tr>
-                  <td
-                    colSpan="6"
-                    style={{ textAlign: "right", fontWeight: "bold" }}
-                  >
+                  <td colSpan={Object.keys(transformedData[0]).length - 1} style={{ textAlign: "right", fontWeight: "bold" }}>
                     Total Visitors:
                   </td>
                   <td style={{ fontWeight: "bold" }}>{totalVisitors}</td>
@@ -307,7 +311,6 @@ function DataReport() {
     }
   };
   const generateMaintenanceTable = (data) => {
-    
     if (Array.isArray(data) && data.length > 0) {
       return (
         <>
@@ -372,9 +375,6 @@ function DataReport() {
     }
   };
   const generateFinanceTable = (data) => {
-    if (financeType === "") {
-      return null;
-    }
     if (Array.isArray(data) && data.length > 0) {
       return (
         <>
@@ -813,9 +813,6 @@ function DataReport() {
   };
 
   const generateMaintExpense = (data) => {
-    if (financeType === "") {
-      return null;
-    }
     if (Array.isArray(data) && data.length > 0) {
       return (
         <>
@@ -894,8 +891,6 @@ function DataReport() {
 
   const generateProfitTable = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-      
-
       return (
         <>
           <button
@@ -926,13 +921,13 @@ function DataReport() {
               <div className="data-report-summary-box">
                 <p>Total Expense:</p>
                 <p className="data-report-summary-box-value">
-                ${parseFloat(data[0].total_expenses).toFixed(2)}
+                  ${parseFloat(data[0].total_expenses).toFixed(2)}
                 </p>
               </div>
               <div className="data-report-summary-box">
                 <p>Total Profit:</p>
                 <p className="data-report-summary-box-value">
-                ${parseFloat(data[0].total_profit).toFixed(2)}
+                  ${parseFloat(data[0].total_profit).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -941,15 +936,9 @@ function DataReport() {
                 <tr>
                   <th>Date</th>
                   <th>Department</th>
-                  <th>
-                    Revenue
-                  </th>
-                  <th>
-                   Expense
-                  </th>
-                  <th>
-                    Profit
-                  </th>
+                  <th>Revenue</th>
+                  <th>Expense</th>
+                  <th>Profit</th>
                 </tr>
               </thead>
               <tbody>
@@ -1138,6 +1127,37 @@ function DataReport() {
   const handleMaintenanceSubmit = (e) => {
     e.preventDefault();
   };
+  const [attractionList, setAttractionList] = useState([]);
+  const [selectedAttractionId, setSelectedAttractionId] = useState("");
+
+  useEffect(() => {
+    const fetchAttractionList = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/attractions`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch attraction list");
+        }
+
+        const data = await response.json();
+        console.log("Attraction list data:", data);
+        setAttractionList(data.attractions);
+      } catch (error) {
+        console.error("Error fetching attraction list:", error);
+        setAttractionList([]);
+      }
+    };
+
+    fetchAttractionList();
+  }, []);
 
   useEffect(() => {
     const generateVisitReport = async () => {
@@ -1296,9 +1316,7 @@ function DataReport() {
                       value={financeType}
                       onChange={(e) => setFinanceType(e.target.value)}
                     >
-                      <option value="">
-                        Select Type
-                      </option>
+                      <option value="">Select Type</option>
 
                       <option value="merchRevenue">Revenue</option>
                       <option value="merchExpense">Expense</option>
@@ -1337,15 +1355,19 @@ function DataReport() {
                     {financeCategory === "tickets" &&
                       generateFinanceTable(financeReportData)}
                     {financeCategory === "dining" &&
-                      (financeType === "diningRev" || financeType === "diningExpense") &&(
+                      (financeType === "diningRev" ||
+                        financeType === "diningExpense") && (
                         <div>{generateDiningReport(financeReportData)}</div>
                       )}
-                    {financeCategory === "merch" && (financeType === "merchRevenue" || financeType === "merchExpense") &&(
-                      <div>{generateMerchReport(financeReportData)}</div>
-                    )}
-                    {financeCategory === "maintenance" &&  financeType !== "default" &&(
-                      <div>{generateMaintExpense(financeReportData)}</div>
-                    )}
+                    {financeCategory === "merch" &&
+                      (financeType === "merchRevenue" ||
+                        financeType === "merchExpense") && (
+                        <div>{generateMerchReport(financeReportData)}</div>
+                      )}
+                    {financeCategory === "maintenance" &&
+                      financeType !== "default" && (
+                        <div>{generateMaintExpense(financeReportData)}</div>
+                      )}
                     {financeCategory === "all" && (
                       <div>{generateProfitTable(financeReportData)}</div>
                     )}
@@ -1414,18 +1436,21 @@ function DataReport() {
                   <option value="completed">Completed</option>
                 </select>
                 <label>
-                  Attraction Name:<span className="required">*</span>
+                  Attraction:<span className="required">*</span>
                 </label>
                 <select
                   value={attractionName}
                   onChange={(e) => setAttractionName(e.target.value)}
                 >
                   <option value="all">All</option>
-                  <option value="Carousel">Carousel</option>
-                  <option value="Ferris Wheel">Ferris Wheel</option>
-                  <option value="Roller Coaster">Roller Coaster</option>
-                  <option value="Themed Rides">Themed Rides</option>
-                  <option value="Water Rides">Water Rides</option>
+                  {attractionList.map((attraction) => (
+                    <option
+                      key={attraction.attractionID}
+                      value={attraction.name}
+                    >
+                      {attraction.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="report-section">
@@ -1493,11 +1518,14 @@ function DataReport() {
                     onChange={(e) => setAttractionName(e.target.value)}
                   >
                     <option value="all">All</option>
-                    <option value="Carousel">Carousel</option>
-                    <option value="Ferris Wheel">Ferris Wheel</option>
-                    <option value="Roller Coaster">Roller Coaster</option>
-                    <option value="Themed Rides">Themed Rides</option>
-                    <option value="Water Rides">Water Rides</option>
+                    {attractionList.map((attraction) => (
+                      <option
+                        key={attraction.attractionID}
+                        value={attraction.name}
+                      >
+                        {attraction.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               )}
@@ -1520,7 +1548,7 @@ function DataReport() {
                       Silver Spoon Serenade
                     </option>
                     <option value="HerHarmony Eatery">HerHarmony Eatery</option>
-                    <option value="Bella's Fairy Tale Feast">
+                    <option value="Bellas Fairy Tale Feast">
                       Bella's Fairy Tale Feast{" "}
                     </option>
                   </select>

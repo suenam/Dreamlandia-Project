@@ -16,6 +16,7 @@ function Maintenance() {
   const [newCost, setNewCost] = useState(0);
   const [dateResolved, setDateResolved] = useState('');
   const [showEditContainer, setShowEditContainer] = useState(false);
+  const [attractionList, setAttractionList] = useState([]);
 
   const [openSubmitSuccessModal, setOpenSubmitSuccessModal] = useState(false);
   const [openSubmitFailureModal, setOpenSubmitFailureModal] = useState(false);
@@ -62,6 +63,7 @@ function Maintenance() {
   }, []);
   useEffect(() => {
     fetchMaintenanceRequests();
+    fetchAttractionList();
   }, []);
 
   const fetchMaintenanceRequests = async () => {
@@ -76,6 +78,25 @@ function Maintenance() {
       }
     } catch (error) {
       console.error('There was an error:', error);
+    }
+  };
+  const fetchAttractionList = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/attractions`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAttractionList(data.attractions);
+      } else {
+        console.error('Failed to fetch attraction list');
+      }
+    } catch (error) {
+      console.error('Error fetching attraction list:', error);
     }
   };
 
@@ -128,13 +149,7 @@ function Maintenance() {
     }
   };
 
-  const attractions = [
-    { id: 2, value: 'Roller Coaster', label: 'Roller Coaster' },
-    { id: 3, value: 'Carousel', label: 'Carousel' },
-    { id: 4, value: 'Ferris Wheel', label: 'Ferris Wheel' },
-    { id: 5, value: 'Themed Rides', label: 'Themed Rides' },
-    { id: 6, value: 'Water Rides', label: 'Water Rides' },
-  ];
+ 
 
   const [subject, setSubject] = useState('');
   const [comment, setComment] = useState('');
@@ -171,12 +186,6 @@ function Maintenance() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const attractionId = getAttractionIdFromName(selectedAttractionId);
-
-    if (attractionId === null) {
-      alert('Please select a valid attraction.');
-      return;
-    }
 
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/maintenance-requests`, {
@@ -185,7 +194,7 @@ function Maintenance() {
         body: JSON.stringify({
           MRDescription: comment,
           MRCost: cost,
-          AttractionID: attractionId,
+          AttractionID: selectedAttractionId,
           MRSubject: subject
         }),
       });
@@ -241,24 +250,23 @@ function Maintenance() {
                 <input type="text" value={subject} onChange={handleSubjectChange} required />
                 
                 </div>
-                <div className='input-container'>
-
-              <label>Select Attraction<span className="required">*</span></label>
-               <select
-                 name="attraction"
-                 value={selectedAttractionId}
-                 onChange={handleAttractionChange}
-                 required
-               >
-                 <option value="">Select an Attraction</option>
-                 {attractions.map((attraction) => (
-                   <option key={attraction.id} value={attraction.value}>
-                     {attraction.label}
-                   </option>
-                 ))}
-               </select>
-             </div>
-              
+                <div className="input-container">
+                <label>
+                  Attraction:<span className="required">*</span>
+                </label>
+                <select
+                  value={selectedAttractionId}
+                  onChange={(e) => setSelectedAttractionId(e.target.value)}
+                  required
+                >
+                  <option value="">Select Attraction</option>
+                  {attractionList.map((attraction) => (
+                    <option key={attraction.attractionID} value={attraction.attractionID}>
+                      {attraction.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
              <div className='input-container'>
                <label>Cost<span className="required">*</span></label>

@@ -6,17 +6,21 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
 function Maintenance() {
-
-
+  const [attractionName, setAttractionName] = useState("");
   const [maintenanceRequests, setMaintenanceRequests] = useState([]);
-
-  
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [newStatus, setNewStatus] = useState('');
   const [newComment, setNewComment] = useState('');
   const [newCost, setNewCost] = useState(0);
   const [dateResolved, setDateResolved] = useState('');
   const [showEditContainer, setShowEditContainer] = useState(false);
+  const [attractionList, setAttractionList] = useState([]);
+  const [subject, setSubject] = useState('');
+  const [comment, setComment] = useState('');
+  const [date, setDate] = useState('');
+  const [cost, setCost] = useState(0);
+  const [selectedAttractionId, setSelectedAttractionId] = useState('');
+  const [showSubmitContainer, setShowSubmitContainer] = useState(false);
 
   // Modal state variables
   const [openSubmitSuccessModal, setOpenSubmitSuccessModal] = useState(false);
@@ -26,6 +30,7 @@ function Maintenance() {
 
   useEffect(() => {
     fetchMaintenanceRequests();
+    fetchAttractionList();
   }, []);
 
   const fetchMaintenanceRequests = async () => {
@@ -34,12 +39,31 @@ function Maintenance() {
       const data = await response.json();
       if (response.ok) {
         setMaintenanceRequests(data.requests);
-        console.log(maintenanceRequests);
       } else {
         console.error('Failed to fetch maintenance requests:', data.message);
       }
     } catch (error) {
       console.error('There was an error:', error);
+    }
+  };
+
+  const fetchAttractionList = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/attractions`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAttractionList(data.attractions);
+      } else {
+        console.error('Failed to fetch attraction list');
+      }
+    } catch (error) {
+      console.error('Error fetching attraction list:', error);
     }
   };
 
@@ -92,21 +116,6 @@ function Maintenance() {
     }
   };
 
-  const attractions = [
-    { id: 2, value: 'Roller Coaster', label: 'Roller Coaster' },
-    { id: 3, value: 'Carousel', label: 'Carousel' },
-    { id: 4, value: 'Ferris Wheel', label: 'Ferris Wheel' },
-    { id: 5, value: 'Themed Rides', label: 'Themed Rides' },
-    { id: 6, value: 'Water Rides', label: 'Water Rides' },
-  ];
-
-  const [subject, setSubject] = useState('');
-  const [comment, setComment] = useState('');
-  const [date, setDate] = useState('');
-  const [cost, setCost] = useState(0);
-  const [selectedAttractionId, setSelectedAttractionId] = useState('');
-  const [showSubmitContainer, setShowSubmitContainer] = useState(false);
-
   const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
@@ -123,24 +132,8 @@ function Maintenance() {
     setCost(parseFloat(event.target.value));
   };
 
-  const handleAttractionChange = (event) => {
-    setSelectedAttractionId(event.target.value);
-  };
-
-  const getAttractionIdFromName = (attractionName) => {
-    const attraction = attractions.find((a) => a.label === attractionName);
-    return attraction ? attraction.id : null;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const attractionId = getAttractionIdFromName(selectedAttractionId);
-
-    if (attractionId === null) {
-      alert('Please select a valid attraction.');
-      return;
-    }
 
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/maintenance-requests`, {
@@ -149,8 +142,8 @@ function Maintenance() {
         body: JSON.stringify({
           MRDescription: comment,
           MRCost: cost,
-          AttractionID: attractionId,
-          MRSubject: subject
+          AttractionID: selectedAttractionId,
+          MRSubject: subject,
         }),
       });
 
@@ -187,144 +180,141 @@ function Maintenance() {
   return (
     <>
       <MSidebar />
-      <h1 className='Maintenance-header1'>Maintenance Requests</h1>
+      <h1 className="Maintenance-header1">Maintenance Requests</h1>
 
-      <div className='report-sec-maintenace'>
+      <div className="report-sec-maintenace">
         <button onClick={() => setShowSubmitContainer(!showSubmitContainer)}>
           {showSubmitContainer ? '▲ Submit Request' : '▼ Submit Request'}
         </button>
         {showSubmitContainer && (
           <div className="submit-request-container">
-            <form className='submit-mr' onSubmit={handleSubmit}>
+            <form className="submit-mr" onSubmit={handleSubmit}>
               <div className="form-header">
                 <h3>Submit Maintenance Request</h3>
                 <i title="Form to submit a new maintenance request for an attraction.">&#9432;</i>
               </div>
-              <div className='input-container'>
+              <div className="input-container">
                 <label>Subject<span className="required">*</span></label>
                 <input type="text" value={subject} onChange={handleSubjectChange} required />
-                
+              </div>
+              <div className="input-container">
+                <label>
+                  Attraction:<span className="required">*</span>
+                </label>
+                <select
+                  value={selectedAttractionId}
+                  onChange={(e) => setSelectedAttractionId(e.target.value)}
+                  required
+                >
+                  <option value="">Select Attraction</option>
+                  {attractionList.map((attraction) => (
+                    <option key={attraction.attractionID} value={attraction.attractionID}>
+                      {attraction.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="input-container">
+                <label>Cost<span className="required">*</span></label>
+                <input type="number" value={cost} onChange={handleCostChange} required />
+              </div>
+              <div className="input-container">
+                <label>Comment<span className="required">*</span></label>
+                <textarea value={comment} onChange={handleCommentChange} required />
+              </div>
+              <div className="submit-actions">
+                <button type="submit">Submit</button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+      <div className="report-sec-maintenace">
+        <button onClick={() => setShowEditContainer(!showEditContainer)}>
+          {showEditContainer ? '▲ Edit Request' : '▼ Edit Request'}
+        </button>
+        {showEditContainer && (
+          <div className="edit-container">
+            <form className="submit-mr">
+              <div className="form-header">
+                <h3>Edit Maintenance Request</h3>
+                <i title="Form to edit an existing maintenance request.">&#9432;</i>
+              </div>
+              <div className="edit-details">
+                <div className="edit-row">
+                  <label>Select Request<span className="required">*</span></label>
+                  <select
+                    value={selectedRequest?.id || ""}
+                    onChange={(e) => handleRequestSelect(parseInt(e.target.value))}
+                    required
+                  >
+                    <option value="">Select a Request</option>
+                    {maintenanceRequests.map((request) => (
+                      <option key={request.id} value={request.id}>
+                        {`RID: ${request.id} - ${request.subject}`}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div className='input-container'>
 
-              <label>Select Attraction<span className="required">*</span></label>
-               <select
-                 name="attraction"
-                 value={selectedAttractionId}
-                 onChange={handleAttractionChange}
-                 required
-               >
-                 <option value="">Select an Attraction</option>
-                 {attractions.map((attraction) => (
-                   <option key={attraction.id} value={attraction.value}>
-                     {attraction.label}
-                   </option>
-                 ))}
-               </select>
-             </div>
-              
+                {selectedRequest && (
+                  <>
+                    <div className="edit-row">
+                      <label>Current Subject:</label>
+                      <span>{selectedRequest.subject}</span>
+                    </div>
+                    <div className="edit-row">
+                      <label>Current Status:</label>
+                      <span>{selectedRequest.status}</span>
+                    </div>
+                    <div className="edit-row">
+                      <label>Current Comment:</label>
+                      <span>{selectedRequest.comment}</span>
+                    </div>
+                    <div className="edit-row">
+                      <label>Current Cost:</label>
+                      <span>${selectedRequest.cost}</span>
+                    </div>
 
-             <div className='input-container'>
-               <label>Cost<span className="required">*</span></label>
-               <input type="number" value={cost} onChange={handleCostChange} required />
-             </div>
-             <div className='input-container'>
-               <label>Comment<span className="required">*</span></label>
-               <textarea value={comment} onChange={handleCommentChange} required />
-             </div>
-             <div className="submit-actions">
-               <button type="submit">Submit</button>
-             </div>
-           </form>
-         </div>
-       )}
-     </div>
-     <div className='report-sec-maintenace'>
-       <button onClick={() => setShowEditContainer(!showEditContainer)}>
-         {showEditContainer ? '▲ Edit Request' : '▼ Edit Request'}
-       </button>
-       {showEditContainer && (
-         <div className="edit-container">
-           <form className='submit-mr'>
-             <div className="form-header">
-               <h3>Edit Maintenance Request</h3>
-               <i title="Form to edit an existing maintenance request.">&#9432;</i>
-             </div>
-             <div className="edit-details">
-               <div className="edit-row">
-                 <label>Select Request<span className="required">*</span></label>
-                 <select
-                   value={selectedRequest?.id || ""}
-                   onChange={(e) => handleRequestSelect(parseInt(e.target.value))}
-                   required
-                 >
-                   <option value="">Select a Request</option>
-                   {maintenanceRequests.map((request) => (
-                     <option key={request.id} value={request.id}>
-                       {`RID: ${request.id} - ${request.subject}`}
-                     </option>
-                   ))}
-                 </select>
-               </div>
+                    <div className="input-container">
+                      <label>New Status:<span className="required">*</span></label>
+                      <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)} required>
+                        <option value="Open">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                      </select>
+                    </div>
 
-               {selectedRequest && (
-                 <>
-                 <div className="edit-row">
-                     <label>Current Subject:</label>
-                     <span>{selectedRequest.subject}</span>
-                   </div>
-                   <div className="edit-row">
-                     <label>Current Status:</label>
-                     <span>{selectedRequest.status}</span>
-                   </div>
-                   <div className="edit-row">
-                     <label>Current Comment:</label>
-                     <span>{selectedRequest.comment}</span>
-                   </div>
-                   <div className="edit-row">
-                     <label>Current Cost:</label>
-                     <span>${selectedRequest.cost}</span>
-                   </div>
+                    {newStatus === 'Completed' && (
+                      <div className="input-container">
+                        <label>Date Resolved:<span className="required">*</span></label>
+                        <input type="date" value={dateResolved} onChange={handleDateResolvedChange} required />
+                      </div>
+                    )}
 
-                   <div className="input-container">
-                     <label>New Status:<span className="required">*</span></label>
-                     <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)} required>
-                       <option value="Open">Pending</option>
-                       <option value="In Progress">In Progress</option>
-                       <option value="Completed">Completed</option>
-                     </select>
-                   </div>
+                    <div className="input-container">
+                      <label>New Cost:<span className="required">*</span></label>
+                      <input type="number" value={newCost} onChange={handleNewCostChange} required />
+                    </div>
 
-                   {newStatus === 'Completed' && (
-                     <div className="input-container">
-                       <label>Date Resolved:<span className="required">*</span></label>
-                       <input type="date" value={dateResolved} onChange={handleDateResolvedChange} required />
-                     </div>
-                   )}
+                    <div className="input-container">
+                      <label>New Comment:<span className="required">*</span></label>
+                      <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} required />
+                    </div>
 
-                   <div className="input-container">
-                     <label>New Cost:<span className="required">*</span></label>
-                     <input type="number" value={newCost} onChange={handleNewCostChange} required />
-                   </div>
-
-                   <div className="input-container">
-                     <label>New Comment:<span className="required">*</span></label>
-                     <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} required />
-                   </div>
-
-                   <div className="edit-actions">
-                     <button type="button" onClick={handleSaveChanges}>Save Changes</button>
-                     <button type="button" onClick={() => setSelectedRequest(null)}>
-                       Cancel
-                     </button>
-                   </div>
-                 </>
-               )}
-             </div>
-           </form>
-         </div>
-       )}
-     </div>
+                    <div className="edit-actions">
+                      <button type="button" onClick={handleSaveChanges}>Save Changes</button>
+                      <button type="button" onClick={() => setSelectedRequest(null)}>
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
 
      {/* Submit Success Modal */}
      <Modal
