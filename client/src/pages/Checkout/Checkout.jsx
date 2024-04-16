@@ -88,8 +88,8 @@ const Checkout = () => {
                 foodTickets will look like this:
                 {
                     standardMeal1: {
-                        item: {...},    
-                        qty: 4          
+                        item: {...},
+                        qty: 4
                     },
                     expressMeal3: {
                         item: {...},
