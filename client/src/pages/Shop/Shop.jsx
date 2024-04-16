@@ -12,8 +12,12 @@ import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
 
 const Shop = () => {
   const shoppingCartContext = useShoppingCart();
-  const [selectedItems, setSelectedItems] = useState({});
+  const [selectedItems, setSelectedItems] = useState(shoppingCartContext.getMerch());
   const [merchandise, setMerchandise] = useState([]);
+
+  useEffect(() => {
+    console.log(merchandise);
+  }, [merchandise]);
 
   useEffect(() => {
     const fetchMerchandise = async () => {
@@ -23,15 +27,17 @@ const Shop = () => {
 
         if (response.ok) {
           setMerchandise(data.merchandise);
-          setSelectedItems(
-            data.merchandise.reduce((acc, item) => {
-              acc[item.name] = {
-                size: '',
-                quantity: 0,
-              };
-              return acc;
-            }, {})
-          );
+          // setSelectedItems(
+          //   data.merchandise.reduce((acc, item) => {
+          //     acc[item.name] = {
+          //       size: '',
+          //       quantity: 0,
+          //       price: item.sellingCost, 
+          //       image: item.image,
+          //     };
+          //     return acc;
+          //   }, {})
+          // );
         } else {
           console.error('FAILED TO FETCH MERCHANDISE!', data.message);
         }
@@ -44,7 +50,7 @@ const Shop = () => {
   }, []);
 
   const handleSizeChange = (item, size) => {
-    if (selectedItems[item].quantity === 0) {
+    if (!selectedItems[item]?.quantity) {
       return;
     }
     setSelectedItems((prevItems) => ({
@@ -57,16 +63,38 @@ const Shop = () => {
   };
 
   const updateQuantity = (item, value) => {
-    setSelectedItems((prevItems) => {
-      const newQuantity = prevItems[item].quantity + value;
+    const nextValue = (selectedItems[item]?.quantity ?? 0) + value;
+
+    if (nextValue < 0) {
+      return;
+    }
+  
+    setSelectedItems(prevItems => {
+      if (nextValue === 0) {
+        const { [item]: _, ...rest } = prevItems;
+        return rest;
+      }
+
       return {
         ...prevItems,
         [item]: {
-          size: newQuantity === 0 ? '' : prevItems[item].size,
-          quantity: newQuantity,
-        },
-      };
+          ...prevItems[item],
+          item: merchandise.find(merchandise => merchandise.name === item),
+          quantity: nextValue,
+        }
+      }
     });
+
+    // setSelectedItems((prevItems) => {
+    //   const newQuantity = (prevItems[item]?.quantity?? 0) + value;
+    //   return {
+    //     ...prevItems,
+    //     [item]: {
+    //       size: newQuantity === 0 ? '' : prevItems[item].size,
+    //       quantity: newQuantity,
+    //     },
+    //   };
+    // });
   };
 
   const addToCart = (item) => {
@@ -76,13 +104,14 @@ const Shop = () => {
     }
     shoppingCartContext.setMerch((prevMerch) => ({
       ...prevMerch,
-      [item]: {
-        size: selectedItems[item].size,
-        quantity: selectedItems[item].quantity,
-      },
+        [item]: {
+          item: selectedItems[item].item,
+          quantity: selectedItems[item].quantity,
+          size: selectedItems[item].size,
+        }
     }));
     console.log('shirt added!');
-    console.log(selectedItems);
+    console.log(shoppingCartContext.getMerch());
     return true;
   };
 
@@ -145,15 +174,15 @@ const Shop = () => {
               <RemoveCircleOutlineIcon
                 fontSize="large"
                 pointerEvents={
-                  selectedItems[item.name]?.quantity === 0 ? 'none' : ''
+                  (selectedItems[item.name]?.quantity ?? 0) === 0 ? 'none' : ''
                 }
                 color={
-                  selectedItems[item.name]?.quantity === 0 ? 'action' : ''
+                  (selectedItems[item.name]?.quantity ?? 0) === 0 ? 'action' : ''
                 }
                 onClick={() => updateQuantity(item.name, -1)}
               />
               <div className="quantity-count">
-                {selectedItems[item.name]?.quantity}
+                {(selectedItems[item.name]?.quantity ?? 0)}
               </div>
               <AddCircleOutlineIcon
                 fontSize="large"
@@ -163,7 +192,7 @@ const Shop = () => {
             <button
               className="add-to-cart-btn"
               disabled={
-                !selectedItems[item.name]?.quantity ||
+                !(selectedItems[item.name]?.quantity ?? 0) ||
                 !selectedItems[item.name]?.size
               }
               onClick={() => addToCart(item.name)}

@@ -1,8 +1,9 @@
+import React from "react";
 import './CartDropdown.css';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useShoppingCart } from './ShoppingCart';
-import { ticketDetails, mealTickets } from '../../constants/ticketModels';
+import { ticketDetails } from '../../constants/ticketModels';
 import { merchDetails } from '../../constants/merchModel';
 import EmptyCartIcon from '../../assets/empty_cart_blob.svg';
 import { useNavigate } from 'react-router-dom';
@@ -18,30 +19,20 @@ const CartDropdown = () => {
     const isNotEmptyCart = () => {
         return (
             Object.values(tickets).some(ticketCount => ticketCount > 0)
-            || Object.values(foodTickets).some(foodTicketCount => foodTicketCount > 0)
+            || Object.values(foodTickets).some(foodTicket => foodTicket.qty > 0)
             || Object.values(merchItems).some(merchItem => merchItem.quantity > 0)
         )
     }
 
     const removeMealTickets = () => {
-        shoppingCartContext.setMealTickets({
-            standardMeal1: 0,
-            standardMeal2: 0,
-            deluxeMeal1: 0,
-            deluxeMeal2: 0,
-            specialMeal1: 0,
-            specialMeal2: 0
-        });
+        shoppingCartContext.setMealTickets({});
     }
 
     const removeMerchItem = (merchItem) => {
-        shoppingCartContext.setMerch((prevMerchItems)=> ({
-            ...prevMerchItems,
-            [merchItem]: {
-                size: '',
-                quantity: 0
-            }
-        }));
+        shoppingCartContext.setMerch((prevMerchItems)=> {
+            const { [merchItem]: _, ...rest } = prevMerchItems;
+            return rest;
+        });
     }
 
     return (
@@ -60,9 +51,9 @@ const CartDropdown = () => {
                                     {
                                         Object.entries(ticketDetails).map(([ticket, ticketDetails]) => {
                                             return tickets[ticket] !== 0 ?
-                                                <>
+                                                <React.Fragment key={ticket}>
                                                     - {ticketDetails.name} (x{tickets[ticket]}) <br />
-                                                </> : null;
+                                                </React.Fragment> : null;
                                         })
                                     }
                                 </div>
@@ -72,7 +63,7 @@ const CartDropdown = () => {
                             </div>
                         </div>
                     }
-                    {Object.values(foodTickets).some(foodTicketCount => foodTicketCount > 0) &&
+                    {Object.values(foodTickets).some(foodTicket => foodTicket.qty > 0) &&
                         <div className="cart-dropdown-item">
                             <div className="item-content">
                                 <div className="item-name">
@@ -80,12 +71,11 @@ const CartDropdown = () => {
                                 </div>
                                 <div className="item-details">
                                     {
-                                        Object.entries(mealTickets).map(([mealTicket, mealTicketDetails]) => {
-                                            return foodTickets[mealTicket] !== 0 ?
-                                                <>
-                                                    - {mealTicketDetails.name} (x{foodTickets[mealTicket]}) <br />
-                                                </> : null;
-                                        })
+                                        Object.values(foodTickets).map((foodTicket) => (
+                                            <React.Fragment key={foodTicket.item.id}>
+                                                - {foodTicket.item.name} (x{foodTicket.qty}) <br />
+                                            </React.Fragment>
+                                        ))
                                     }
                                 </div>
                             </div>
@@ -94,16 +84,16 @@ const CartDropdown = () => {
                             </div>
                         </div>
                     }
-                    { Object.entries(merchDetails).map(([merch, merchItemDetails]) => {
-                            return merchItems[merch].quantity !== 0?
-                        <div className="cart-dropdown-item">
+                    { Object.entries(merchItems).map(([merch, merchItemDetails]) => {
+                            return merchItemDetails.quantity !== 0?
+                        <div className="cart-dropdown-item" key={merch}>
                             <div className="item-content">
                                 <div className="item-name">
-                                    {merchItemDetails.name}
+                                    {merch}
                                 </div>
                                 <div className="item-details">
-                                    {`Size: ${merchItems[merch].size}`}<br/>
-                                    {`Quantity: x${merchItems[merch].quantity}`}
+                                    {`Size: ${merchItemDetails.size}`}<br/>
+                                    {`Quantity: x${merchItemDetails.quantity}`}
                                 </div>
                             </div>
                             <div className="remove-item" onClick={()=>removeMerchItem(merch)}>

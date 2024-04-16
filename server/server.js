@@ -191,7 +191,7 @@ const server = http.createServer((req, res) => {
     else if(req.url === '/attraction-status' && req.method === 'GET') {
       getAttractionStatusHandler(req, res);
     }
-    else if(req.url === '/current-weather' && req.method === 'GET') {
+    else if(req.url === '/current-weather' && req.method === 'POST') {
       getCurrentWeatherHandler(req, res);
     }else if(req.url === '/get-unresolved-maintenance-requests' && req.method === 'POST' ){
       unresolvedMaintenanceHandler(req,res);
