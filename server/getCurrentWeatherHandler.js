@@ -1,18 +1,12 @@
 const pool = require('./database');
+const getPostData = require('./postDataParser');
 
 async function getCurrentWeatherHandler(req, res) {
   try {
-    const currentDate = new Date();
-    const month = `${currentDate.getMonth()+1}`.padStart(2, '0');
-    const day = `${currentDate.getDate()}`.padStart(2, '0');
-    const year = currentDate.getFullYear();
-    const formattedDate = `${year}-${month}-${day}`
+    const { WDate } = await getPostData(req);
     const [result] = await pool.execute(
-      "SELECT WeatherCondition FROM weather_log WHERE Wdate = ?", [formattedDate]
+      "SELECT WeatherCondition FROM weather_log WHERE Wdate = ?", [WDate]
     );
-
-    console.log(formattedDate);
-
 
     const requests = result.map((row) => ({
         weatherStatus: row.WeatherCondition

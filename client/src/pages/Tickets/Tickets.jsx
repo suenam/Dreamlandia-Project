@@ -1,16 +1,5 @@
 import "./Tickets.css";
 import { useState, useEffect } from "react";
-import Carousel from "../../assets/carousel.jpg";
-import FerrisWheel from "../../assets/ferris_wheel.jpg";
-import RollerCoaster from "../../assets/roller_coaster.jpg";
-import ThemedRide from "../../assets/themed_rides.jpg";
-import WaterRide from "../../assets/water_ride.jpg";
-import Burger from "../../assets/whataburger.jpg";
-import Steak from "../../assets/steak_restaurant.jpg";
-import MyMelody from "../../assets/themed_restaurant.jpg";
-import SilverSpoon from "../../assets/silverspoonfood.png";
-import WhiteCastle from "../../assets/whitecastle.jpg";
-import BellaFood from "../../assets/bellasfood.jpg";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -40,54 +29,73 @@ const Tickets = () => {
 
   const cartAttractions = shoppingCartContext.getAttractions();
   const [attractions, setAttractions] = useState([]);
-  const [selectedAttractions, setSelectedAttractions] = useState([]);
+  const [selectedAttractions, setSelectedAttractions] = useState(cartAttractions);
+
+  const [restaurants, setRestaurants] = useState([]);
 
   const cartFoodTickets = shoppingCartContext.getMealTickets();
   const [foodTickets, setFoodTickets] = useState({
     ...cartFoodTickets,
   });
-  useEffect(() => {
-    const fetchAttractions = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/attractions`
-        );
-        const { attractions } = await response.json();
-        setAttractions(attractions);
-      } catch (error) {
-        console.error("Error fetching attractions:", error);
-      }
-    };
 
+  const [errorState, setErrorState] = useState(false);
+
+  const fetchAttractions = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/attractions`
+      );
+      const { attractions } = await response.json();
+      setAttractions(attractions);
+    } catch (error) {
+      console.error("Error fetching attractions:", error);
+    }
+  };
+  const fetchRestaurants = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/get-rest`
+      );
+      const { restaurants } = await response.json();
+      setRestaurants(restaurants);
+    } catch (error) {
+      console.error("Error fetching restaurant:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchAttractions();
-  }, []);
-  const [restaurant, setRestaurant] = useState([]);
-
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/get-rest`
-        );
-        const { restaurants } = await response.json();
-        setRestaurants(restaurants);
-      } catch (error) {
-        console.error("Error fetching restaurant:", error);
-      }
-    };
-
     fetchRestaurants();
   }, []);
+
+  useEffect(() => {
+    console.log(restaurants);
+  }, [restaurants]);
+
   const updateMealTicket = (mealType, restaurantId, value) => {
     const mealKey = `${mealType}Meal${restaurantId}`;
-    console.log(foodTickets);
-    setFoodTickets(prevFoodTickets => ({
-      ...prevFoodTickets,
-      [mealKey]: Math.max(0, prevFoodTickets[mealKey] + value) 
-    }));
+    const nextValue = (foodTickets[mealKey]?.qty ?? 0) + value;
+
+    if (nextValue < 0) {
+      return;
+    }
+
+    setFoodTickets(prevFoodTickets => {
+      if (nextValue === 0) {
+        const { [mealKey]: _, ...rest } = prevFoodTickets;
+        return rest;
+      }
+
+      return {
+        ...prevFoodTickets,
+        [mealKey]: {
+          item: restaurants.find(restaurant => restaurant.id === restaurantId),
+          qty: nextValue
+        }
+      }
+    });
   };
   
-
   const setAttractionFn = (newAttraction) => {
     if (!selectedAttractions.includes(newAttraction)) {
       setSelectedAttractions([...selectedAttractions, newAttraction]);
@@ -97,9 +105,6 @@ const Tickets = () => {
       );
     }
   };
-  const [restaurants, setRestaurants] = useState([]);
-
-  const [errorState, setErrorState] = useState(false);
 
   const addToCart = () => {
     if (!standardTicket && !expressTicket && !childTicket) {
@@ -123,6 +128,8 @@ const Tickets = () => {
     shoppingCartContext.setMealTickets({
       ...foodTickets,
     });
+
+    console.log(foodTickets);
     
     shoppingCartContext.setAttractions(selectedAttractions);
     shoppingCartContext.setDate(visitDate);
@@ -264,12 +271,12 @@ const Tickets = () => {
                           <RemoveCircleOutlineIcon
                             fontSize="large"
                             pointerEvents={
-                              foodTickets[`standard${restaurant.id}`] === 0
+                              (foodTickets[`standardMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "none"
                                 : ""
                             }
                             color={
-                              foodTickets[`standard${restaurant.id}`] === 0
+                              (foodTickets[`standardMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "action"
                                 : ""
                             }
@@ -278,7 +285,7 @@ const Tickets = () => {
                             }
                           />
                           <div className="ticket-count">
-                            {foodTickets[`standardMeal${restaurant.id}`]}
+                            {(foodTickets[`standardMeal${restaurant.id}`]?.qty ?? 0)}
                           </div>
                           <AddCircleOutlineIcon
                             fontSize="large"
@@ -308,12 +315,12 @@ const Tickets = () => {
                           <RemoveCircleOutlineIcon
                             fontSize="large"
                             pointerEvents={
-                              foodTickets[`deluxeMeal${restaurant.id}`] === 0
+                              (foodTickets[`deluxeMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "none"
                                 : ""
                             }
                             color={
-                              foodTickets[`deluxeMeal${restaurant.id}`] === 0
+                              (foodTickets[`deluxeMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "action"
                                 : ""
                             }
@@ -322,7 +329,7 @@ const Tickets = () => {
                             }
                           />
                           <div className="ticket-count">
-                            {foodTickets[`deluxeMeal${restaurant.id}`]}
+                            {(foodTickets[`deluxeMeal${restaurant.id}`]?.qty ?? 0)}
                           </div>
                           <AddCircleOutlineIcon
                             fontSize="large"
@@ -352,12 +359,12 @@ const Tickets = () => {
                           <RemoveCircleOutlineIcon
                             fontSize="large"
                             pointerEvents={
-                              foodTickets[`specialMeal${restaurant.id}`] === 0
+                              (foodTickets[`specialMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "none"
                                 : ""
                             }
                             color={
-                              foodTickets[`specialMeal${restaurant.id}`] === 0
+                              (foodTickets[`specialMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "action"
                                 : ""
                             }
@@ -366,7 +373,7 @@ const Tickets = () => {
                             }
                           />
                           <div className="ticket-count">
-                            {foodTickets[`specialMeal${restaurant.id}`]}
+                            {(foodTickets[`specialMeal${restaurant.id}`]?.qty ?? 0)}
                           </div>
                           <AddCircleOutlineIcon
                             fontSize="large"
