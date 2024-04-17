@@ -412,10 +412,10 @@ const Tickets = () => {
             <AddShoppingCartIcon />
             <h3>Add to Cart</h3>
           </button>
-          <button className="ticket-cart-button" onClick={handleCheckout}>
+          {/* <button className="ticket-cart-button" onClick={handleCheckout}>
             <ShoppingCartIcon />
             <h3> Checkout</h3>
-          </button>
+          </button> */}
         </div>
         {errorState && (
           <div className="ticket-error-message" style={{ color: "red" }}>

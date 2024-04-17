@@ -112,9 +112,8 @@ const Checkout = () => {
                 setLoading(true);
                 setOpen(true);
                 setTimeout(() => setLoading(false), 3000);
-
                 // Reset frontend data
-                shoppingCartContext.resetTicketPage();
+                shoppingCartContext.emptyShoppingCart();
             } else {
                 // If the request fails, handle the error
                 console.error('Checkout failed:', response.status);

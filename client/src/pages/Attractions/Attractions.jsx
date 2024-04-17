@@ -36,13 +36,15 @@ const Attractions = () => {
       const year = currentDate.getFullYear();
       const formattedDate = `${year}-${month}-${day}`;
     
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/current-weather`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ WDate: formattedDate })
-      });
+      // const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/current-weather`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ WDate: formattedDate })
+      // });
+
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/current-weather`);
       const data = await response.json();
 
       if (response.ok) {
