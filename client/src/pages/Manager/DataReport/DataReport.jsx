@@ -1057,7 +1057,7 @@ function DataReport() {
         if (financeCategory === "tickets") {
           setFinanceReportData(reportData.TicketData);
         } else if (financeCategory === "dining") {
-          setFinanceReportData(reportData);
+          setFinanceReportData(reportData.diningData);
         } else if (financeCategory === "merch") {
           setFinanceReportData(reportData.merchData);
         } else if (financeCategory === "maintenance") {
