@@ -1,16 +1,5 @@
 import "./Tickets.css";
 import { useState, useEffect } from "react";
-import Carousel from "../../assets/carousel.jpg";
-import FerrisWheel from "../../assets/ferris_wheel.jpg";
-import RollerCoaster from "../../assets/roller_coaster.jpg";
-import ThemedRide from "../../assets/themed_rides.jpg";
-import WaterRide from "../../assets/water_ride.jpg";
-import Burger from "../../assets/whataburger.jpg";
-import Steak from "../../assets/steak_restaurant.jpg";
-import MyMelody from "../../assets/themed_restaurant.jpg";
-import SilverSpoon from "../../assets/silverspoonfood.png";
-import WhiteCastle from "../../assets/whitecastle.jpg";
-import BellaFood from "../../assets/bellasfood.jpg";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -22,15 +11,17 @@ import dayjs from "dayjs";
 import { useShoppingCart } from "../../components/ShoppingCart/ShoppingCart";
 import { useNavigate } from "react-router-dom";
 import Sparkles from "../../components/SparkleCursor/Sparkles";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Tickets = () => {
   const shoppingCartContext = useShoppingCart();
   const navigate = useNavigate();
-  const [attractionsLoading, setAttractionsLoading] = useState(true);
 
   const cartDate = shoppingCartContext.getDate();
   const [visitDate, setVisitDate] = useState(cartDate);
   const today = dayjs().startOf("day");
+  const [loading, setLoading] = useState(true);
 
   const cartTickets = shoppingCartContext.getTickets();
   const [standardTicket, setStandardTicket] = useState(
@@ -41,58 +32,80 @@ const Tickets = () => {
 
   const cartAttractions = shoppingCartContext.getAttractions();
   const [attractions, setAttractions] = useState([]);
-  const [selectedAttractions, setSelectedAttractions] = useState([]);
+  const [selectedAttractions, setSelectedAttractions] = useState(cartAttractions);
+
+  const [restaurants, setRestaurants] = useState([]);
 
   const cartFoodTickets = shoppingCartContext.getMealTickets();
   const [foodTickets, setFoodTickets] = useState({
     ...cartFoodTickets,
   });
-  useEffect(() => {
-    const fetchAttractions = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/attractions`
-        );
-        const { attractions } = await response.json();
-        setAttractions(attractions);
-        setAttractionsLoading(false);
-      } catch (error) {
-        console.error("Error fetching attractions:", error);
-        setAttractionsLoading(false);
-      }
-    };
 
-    fetchAttractions();
-  }, []);
-  const [restaurant, setRestaurant] = useState([]);
-  const [restaurantsLoading, setRestaurantsLoading] = useState(true);
+  const [errorState, setErrorState] = useState(false);
 
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/get-rest`
-        );
-        const { restaurants } = await response.json();
-        setRestaurants(restaurants);
-        setRestaurantsLoading(false);
-      } catch (error) {
-        console.error("Error fetching restaurants:", error);
-        setRestaurantsLoading(false);
-      }
-    };
-
-    fetchRestaurants();
-  }, []);
-  const updateMealTicket = (mealType, restaurantId, value) => {
-    const mealKey = `${mealType}Meal${restaurantId}`;
-    console.log(foodTickets);
-    setFoodTickets((prevFoodTickets) => ({
-      ...prevFoodTickets,
-      [mealKey]: Math.max(0, prevFoodTickets[mealKey] + value),
-    }));
+  const fetchAttractions = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/attractions`
+      );
+      const { attractions } = await response.json();
+      setAttractions(attractions);
+    } catch (error) {
+      console.error("Error fetching attractions:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const fetchRestaurants = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/get-rest`
+      );
+      const { restaurants } = await response.json();
+      setRestaurants(restaurants);
+    } catch (error) {
+      console.error("Error fetching restaurants:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAttractions();
+    fetchRestaurants();
+  }, []);
+
+  useEffect(() => {
+    console.log(restaurants);
+  }, [restaurants]);
+
+  const updateMealTicket = (mealType, restaurantId, value) => {
+    const mealKey = `${mealType}Meal${restaurantId}`;
+    const nextValue = (foodTickets[mealKey]?.qty ?? 0) + value;
+
+    if (nextValue < 0) {
+      return;
+    }
+
+    setFoodTickets(prevFoodTickets => {
+      if (nextValue === 0) {
+        const { [mealKey]: _, ...rest } = prevFoodTickets;
+        return rest;
+      }
+
+      return {
+        ...prevFoodTickets,
+        [mealKey]: {
+          item: restaurants.find(restaurant => restaurant.id === restaurantId),
+          qty: nextValue
+        }
+      }
+    });
+  };
+  
   const setAttractionFn = (newAttraction) => {
     if (!selectedAttractions.includes(newAttraction)) {
       setSelectedAttractions([...selectedAttractions, newAttraction]);
@@ -102,9 +115,6 @@ const Tickets = () => {
       );
     }
   };
-  const [restaurants, setRestaurants] = useState([]);
-
-  const [errorState, setErrorState] = useState(false);
 
   const addToCart = () => {
     if (!standardTicket && !expressTicket && !childTicket) {
@@ -129,6 +139,8 @@ const Tickets = () => {
       ...foodTickets,
     });
 
+    console.log(foodTickets);
+    
     shoppingCartContext.setAttractions(selectedAttractions);
     shoppingCartContext.setDate(visitDate);
     return true;
@@ -143,6 +155,12 @@ const Tickets = () => {
 
   return (
     <div className="tickets-container">
+       <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="tickets-header">
         <Sparkles />
         <h1>Theme Park Tickets</h1>
@@ -222,34 +240,30 @@ const Tickets = () => {
           <div className="select-attractions">
             <h2>Select the attractions you're planning to ride</h2>
             <div className="attractions-options">
-              {attractionsLoading ? (
-                <div>Loading attractions...</div>
-              ) : (
-                attractions.map((attraction) => (
-                  <div key={attraction.name} className="attraction-option">
-                    <img src={attraction.image} />
-                    <div className="attraction-desc">
-                      <h3>{attraction.name}</h3>
-                      <div>{attraction.description}</div>
-                    </div>
-                    <button
-                      className="add-attraction"
-                      style={{
-                        backgroundColor: selectedAttractions.includes(
-                          attraction.name
-                        )
-                          ? "#67C237"
-                          : "",
-                      }}
-                      onClick={() => setAttractionFn(attraction.name)}
-                    >
-                      {selectedAttractions.includes(attraction.name)
-                        ? "Added ✔"
-                        : "Add attraction"}
-                    </button>
+              {attractions.map((attraction) => (
+                <div key={attraction.name} className="attraction-option">
+                  <img src={attraction.image} />
+                  <div className="attraction-desc">
+                    <h3>{attraction.name}</h3>
+                    <div>{attraction.description}</div>
                   </div>
-                ))
-              )}
+                  <button
+                    className="add-attraction"
+                    style={{
+                      backgroundColor: selectedAttractions.includes(
+                        attraction.name
+                      )
+                        ? "#67C237"
+                        : "",
+                    }}
+                    onClick={() => setAttractionFn(attraction.name)}
+                  >
+                    {selectedAttractions.includes(attraction.name)
+                      ? "Added ✔"
+                      : "Add attraction"}
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -262,12 +276,9 @@ const Tickets = () => {
                 <h4>Standard ($10/ea)</h4>
                 <i>Quick eats and quick service</i>
 
-                {restaurantsLoading ? (
-                  <div>Loading restaurants...</div>
-                ) : (
-                  restaurants
-                    .filter((restaurant) => restaurant.type === "Standard")
-                    .map((restaurant) => (
+                {restaurants.map((restaurant) => {
+                  if (restaurant.type === "Standard") {
+                    return (
                       <div key={restaurant.id} className="meal-option">
                         <img src={restaurant.image} />
                         <h3>{restaurant.name}</h3>
@@ -276,12 +287,12 @@ const Tickets = () => {
                           <RemoveCircleOutlineIcon
                             fontSize="large"
                             pointerEvents={
-                              foodTickets[`standard${restaurant.id}`] === 0
+                              (foodTickets[`standardMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "none"
                                 : ""
                             }
                             color={
-                              foodTickets[`standard${restaurant.id}`] === 0
+                              (foodTickets[`standardMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "action"
                                 : ""
                             }
@@ -290,7 +301,7 @@ const Tickets = () => {
                             }
                           />
                           <div className="ticket-count">
-                            {foodTickets[`standardMeal${restaurant.id}`]}
+                            {(foodTickets[`standardMeal${restaurant.id}`]?.qty ?? 0)}
                           </div>
                           <AddCircleOutlineIcon
                             fontSize="large"
@@ -300,19 +311,18 @@ const Tickets = () => {
                           />
                         </div>
                       </div>
-                    ))
-                )}
+                    );
+                  }
+                  return null;
+                })}
               </div>
 
               <div className="meal-options-col">
                 <h4>Deluxe ($35/ea)</h4>
                 <i>Fine dining in luxury</i>
-                {restaurantsLoading ? (
-                  <div>Loading restaurants...</div>
-                ) : (
-                  restaurants
-                    .filter((restaurant) => restaurant.type === "Deluxe")
-                    .map((restaurant) => (
+                {restaurants.map((restaurant) => {
+                  if (restaurant.type === "Deluxe") {
+                    return (
                       <div key={restaurant.id} className="meal-option">
                         <img src={restaurant.image} />
                         <h3>{restaurant.name}</h3>
@@ -321,12 +331,12 @@ const Tickets = () => {
                           <RemoveCircleOutlineIcon
                             fontSize="large"
                             pointerEvents={
-                              foodTickets[`deluxeMeal${restaurant.id}`] === 0
+                              (foodTickets[`deluxeMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "none"
                                 : ""
                             }
                             color={
-                              foodTickets[`deluxeMeal${restaurant.id}`] === 0
+                              (foodTickets[`deluxeMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "action"
                                 : ""
                             }
@@ -335,7 +345,7 @@ const Tickets = () => {
                             }
                           />
                           <div className="ticket-count">
-                            {foodTickets[`deluxeMeal${restaurant.id}`]}
+                            {(foodTickets[`deluxeMeal${restaurant.id}`]?.qty ?? 0)}
                           </div>
                           <AddCircleOutlineIcon
                             fontSize="large"
@@ -345,19 +355,18 @@ const Tickets = () => {
                           />
                         </div>
                       </div>
-                    ))
-                )}
+                    );
+                  }
+                  return null;
+                })}
               </div>
 
               <div className="meal-options-col">
                 <h4>Special ($45/ea)</h4>
                 <i>Themed character restaurants</i>
-                {restaurantsLoading ? (
-                  <div>Loading restaurants...</div>
-                ) : (
-                  restaurants
-                    .filter((restaurant) => restaurant.type === "Special")
-                    .map((restaurant) => (
+                {restaurants.map((restaurant) => {
+                  if (restaurant.type === "Special") {
+                    return (
                       <div key={restaurant.id} className="meal-option">
                         <img src={restaurant.image} />
                         <h3>{restaurant.name}</h3>
@@ -366,12 +375,12 @@ const Tickets = () => {
                           <RemoveCircleOutlineIcon
                             fontSize="large"
                             pointerEvents={
-                              foodTickets[`specialMeal${restaurant.id}`] === 0
+                              (foodTickets[`specialMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "none"
                                 : ""
                             }
                             color={
-                              foodTickets[`specialMeal${restaurant.id}`] === 0
+                              (foodTickets[`specialMeal${restaurant.id}`]?.qty ?? 0) === 0
                                 ? "action"
                                 : ""
                             }
@@ -380,7 +389,7 @@ const Tickets = () => {
                             }
                           />
                           <div className="ticket-count">
-                            {foodTickets[`specialMeal${restaurant.id}`]}
+                            {(foodTickets[`specialMeal${restaurant.id}`]?.qty ?? 0)}
                           </div>
                           <AddCircleOutlineIcon
                             fontSize="large"
@@ -390,8 +399,10 @@ const Tickets = () => {
                           />
                         </div>
                       </div>
-                    ))
-                )}
+                    );
+                  }
+                  return null;
+                })}
               </div>
             </div>
           </div>

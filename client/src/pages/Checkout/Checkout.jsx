@@ -8,7 +8,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Logo from '../../assets/logoWhiteBkg.png';
 import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
-import { ticketDetails, mealTickets } from '../../constants/ticketModels';
+import { ticketDetails } from '../../constants/ticketModels';
 import { merchDetails } from '../../constants/merchModel';
 import { useAuth } from '../auth/auth';
 import axios from 'axios';
@@ -51,16 +51,16 @@ const Checkout = () => {
 
     const getTotal = () => {
         let total = 0;
-        Object.entries(mealTickets).forEach(([mealTicket, mealTicketDetail]) => {
-            total += mealTicketDetail.price * foodTickets[mealTicket];
+        Object.values(foodTickets).forEach((foodTicket) => {
+            total += foodTicket.item.amount * foodTicket.qty;
         })
 
         Object.entries(ticketDetails).forEach(([ticket, ticketDetail]) => {
             total += ticketDetail.price * tickets[ticket];
         })
 
-        Object.entries(merchDetails).forEach(([merch, merchDetail]) => {
-            total += merchDetail.price * merchItems[merch].quantity;
+        Object.values(merchItems).forEach((merchDetail) => {
+            total += merchDetail.item.sellingCost *  merchDetail.quantity;
         })
 
         return total;
@@ -83,6 +83,21 @@ const Checkout = () => {
         }
 
         try {
+            /*
+                TODO: UPDATE BACKEND TO HANDLE NEW foodTickets STRUCTURE:
+                foodTickets will look like this:
+                {
+                    standardMeal1: {
+                        item: {...},
+                        qty: 4
+                    },
+                    expressMeal3: {
+                        item: {...},
+                        qty: 1
+                    }
+                }
+            */
+
             const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/checkout`, {
                 tickets,
                 visitDate,
@@ -270,37 +285,35 @@ const Checkout = () => {
                                 </div>
                                 : null;
                         })}
-                        {Object.entries(mealTickets).map(([mealTicketKey, mealTicketDetails]) => {
-                            return foodTickets[mealTicketKey] !== 0 ?
-                                <div className="order-item" key={mealTicketKey}>
-                                    <div className='checkout-item-pic'>
-                                        <img src={mealTicketDetails.image} />
-                                    </div>
-                                    <div className='item'>
-                                        {mealTicketDetails.name}
-                                        <div className="item-quantity">
-                                            {mealTicketDetails.type}<br />
-                                            Quantity: {foodTickets[mealTicketKey]}
-                                        </div>
-                                    </div>
-                                    <div className='price'>${mealTicketDetails.price * foodTickets[mealTicketKey]}</div>
+                        {Object.values(foodTickets).map((foodTicket) => (
+                            <div className="order-item" key={foodTicket.item.id}>
+                                <div className='checkout-item-pic'>
+                                    <img src={foodTicket.item.image} />
                                 </div>
-                                : null;
-                        })}
-                        {Object.entries(merchDetails).map(([merch, merchDetail]) => {
-                            return merchItems[merch].quantity !== 0 ?
+                                <div className='item'>
+                                    {foodTicket.item.name}
+                                    <div className="item-quantity">
+                                        {foodTicket.item.type}<br />
+                                        Quantity: {foodTicket.qty}
+                                    </div>
+                                </div>
+                                <div className='price'>${foodTicket.item.amount * foodTicket.qty}</div>
+                            </div>
+                        ))}
+                        {Object.entries(merchItems).map(([merch, merchDetail]) => {
+                            return merchDetail.quantity !== 0 ?
                                 <div className="order-item" key={merch}>
                                     <div className='checkout-item-pic'>
-                                        <img src={merchDetail.image} />
+                                        <img src={merchDetail.item.image} />
                                     </div>
                                     <div className='item'>
-                                        {merchDetail.name}
+                                        {merch}
                                         <div className="item-quantity">
-                                            Quantity: {merchItems[merch].quantity}<br />
-                                            Size: {merchItems[merch].size}
+                                            Quantity: {merchDetail.quantity}<br />
+                                            Size: {merchDetail.size}
                                         </div>
                                     </div>
-                                    <div className='price'>${merchDetail.price * merchItems[merch].quantity}</div>
+                                    <div className='price'>${merchDetail.item.sellingCost * merchDetail.quantity}</div>
                                 </div>
                                 : null;
                         })}

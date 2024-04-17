@@ -15,37 +15,13 @@ export const ShoppingCartProvider = ({ children }) => {
         childTicket: 0
     })
     
-    const [mealTickets, setMealTickets] = useState({
-        standardMeal1: 0,
-        standardMeal2: 0,
-        deluxeMeal1: 0,
-        deluxeMeal2: 0,
-        specialMeal1: 0,
-        specialMeal2: 0
-    })
+    const [mealTickets, setMealTickets] = useState({})
 
     const [attractions, setAttractions] = useState([]);
 
     const [date, setDate] = useState(dayjs());
 
-    const [merch, setMerch] = useState({
-        shirt1: {
-            size: '',
-            quantity: 0,
-        }, 
-        shirt2: {
-            size: '',
-            quantity: 0,
-        }, 
-        pants1: {
-            size: '',
-            quantity: 0,
-        }, 
-        pants2: {
-            size: '',
-            quantity: 0,
-        }, 
-    })
+    const [merch, setMerch] = useState({});
 
     const [cartCount, setCartCount] = useState(0);
 
@@ -98,14 +74,7 @@ export const ShoppingCartProvider = ({ children }) => {
             childTicket: 0
         });
 
-        setMealTickets({
-            standardMeal1: 0,
-            standardMeal2: 0,
-            deluxeMeal1: 0,
-            deluxeMeal2: 0,
-            specialMeal1: 0,
-            specialMeal2: 0
-        });
+        setMealTickets({});
         
         setAttractions([]);
         setDate(dayjs());

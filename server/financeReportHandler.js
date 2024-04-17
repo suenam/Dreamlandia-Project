@@ -113,37 +113,38 @@ SELECT
     SUM(CASE WHEN RestaurantType = 'Special' THEN ExpenseAmt ELSE 0 END) AS Special_Expense,
     SUM(ExpenseAmt) AS Total_Expense,
     (
-        SELECT SUM(ExpenseAmt)
-        FROM restaurant_expense
-        WHERE DATE(ExpenseDate) BETWEEN ? AND ?
-        ${
-            diningType !== "allDining"
-                ? "AND RestaurantType = ?"
-                : 'AND RestaurantType IN ("Standard", "Deluxe", "Special")'
-        }
-    ) / DATEDIFF(?, ?) AS AvgDailyExpenseAmt,
+      SELECT SUM(re.ExpenseAmt)
+      FROM restaurant_expense re
+      JOIN restaurant r ON r.RestaurantID = re.RestaurantID
+      WHERE DATE(re.ExpenseDate) BETWEEN ? AND ?
+      
+      ${diningType !== 'allDining' ? 'AND r.RestaurantType = ?' : 'AND r.RestaurantType IN ("Standard", "Deluxe", "Special")'}
+      
+  ) / DATEDIFF(?, ?) AS AvgDailyExpenseAmt,
     (
-        SELECT SUM(ExpenseAmt)
-        FROM restaurant_expense
-        WHERE DATE(ExpenseDate) BETWEEN ? AND ?
-        ${
-            diningType !== "allDining"
-                ? "AND RestaurantType = ?"
-                : 'AND RestaurantType IN ("Standard", "Deluxe", "Special")'
-        }
+      SELECT SUM(re.ExpenseAmt)
+      FROM restaurant_expense re
+      JOIN restaurant r ON r.RestaurantID = re.RestaurantID
+      WHERE DATE(re.ExpenseDate) BETWEEN ? AND ?
+      
+      ${diningType !== 'allDining' ? 'AND r.RestaurantType = ?' : 'AND r.RestaurantType IN ("Standard", "Deluxe", "Special")'}
+        
     ) AS TotalExpense
 FROM
     restaurant_expense
 JOIN restaurant ON restaurant.RestaurantID = restaurant_expense.RestaurantID
 WHERE DATE(ExpenseDate) BETWEEN ? AND ?
-${
-    diningType !== "allDining"
-        ? "AND RestaurantType = ?"
-        : 'AND RestaurantType IN ("Standard", "Deluxe", "Special")'
-}
 
 `;
+console.log("Received request:", {
+  startDate,
+  endDate,
+  category,
+  ticketType,
+  financeType,
+  diningType,
 
+});
 let diningExpenseQueryParams;
 if (diningType !== "allDining") {
     diningExpenseQueryParams = [
@@ -157,7 +158,6 @@ if (diningType !== "allDining") {
         diningType,
         startDate,
         endDate,
-        diningType
     ];
 } else {
     diningExpenseQueryParams = [

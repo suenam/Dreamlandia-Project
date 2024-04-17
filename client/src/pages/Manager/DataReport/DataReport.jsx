@@ -85,7 +85,6 @@ function DataReport() {
 
   const generateVisitTableSingleDining = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-      // Calculate the total visitors for the date range
       const totalVisitors = data.reduce((sum, row) => sum + parseFloat(row.Visitors), 0);
   
       return (
@@ -147,7 +146,6 @@ function DataReport() {
 
   const generateVisitTableAllDining = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-        // Calculate the total visitors for the date range
         const totalVisitors = data.reduce((sum, row) => sum + parseFloat(row.Total), 0);
       const transformedData = data.map((row) => {
         const { TransactionDate, ...restaurants } = row;
@@ -223,7 +221,6 @@ function DataReport() {
 
   const generateVisitTable = (data) => {
     if (Array.isArray(data) && data.length > 0) {
-      // Transform the data to match the expected structure
       const transformedData = data.map((row) => {
         const { PurchaseDate, ...attractions } = row;
         return {
@@ -479,20 +476,14 @@ function DataReport() {
     if (financeType === "") {
       return null;
     }
+    console.log(diningType);
+    console.log(diningType);
+    console.log(diningType);
 
     if (Array.isArray(data) && data.length > 0) {
-      const totalRevenue = data.reduce(
-        (sum, row) => sum + parseFloat(row.TotalRevenue),
-        0
-      );
+      
 
-      const totalExpense = data.reduce(
-        (sum, row) => sum + parseFloat(row.TotalExpense),
-        0
-      );
 
-      const amountLabel =
-        financeType === "diningRev" ? "Total Revenue" : "Total Expense";
 
       return (
         <>

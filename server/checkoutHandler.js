@@ -31,7 +31,6 @@ async function checkoutHandler(req, res) {
     console.log('foodTickets:', foodTickets);
     console.log('attractions:', attractions);
     console.log('merchItems:', merchItems);
-    // return;
 
     // Batch insertion of ticket data
     const query = 'INSERT INTO ticket (TType, TPurchaseDate, TExpiryDate, TPrice, UserID) VALUES ?';
@@ -65,25 +64,31 @@ async function checkoutHandler(req, res) {
       }
     }
 
-    for (const [itemKey, { size, quantity }] of Object.entries(merchItems)) {
+    for (const [itemName, itemDetails] of Object.entries(merchItems)) {
+      const { item, quantity, size } = itemDetails;
       if (quantity > 0) {
-        const itemName = itemNameConvert(itemKey);
+        const { MId: itemID } = item;
         const transactionDate = new Date();
 
-        // Call the stored procedure for each item with a quantity greater than 0
-        const merchQuery = 'CALL proc_AddOrderDetail(?, ?, ?, ?, ?)';
-        await pool.query(merchQuery, [itemName, quantity, size, transactionDate, userID]);
+        const merchQuery = `INSERT INTO merchandise_order_detail (ItemID, TotalCost, UserID, TransactionDate, Size, quantity)
+                            VALUES (?, ?, ?, ?, ?, ?)`;
+
+        const totalCost = parseFloat(item.sellingCost) * quantity;
+        await pool.query(merchQuery, [itemID, totalCost, userID, transactionDate, size, quantity]);
       }
     }
 
 
-    for (const [mealKey, quantity] of Object.entries(foodTickets)) {
+    for (const [mealKey, mealDetails] of Object.entries(foodTickets)) {
+      const { item, qty: quantity } = mealDetails;
       if (quantity > 0) {
-        console.log('mealKey:', mealKey);
-        const restaurantName = restaurantNameConvert(mealKey);
-        const foodTicketQuery = 'CALL proc_AddRestaurantTransaction(?, ?, ?, ?)';
+        const { id: restaurantID } = item;
         const transactionDate = new Date();
-        await pool.query(foodTicketQuery, [restaurantName, quantity, transactionDate, userID]);
+
+        const foodTicketQuery = `INSERT INTO restaurant_transaction (RestaurantID, UserID, TransactionTimeStamp, quantity)
+                                  VALUES (?, ?, ?, ?)`;
+
+        await pool.query(foodTicketQuery, [restaurantID, userID, transactionDate, quantity]);
       }
     }
 
@@ -110,38 +115,6 @@ function getTicketPrice(ticketType) {
   }
 }
 
-function itemNameConvert(itemname) {
-  switch (itemname) {
-    case 'shirt1':
-      return 'Enchanted T-Shirt 1';
-    case 'shirt2':
-      return 'Enchanted T-Shirt 2';
-    case 'pants1':
-      return 'Enchanted Shorts 1';
-    case 'pants2':
-      return 'Enchanted Shorts 2';
-    default:
-      throw new Error('Invalid item name');
-  }
-}
 
-function restaurantNameConvert(restaurantName) {
-  switch (restaurantName) {
-    case 'standardMeal1':
-      return 'WhataSandwich';
-    case 'standardMeal2':
-      return 'Burger Castle';
-    case 'deluxeMeal1':
-      return 'The Velvet Vineyard';
-    case 'deluxeMeal2':
-      return 'Silver Spoon Serenade';
-    case 'specialMeal1':
-      return 'HerHarmony Eatery';
-    case 'specialMeal2':
-      return 'Bellas Fairy Tale Feast';
-    default:
-      throw new Error('Invalid restaurant name');
-  }
-}
 
 module.exports = checkoutHandler;
