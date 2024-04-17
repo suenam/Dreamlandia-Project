@@ -25,6 +25,10 @@ const Shop = () => {
   }, [merchandise]);
 
   useEffect(() => {
+    console.log(merchandise);
+  }, [merchandise]);
+
+  useEffect(() => {
     const fetchMerchandise = async () => {
       try {
         setLoading(true);
@@ -33,6 +37,18 @@ const Shop = () => {
 
         if (response.ok) {
           setMerchandise(data.merchandise);
+
+          // setSelectedItems(
+          //   data.merchandise.reduce((acc, item) => {
+          //     acc[item.name] = {
+          //       size: '',
+          //       quantity: 0,
+          //       price: item.sellingCost, 
+          //       image: item.image,
+          //     };
+          //     return acc;
+          //   }, {})
+          // );
         } else {
           console.error('FAILED TO FETCH MERCHANDISE!', data.message);
         }

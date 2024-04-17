@@ -46,6 +46,7 @@ const Tickets = () => {
   const fetchAttractions = async () => {
     try {
       setLoading(true);
+
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/attractions`
       );
@@ -61,6 +62,11 @@ const Tickets = () => {
   const fetchRestaurants = async () => {
     try {
       setLoading(true);
+
+    }
+  };
+  const fetchRestaurants = async () => {
+    try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/get-rest`
       );
@@ -70,6 +76,7 @@ const Tickets = () => {
       console.error("Error fetching restaurants:", error);
     } finally {
       setLoading(false);
+
     }
   };
 
