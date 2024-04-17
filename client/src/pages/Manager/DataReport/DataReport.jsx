@@ -1057,7 +1057,7 @@ function DataReport() {
         if (financeCategory === "tickets") {
           setFinanceReportData(reportData.TicketData);
         } else if (financeCategory === "dining") {
-          setFinanceReportData(reportData.diningData);
+          setFinanceReportData(reportData);
         } else if (financeCategory === "merch") {
           setFinanceReportData(reportData.merchData);
         } else if (financeCategory === "maintenance") {
@@ -1444,7 +1444,7 @@ function DataReport() {
                 >
                   <option value="">All</option>
                   <option value="pending">Pending</option>
-                  <option value="inProgress">In Progress</option>
+                  <option value="In Progress">In Progress</option>
                   <option value="completed">Completed</option>
                 </select>
                 <label>

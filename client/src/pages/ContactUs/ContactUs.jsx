@@ -139,7 +139,9 @@ const ContactUs = () => {
             <option value="query">Query</option>
             <option value="feedback">Feedback</option>
             <option value="issue">Issue</option>
+            
           </select>
+          
         </div>
         <div className="input-group">
           <label htmlFor="message">Message:</label>
