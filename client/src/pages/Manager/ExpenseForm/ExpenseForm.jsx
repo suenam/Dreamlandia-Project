@@ -8,8 +8,8 @@ import axios from "axios";
 const ExpenseForm = () => {
   const [UPDATEid, UPDATEsetId] = useState(""); //update attr
   const [showUpdateAttraction, setShowUpdateAttraction] = useState(false);
-const [showUpdateMerchandise, setShowUpdateMerchandise] = useState(false);
-const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
+  const [showUpdateMerchandise, setShowUpdateMerchandise] = useState(false);
+  const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
   const [UPDATEDname, setUPDATEDname] = useState("");
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
@@ -97,18 +97,16 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
       if (response.ok) {
         console.log("good");
         console.log(response);
+        setMessage("Success in updating Attraction");
         setOpenMerchandiseSuccessModal(true);
-
       } else {
         console.log("not good");
         console.log(response);
         setOpenMerchandiseFailureModal(true);
-
       }
     } catch (error) {
       console.error("Error updating attraction:", error);
       setOpenMerchandiseFailureModal(true);
-
     }
   };
   const handleUpdateMerchandise = async (e) => {
@@ -135,19 +133,16 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
       );
       if (response.ok) {
         console.log("good");
-        console.log(response);
+        setMessage("Success in updating Merchandise");
         setOpenMerchandiseSuccessModal(true);
-
       } else {
         console.log("not good");
         console.log(response);
         setOpenMerchandiseFailureModal(true);
-
       }
     } catch (error) {
       console.error("Error updating merch:", error);
       setOpenMerchandiseFailureModal(true);
-
     }
   };
   const handleUpdateRestaurant = async (e) => {
@@ -174,19 +169,18 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
       );
       if (response.ok) {
         console.log("good");
+        setMessage("Success in updating Restaurant");
         setOpenMerchandiseSuccessModal(true);
 
         console.log(response);
       } else {
         console.log("not good");
-        console.log(response);
+        setMessage("Failed to Update Restaurant");
         setOpenMerchandiseFailureModal(true);
-
       }
     } catch (error) {
       console.error("Error updating merch:", error);
       setOpenMerchandiseFailureModal(true);
-
     }
   };
   useEffect(() => {
@@ -348,16 +342,16 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
             },
           }
         );
-  
+
         if (!response.ok) {
           throw new Error("Failed to fetch merchandise list");
         }
-  
+
         const data = await response.json();
         const selectedMerchandise = data.merchandise.find(
           (merchandise) => merchandise.MId === parseInt(selectedMerchandiseId)
         );
-  
+
         if (selectedMerchandise) {
           setMerchIDUpdate(selectedMerchandise.MId);
           setNewMerchName(selectedMerchandise.name);
@@ -384,16 +378,16 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
             },
           }
         );
-  
+
         if (!response.ok) {
           throw new Error("Failed to fetch restaurant list");
         }
-  
+
         const data = await response.json();
         const selectedRestaurant = data.restaurants.find(
           (restaurant) => restaurant.id === parseInt(selectedRestaurantId)
         );
-  
+
         if (selectedRestaurant) {
           setUPDATEDRestaurantID(selectedRestaurant.id);
           setUPDATEDRestaurantName(selectedRestaurant.name);
@@ -420,16 +414,17 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
             },
           }
         );
-  
+
         if (!response.ok) {
           throw new Error("Failed to fetch attraction list");
         }
-  
+
         const data = await response.json();
         const selectedAttraction = data.attractions.find(
-          (attraction) => attraction.attractionID === parseInt(selectedAttractionId)
+          (attraction) =>
+            attraction.attractionID === parseInt(selectedAttractionId)
         );
-  
+
         if (selectedAttraction) {
           UPDATEsetId(selectedAttraction.attractionID);
           setUPDATEDname(selectedAttraction.name);
@@ -489,7 +484,8 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
         }
       );
       if (response.ok) {
-        console.log("done");
+        setMessage("Successfully deleted merchandise!");
+        setOpenMerchandiseSuccessModal(true);
       }
     } catch (error) {
       console.error("Error deleting merchandise:", error);
@@ -514,6 +510,7 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
       );
 
       if (response.ok) {
+        setMessage("Successfully deleted attraction!");
         setOpenMerchandiseSuccessModal(true);
       } else {
         setOpenDeleteFailureModal(true);
@@ -542,7 +539,9 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
       );
 
       if (response.ok) {
-        setOpenDeleteSuccessModal(true);
+        setMessage("Successfully deleted restaurant!");
+        setOpenMerchandiseSuccessModal(true);
+        true;
       } else {
         setOpenDeleteFailureModal(true);
       }
@@ -615,7 +614,7 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
       if (response.ok) {
         const data = await response.json();
         setOpenMerchandiseSuccessModal(true);
-        setMerchandiseMessage(data.message);
+        setMessage("Success in adding Merchandise");
         setMerchandiseFormData({
           name: "",
           type: "",
@@ -686,6 +685,7 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
 
       if (response.ok) {
         const data = await response.json();
+        setMessage("Success in adding Restaurant!");
         setOpenMerchandiseSuccessModal(true);
       } else {
         setOpenMerchandiseFailureModal(true);
@@ -781,7 +781,7 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
                 value={restaurantId}
                 onChange={(e) => setRestaurantId(e.target.value)}
               >
-               <option value="">Select Restaurant</option>
+                <option value="">Select Restaurant</option>
                 {restList.map((restaurant) => (
                   <option key={restaurant.id} value={restaurant.id}>
                     {restaurant.name}
@@ -838,7 +838,6 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
         >
           {showAttractionForm ? "▲ Add Attraction" : "▼ Add Attraction"}
         </button>
-
         {showAttractionForm && (
           <form onSubmit={handleAttractionSubmit}>
             <div className="form-header">
@@ -861,13 +860,19 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
               <label>
                 Type:<span className="required">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value="">Select Type</option>
+                <option value="Roller Coaster">Roller Coaster</option>
+                <option value="Carousel">Carousel</option>
+                <option value="Water Ride">Water Ride</option>
+                <option value="Themed Ride">Themed Ride</option>
+                <option value="Ferris Wheel">Ferris Wheel</option>
+              </select>
             </div>
             <div className="form-row">
               <label>
@@ -895,13 +900,17 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
               <label>
                 Thrill Level:<span className="required">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 name="thrillLevel"
                 value={formData.thrillLevel}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value="">Select Thrill Level</option>
+                <option value="Low">Low</option>
+                <option value="Moderate">Moderate</option>
+                <option value="High">High</option>
+              </select>
             </div>
             <div className="form-row">
               <label>
@@ -934,87 +943,95 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
         )}
       </div>
       <div className="expense-section">
-  <button
-    onClick={() => setShowUpdateAttraction(!showUpdateAttraction)}
-    className={`show-hide-button ${showUpdateAttraction ? "hide" : "show"}`}
-  >
-    {showUpdateAttraction ? "▲ Update Attraction" : "▼ Update Attraction"}
-  </button>
+        <button
+          onClick={() => setShowUpdateAttraction(!showUpdateAttraction)}
+          className={`show-hide-button ${
+            showUpdateAttraction ? "hide" : "show"
+          }`}
+        >
+          {showUpdateAttraction ? "▲ Update Attraction" : "▼ Update Attraction"}
+        </button>
 
-  {showUpdateAttraction && (
-    <>
-    
-    <form onSubmit={handleUpdateAttraction}>
-    <div className="form-header">
-      <h3>Update Attraction</h3>
-    </div>
-          <div className="form-row">
-            <label>Select Attraction:</label>
-            <select value={UPDATEid} onChange={handleAttractionSelect}>
-  <option value="">Select Attraction</option>
-  {attractionList.map((attraction) => (
-    <option key={attraction.attractionID} value={attraction.attractionID}>
-      {attraction.name}
-    </option>
-  ))}
-</select>
-          </div>
-          <div className="form-row">
-            <label>Name:</label>
-            <input
-              type="text"
-              value={UPDATEDname}
-              onChange={(e) => setUPDATEDname(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-row">
-            <label>Description:</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            ></textarea>
-          </div>
-          <div className="form-row">
-            <label>Short Description:</label>
-            <textarea
-              value={shortDescription}
-              onChange={(e) => setShortDescription(e.target.value)}
-              required
-            ></textarea>
-          </div>
-          <div className="form-row">
-            <label>Thrill Level:</label>
-            <input
-              type="text"
-              value={thrill}
-              onChange={(e) => setThrill(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-row">
-            <label>Height Requirement:</label>
-            <input
-              type="text"
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-row">
-            <label>Image:</label>
-            <input
-              type="text"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Update Attraction</button>
-        </form></>
-          )}
-
+        {showUpdateAttraction && (
+          <>
+            <form onSubmit={handleUpdateAttraction}>
+              <div className="form-header">
+                <h3>Update Attraction</h3>
+              </div>
+              <div className="form-row">
+                <label>Select Attraction:</label>
+                <select value={UPDATEid} onChange={handleAttractionSelect}>
+                  <option value="">Select Attraction</option>
+                  {attractionList.map((attraction) => (
+                    <option
+                      key={attraction.attractionID}
+                      value={attraction.attractionID}
+                    >
+                      {attraction.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-row">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={UPDATEDname}
+                  onChange={(e) => setUPDATEDname(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-row">
+                <label>Description:</label>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                ></textarea>
+              </div>
+              <div className="form-row">
+                <label>Short Description:</label>
+                <textarea
+                  value={shortDescription}
+                  onChange={(e) => setShortDescription(e.target.value)}
+                  required
+                ></textarea>
+              </div>
+              <div className="form-row">
+                <label>Thrill Level:</label>
+                <select
+                  value={thrill}
+                  onChange={(e) => setThrill(e.target.value)}
+                  required
+                >
+                  <option value="">Select Thrill Level</option>
+                  <option value="Low">Low</option>
+                  <option value="Moderate">Moderate</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+              <div className="form-row">
+                <label>Height Requirement:</label>
+                <input
+                  type="text"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-row">
+                <label>Image:</label>
+                <input
+                  type="text"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  required
+                />
+              </div>
+              <button type="submit">Update Attraction</button>
+            </form>
+          </>
+        )}
       </div>
 
       <div className="expense-section">
@@ -1066,7 +1083,6 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
           >
             {showAddMerchandiseForm ? "▲ Add Merchandise" : "▼ Add Merchandise"}
           </button>
-
           {showAddMerchandiseForm && (
             <form onSubmit={handleAddMerchandiseSubmit}>
               <div className="form-header">
@@ -1089,13 +1105,16 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
                 <label>
                   Type:<span className="required">*</span>
                 </label>
-                <input
-                  type="text"
+                <select
                   name="type"
                   value={merchandiseFormData.type}
                   onChange={handleMerchandiseInputChange}
                   required
-                />
+                >
+                  <option value="">Select Type</option>
+                  <option value="Clothing">Clothing</option>
+                  <option value="Accessory">Accessory</option>
+                </select>
               </div>
               <div className="form-row">
                 <label>
@@ -1140,21 +1159,21 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
           )}
         </div>
         <div className="expense-section">
-  <button
-    onClick={() => setShowUpdateMerchandise(!showUpdateMerchandise)}
-    className={`show-hide-button ${showUpdateMerchandise ? "hide" : "show"}`}
-  >
-    {showUpdateMerchandise ? "▲ Update Merchandise" : "▼ Update Merchandise"}
-  </button>
-
-  {showUpdateMerchandise && (
-    <form onSubmit={handleUpdateMerchandise}>
-          <div className="form-row">
+          <button
+            onClick={() => setShowUpdateMerchandise(!showUpdateMerchandise)}
+            className={`show-hide-button ${
+              showUpdateMerchandise ? "hide" : "show"
+            }`}
+          >
+            {showUpdateMerchandise
+              ? "▲ Update Merchandise"
+              : "▼ Update Merchandise"}
+          </button>
+          {showUpdateMerchandise && (
+            <form onSubmit={handleUpdateMerchandise}>
+              <div className="form-row">
                 <label>Select Merchandise:</label>
-                <select
-                  value={merchIDUpdate}
-                  onChange={handleMerchSelect}
-                >
+                <select value={merchIDUpdate} onChange={handleMerchSelect}>
                   <option value="">Select Merchandise</option>
                   {merchandiseList.map((merchandise) => (
                     <option key={merchandise.MId} value={merchandise.MId}>
@@ -1163,56 +1182,57 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
                   ))}
                 </select>
               </div>
-
-            <div className="form-row">
-              <label>Name:</label>
-              <input
-                type="text"
-                value={newMerchName}
-                onChange={(e) => setNewMerchName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-row">
-              <label>Type:</label>
-              <input
-                type="text"
-                value={newMerchType}
-                onChange={(e) => setNewMerchType(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-row">
-              <label>Supplier Cost:</label>
-              <input
-                type="number"
-                value={newSupplierCost}
-                onChange={(e) => setNewSupplierCost(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-row">
-              <label>Selling Cost:</label>
-              <input
-                type="number"
-                value={newSellingCost}
-                onChange={(e) => setNewSellingCost(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-row">
-              <label>Image:</label>
-              <input
-                type="text"
-                value={newImageMerch}
-                onChange={(e) => setNewImageMerch(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit">Update Merchandise</button>
-          </form>
-            )}
-
+              <div className="form-row">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={newMerchName}
+                  onChange={(e) => setNewMerchName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-row">
+                <label>Type:</label>
+                <select
+                  value={newMerchType}
+                  onChange={(e) => setNewMerchType(e.target.value)}
+                  required
+                >
+                  <option value="">Select Type</option>
+                  <option value="Clothing">Clothing</option>
+                  <option value="Accessory">Accessory</option>
+                </select>
+              </div>
+              <div className="form-row">
+                <label>Supplier Cost:</label>
+                <input
+                  type="number"
+                  value={newSupplierCost}
+                  onChange={(e) => setNewSupplierCost(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-row">
+                <label>Selling Cost:</label>
+                <input
+                  type="number"
+                  value={newSellingCost}
+                  onChange={(e) => setNewSellingCost(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-row">
+                <label>Image:</label>
+                <input
+                  type="text"
+                  value={newImageMerch}
+                  onChange={(e) => setNewImageMerch(e.target.value)}
+                  required
+                />
+              </div>
+              <button type="submit">Update Merchandise</button>
+            </form>
+          )}
         </div>
         <div className="expense-section">
           <button
@@ -1259,7 +1279,6 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
         >
           {showRestForm ? "▲ Add Restaurant" : "▼ Add Restaurant"}
         </button>
-
         {showRestForm && (
           <form onSubmit={handleAddRestSubmit}>
             <div className="form-header">
@@ -1282,13 +1301,17 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
               <label>
                 Type:<span className="required">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 name="type"
                 value={restFormData.type}
                 onChange={handleRestInputChange}
                 required
-              />
+              >
+                <option value="">Select Type</option>
+                <option value="Standard">Standard</option>
+                <option value="Deluxe">Deluxe</option>
+                <option value="Special">Special</option>
+              </select>
             </div>
             <div className="form-row">
               <label>
@@ -1301,7 +1324,6 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
                 required
               ></textarea>
             </div>
-
             <div className="form-row">
               <label>
                 Image:<span className="required">*</span>
@@ -1321,20 +1343,19 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
         )}
       </div>
       <div className="expense-section">
-  <button
-    onClick={() => setShowUpdateRestaurant(!showUpdateRestaurant)}
-    className={`show-hide-button ${showUpdateRestaurant ? "hide" : "show"}`}
-  >
-    {showUpdateRestaurant ? "▲ Update Restaurant" : "▼ Update Restaurant"}
-  </button>
-
-  {showUpdateRestaurant && (
-    <form onSubmit={handleUpdateRestaurant}>
-        <div className="form-row">
+        <button
+          onClick={() => setShowUpdateRestaurant(!showUpdateRestaurant)}
+          className={`show-hide-button ${
+            showUpdateRestaurant ? "hide" : "show"
+          }`}
+        >
+          {showUpdateRestaurant ? "▲ Update Restaurant" : "▼ Update Restaurant"}
+        </button>
+        {showUpdateRestaurant && (
+          <form onSubmit={handleUpdateRestaurant}>
+            <div className="form-row">
               <label>Select Restaurant:</label>
-              <select value={UPDATEDRestaurantID}
-               onChange={handleRestSelect}
-               >
+              <select value={UPDATEDRestaurantID} onChange={handleRestSelect}>
                 <option value="">Select Restaurant</option>
                 {restList.map((restaurant) => (
                   <option key={restaurant.id} value={restaurant.id}>
@@ -1343,59 +1364,72 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
                 ))}
               </select>
             </div>
-          
-
-          <div className="form-row">
-            <label>Name:</label>
-            <input
-              type="text"
-              value={UPDATEDRestaurantName}
-              onChange={(e) => setUPDATEDRestaurantName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-row">
-            <label>Type:</label>
-            <input
-              type="text"
-              value={UPDATEDRestaurantType}
-              onChange={(e) => setUPDATEDRestaurantType(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-row">
-            <label>Description:</label>
-            <textarea
-              value={UPDATEDRDescription}
-              onChange={(e) => setUPDATEDRDescription(e.target.value)}
-              required
-            ></textarea>
-          </div>
-          <div className="form-row">
-            <label>Cost:</label>
-            <input
-              type="number"
-              value={UPDATEDAmount}
-              onChange={(e) => setUPDATEDAmount(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-row">
-            <label>Image:</label>
-            <input
-              type="text"
-              value={UPDATEDRImage}
-              onChange={(e) => setUPDATEDRImage(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Update Merchandise</button>
-        </form>
-          )}
-
+            <div className="form-row">
+              <label>Name:</label>
+              <input
+                type="text"
+                value={UPDATEDRestaurantName}
+                onChange={(e) => setUPDATEDRestaurantName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-row">
+              <label>Type:</label>
+              <select
+                value={UPDATEDRestaurantType}
+                onChange={(e) => {
+                  setUPDATEDRestaurantType(e.target.value);
+                  switch (e.target.value) {
+                    case "Standard":
+                      setUPDATEDAmount(10);
+                      break;
+                    case "Deluxe":
+                      setUPDATEDAmount(35);
+                      break;
+                    case "Special":
+                      setUPDATEDAmount(45);
+                      break;
+                    default:
+                      setUPDATEDAmount(0);
+                  }
+                }}
+                required
+              >
+                <option value="">Select Type</option>
+                <option value="Standard">Standard</option>
+                <option value="Deluxe">Deluxe</option>
+                <option value="Special">Special</option>
+              </select>
+            </div>
+            <div className="form-row">
+              <label>Description:</label>
+              <textarea
+                value={UPDATEDRDescription}
+                onChange={(e) => setUPDATEDRDescription(e.target.value)}
+                required
+              ></textarea>
+            </div>
+            <div className="form-row">
+              <label>Cost:</label>
+              <select value={UPDATEDAmount} disabled>
+                <option value={10}>$10</option>
+                <option value={35}>$35</option>
+                <option value={45}>$45</option>
+              </select>
+            </div>
+            <div className="form-row">
+              <label>Image:</label>
+              <input
+                type="text"
+                value={UPDATEDRImage}
+                onChange={(e) => setUPDATEDRImage(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit">Update Restaurant</button>
+          </form>
+        )}
       </div>
-
       <div className="expense-section">
         <button
           onClick={() => setShowDeleteRestForm(!showDeleteRestForm)}
@@ -1475,7 +1509,8 @@ const [showUpdateRestaurant, setShowUpdateRestaurant] = useState(false);
           className="modal-content"
         >
           <h2 id="failure-modal-title" className="modal-title">
-FAILURE          </h2>
+            FAILURE{" "}
+          </h2>
           <p id="failure-modal-description" className="modal-description">
             There was an error while submitting the expense. Please try again
             later.
@@ -1729,12 +1764,13 @@ FAILURE          </h2>
           className="modal-content"
         >
           <h2 id="merchandise-success-modal-title" className="modal-title">
-SUCCESS!          </h2>
+            SUCCESS{" "}
+          </h2>
           <p
             id="merchandise-success-modal-description"
             className="modal-description"
           >
-            Form went through.
+            {message}
           </p>
           <button
             onClick={handleCloseMerchandiseSuccessModal}
@@ -1765,7 +1801,8 @@ SUCCESS!          </h2>
           className="modal-content"
         >
           <h2 id="merchandise-failure-modal-title" className="modal-title">
-Failure          </h2>
+            Failure{" "}
+          </h2>
           <p
             id="merchandise-failure-modal-description"
             className="modal-description"

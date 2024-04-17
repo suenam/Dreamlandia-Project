@@ -15,7 +15,7 @@ async function updateAttraction(req, res) {
         );
         if (result.affectedRows > 0) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ message: 'Attraction updated successfully' }));
+          res.end(JSON.stringify({ message: 'Attraction updated successfully', UPDATEDname }));
         } else {
           res.writeHead(404, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ message: 'Attraction not found' }));
