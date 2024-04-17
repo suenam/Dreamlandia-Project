@@ -20,10 +20,12 @@ const SignupPage = () => {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
- 
+
 
   const navigate = useNavigate();
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openFailureModal, setOpenFailureModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
 
   const handleSignup = async (event) => {
@@ -34,17 +36,24 @@ const SignupPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({fullname, email, password }),
+        body: JSON.stringify({ fullname, email, password }),
       });
-
+      const data = await response.json();
       if (response.ok) {
-        navigate('/login', { replace: true });
+        setModalMessage("Signup successful! Redirecting to login...");
+        setOpenSuccessModal(true);
+        setTimeout(() => {
+          navigate('/login', { replace: true });
+        }, 2000);
         console.log("Signup successful");
       } else {
         setOpenFailureModal(true);
+        setModalMessage(data.message || "There was an error while signing up");
         console.error("Signup failed");
       }
     } catch (error) {
+      setOpenFailureModal(true);
+      setModalMessage("Network error or server is down.");
       console.error('There was an error:', error);
     }
   };
@@ -62,7 +71,7 @@ const SignupPage = () => {
       <img src={Logo} />
       <div className="signup-form">
         <h1>Sign Up</h1>
-        
+
         <FormControl required sx={{ m: 1, width: '75%', marginTop: '40px' }} variant="outlined">
           <OutlinedInput
             value={email}
@@ -91,9 +100,9 @@ const SignupPage = () => {
             }
           />
         </FormControl>
-        
-        
-       
+
+
+
         <FormControl required sx={{ m: 1, width: '75%', marginBottom: '8px' }} variant="outlined">
           <OutlinedInput
             value={password}
@@ -150,9 +159,39 @@ const SignupPage = () => {
             Failed to Sign Up
           </h2>
           <p id="submit-failure-modal-description" className="modal-description">
-            There was an error while signing up.
+            {modalMessage}
           </p>
           <button onClick={handleCloseFailureModal} className="modal-button">
+            Close
+          </button>
+        </Box>
+      </Modal>
+      <Modal
+        open={openSuccessModal}
+        onClose={() => setOpenSuccessModal(false)}
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
+        className="modal-container success-modal"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="modal-content"
+        >
+          <h2 id="success-modal-title" className="modal-title">
+            Success
+          </h2>
+          <p id="success-modal-description" className="modal-description">
+            {modalMessage}
+          </p>
+          <button onClick={() => setOpenSuccessModal(false)} className="modal-button">
             Close
           </button>
         </Box>

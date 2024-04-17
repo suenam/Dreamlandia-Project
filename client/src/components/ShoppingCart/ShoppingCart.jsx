@@ -80,6 +80,12 @@ export const ShoppingCartProvider = ({ children }) => {
         setDate(dayjs());
     }
 
+    const emptyShoppingCart = () => {
+        resetTicketPage();
+        setMerch({});
+        setCartCount(0);
+    }
+
 
     return (
         <ShoppingCartContext.Provider value={{
@@ -89,7 +95,8 @@ export const ShoppingCartProvider = ({ children }) => {
             setDate, getDate,
             setMerch, getMerch,
             getCartCount,
-            resetTicketPage
+            resetTicketPage, 
+            emptyShoppingCart,
             }}>
             {children}
         </ShoppingCartContext.Provider>
