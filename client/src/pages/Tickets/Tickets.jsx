@@ -11,6 +11,8 @@ import dayjs from "dayjs";
 import { useShoppingCart } from "../../components/ShoppingCart/ShoppingCart";
 import { useNavigate } from "react-router-dom";
 import Sparkles from "../../components/SparkleCursor/Sparkles";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Tickets = () => {
   const shoppingCartContext = useShoppingCart();
@@ -19,6 +21,7 @@ const Tickets = () => {
   const cartDate = shoppingCartContext.getDate();
   const [visitDate, setVisitDate] = useState(cartDate);
   const today = dayjs().startOf("day");
+  const [loading, setLoading] = useState(true);
 
   const cartTickets = shoppingCartContext.getTickets();
   const [standardTicket, setStandardTicket] = useState(
@@ -42,6 +45,8 @@ const Tickets = () => {
 
   const fetchAttractions = async () => {
     try {
+      setLoading(true);
+
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/attractions`
       );
@@ -49,8 +54,11 @@ const Tickets = () => {
       setAttractions(attractions);
     } catch (error) {
       console.error("Error fetching attractions:", error);
+    } finally {
+      setLoading(false);
     }
   };
+
   const fetchRestaurants = async () => {
     try {
       const response = await fetch(
@@ -59,7 +67,10 @@ const Tickets = () => {
       const { restaurants } = await response.json();
       setRestaurants(restaurants);
     } catch (error) {
-      console.error("Error fetching restaurant:", error);
+      console.error("Error fetching restaurants:", error);
+    } finally {
+      setLoading(false);
+
     }
   };
 
@@ -145,6 +156,12 @@ const Tickets = () => {
 
   return (
     <div className="tickets-container">
+       <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="tickets-header">
         <Sparkles />
         <h1>Theme Park Tickets</h1>

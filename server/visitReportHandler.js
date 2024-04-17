@@ -58,7 +58,7 @@ async function visitReportHandler(req, res) {
     } else if (category === 'dining') {
       if (diningName === 'all') {
         // Retrieve all restaurant names from the database
-        const restaurants = await pool.query('SELECT DISTINCT RestaurantName FROM view_restaurant_transaction_extended');
+        const restaurants = await pool.query('SELECT DISTINCT RestaurantName FROM restaurant');
 
         // Construct the SUM(CASE ...) expressions dynamically
         const sumExpressions = restaurants[0].map(restaurant => `SUM(CASE WHEN rt.RestaurantName = '${restaurant.RestaurantName}' THEN rt.quantity ELSE 0 END) AS "${restaurant.RestaurantName}"`).join(',');

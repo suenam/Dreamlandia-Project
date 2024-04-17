@@ -45,6 +45,9 @@ const deleteMerch = require("./deleteMerch");
 const getRestaurant = require("./getRestaurant");
 const addRestaurant = require("./addRestaurant");
 const deleteRestaurant = require("./deleteRestaurant");
+const updateAttraction = require("./updateAttraction");
+const updateMerch = require("./updateMerch");
+const updateRestaurant = require("./updateRestaurant");
 
 const corsOptions = {
   origin: ['https://dreamlandia.vercel.app', 'http://localhost:5173'],
@@ -218,6 +221,14 @@ const server = http.createServer((req, res) => {
     }
     else if(req.url === '/insert-new-rest' && req.method === 'POST') {
       addRestaurant(req, res);
+    }else if(req.url === '/update-attraction' && req.method === 'POST') {
+      updateAttraction(req, res);
+    }
+    else if(req.url === '/update-merch' && req.method === 'POST') {
+      updateMerch(req, res);
+    }
+    else if(req.url === '/update-rest' && req.method === 'POST') {
+      updateRestaurant(req, res);
     }
     else if(req.url === '/delete-attraction' && req.method === 'POST') {
       getPostData(req)

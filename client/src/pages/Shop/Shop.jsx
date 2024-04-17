@@ -1,3 +1,4 @@
+
 import './Shop.css';
 import { useState, useEffect } from 'react';
 import ShirtImage1 from '../../assets/shirt1.jpg';
@@ -8,12 +9,20 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Sparkles from '../../components/SparkleCursor/Sparkles';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useShoppingCart } from '../../components/ShoppingCart/ShoppingCart';
 
 const Shop = () => {
   const shoppingCartContext = useShoppingCart();
   const [selectedItems, setSelectedItems] = useState(shoppingCartContext.getMerch());
   const [merchandise, setMerchandise] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    console.log(merchandise);
+  }, [merchandise]);
 
   useEffect(() => {
     console.log(merchandise);
@@ -22,11 +31,13 @@ const Shop = () => {
   useEffect(() => {
     const fetchMerchandise = async () => {
       try {
+        setLoading(true);
         const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/get-merch`);
         const data = await response.json();
 
         if (response.ok) {
           setMerchandise(data.merchandise);
+
           // setSelectedItems(
           //   data.merchandise.reduce((acc, item) => {
           //     acc[item.name] = {
@@ -43,6 +54,8 @@ const Shop = () => {
         }
       } catch (error) {
         console.error('There was an error:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -117,6 +130,14 @@ const Shop = () => {
 
   return (
     <div className="shop-container">
+      {loading && (
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )}
       <div className="shop-header">
         <Sparkles />
         <h1>Theme Park Shop</h1>

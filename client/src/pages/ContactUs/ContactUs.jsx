@@ -12,7 +12,7 @@ import Modal from '@mui/material/Modal';
 
 const ContactUs = () => {
   const [name, setName] = useState('');
-  const [ticketId, setTicketId] = useState('');
+  const [ticketId, setTicketId] = useState();
   const [email, setEmail] = useState('');
   const [type, setType] = useState('');
   const [message, setMessage] = useState('');
@@ -112,7 +112,7 @@ const ContactUs = () => {
         <div className="input-group">
           <label htmlFor="ticketId">Ticket ID (optional):</label>
           <input
-            type="text"
+            type="number"
             id="ticketId"
             value={ticketId}
             onChange={(e) => setTicketId(e.target.value)}
@@ -139,7 +139,9 @@ const ContactUs = () => {
             <option value="query">Query</option>
             <option value="feedback">Feedback</option>
             <option value="issue">Issue</option>
+            
           </select>
+          
         </div>
         <div className="input-group">
           <label htmlFor="message">Message:</label>

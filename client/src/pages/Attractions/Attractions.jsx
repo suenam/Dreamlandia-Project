@@ -13,12 +13,16 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import CloudIcon from '@mui/icons-material/Cloud';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import ErrorIcon from '@mui/icons-material/Error';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Attractions = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedAttraction, setSelectedAttraction] = useState(null);
   const [attractions, setAttractions] = useState([]);
   const [currentWeather, setCurrentWeather] = useState('sunny');
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const setupWeatherAttractionStatus = async () => {
@@ -67,6 +71,7 @@ const Attractions = () => {
 
   const fetchAttractions = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/attractions`);
       const data = await response.json();
 
@@ -77,6 +82,8 @@ const Attractions = () => {
       }
     } catch (error) {
       console.error("There was an error: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,6 +99,12 @@ const Attractions = () => {
 
   return (
     <div className="attractions-container">
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="attractions-header">
         <Sparkles/>
         <h1>Thrilling Attractions</h1>
@@ -159,7 +172,3 @@ const Attractions = () => {
 };
 
 export default Attractions;
-
-
-
-
