@@ -61,12 +61,6 @@ const Tickets = () => {
 
   const fetchRestaurants = async () => {
     try {
-      setLoading(true);
-
-    }
-  };
-  const fetchRestaurants = async () => {
-    try {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/get-rest`
       );
