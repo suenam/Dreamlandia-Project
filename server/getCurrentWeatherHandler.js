@@ -5,7 +5,7 @@ async function getCurrentWeatherHandler(req, res) {
   try {
     // const { WDate } = await getPostData(req);
     const [result] = await pool.execute(
-      "SELECT WeatherCondition FROM weather_log WHERE WDate = DATE(CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-06:00'))"
+      "SELECT WeatherCondition FROM weather_log WHERE WDate = DATE(CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '-05:00'))"
     );
 
     const requests = result.map((row) => ({
