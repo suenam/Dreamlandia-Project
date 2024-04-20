@@ -7,6 +7,8 @@ const signupHandler = require('./signupHandler');
 const loginHandler = require('./loginHandler');
 const authenticateToken = require('./authenticateToken');
 const weatherHandler = require('./weatherHandler');
+const pool = require('./database');
+
 
 const employeeLoginHandler = require('./EmployeeLoginControl/employeeHandler');
 const logoutHandler = require('./logoutHandler');
@@ -172,6 +174,36 @@ const server = http.createServer((req, res) => {
     }
     else if (req.url === '/updateMaintenanceRequest' && req.method === 'POST') {
       updateMaintenanceHandler(req, res);
+    }
+    else if (req.url === '/getOrderDetails' && req.method === 'POST') {
+      getPostData(req)
+        .then(async (body) => {
+          const { orderId } = body;
+          const orderDetailsQuery = `
+            SELECT
+              DATE_FORMAT(mo.TransactionDate, '%Y-%m-%d') AS merchDate,
+              mo.OrderID,
+              m.MName,
+              mo.Size,
+              mo.Quantity,
+              mo.TotalCost 
+            FROM
+              merchandise_order_detail mo
+              JOIN merchandise m ON mo.ItemID = m.ItemID
+            WHERE
+              mo.OrderID = ?
+          `;
+    
+          const [orderDetails] = await pool.execute(orderDetailsQuery, [orderId]);
+    
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(orderDetails));
+        })
+        .catch((err) => {
+          console.error('Error parsing request body:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'Error parsing request body', error: err.toString() }));
+        });
     }
     else if (req.url === '/getRecentTicketOrders' && req.method === 'POST') {
       // Parse the request body as JSON

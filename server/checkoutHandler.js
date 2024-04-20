@@ -63,6 +63,10 @@ async function checkoutHandler(req, res) {
         }
       }
     }
+    const { v4: uuidv4 } = require('uuid');
+    const today = new Date();
+    const formattedDay = today.getDate().toString().padStart(2, '0');
+    const orderID = Math.floor(1000 + Math.random() * 9000) + '-' + formattedDay;
 
     for (const [itemName, itemDetails] of Object.entries(merchItems)) {
       const { item, quantity, size } = itemDetails;
@@ -70,11 +74,11 @@ async function checkoutHandler(req, res) {
         const { MId: itemID } = item;
         const transactionDate = new Date();
 
-        const merchQuery = `INSERT INTO merchandise_order_detail (ItemID, TotalCost, UserID, TransactionDate, Size, quantity)
-                            VALUES (?, ?, ?, ?, ?, ?)`;
+        const merchQuery = `INSERT INTO merchandise_order_detail (ItemID, TotalCost, UserID, TransactionDate, Size, quantity, orderID)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         const totalCost = parseFloat(item.sellingCost) * quantity;
-        await pool.query(merchQuery, [itemID, totalCost, userID, transactionDate, size, quantity]);
+        await pool.query(merchQuery, [itemID, totalCost, userID, transactionDate, size, quantity, orderID]);
       }
     }
 
