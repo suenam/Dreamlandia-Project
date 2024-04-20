@@ -20,16 +20,21 @@ async function getRecentTicketOrdersHandler(req, res, userId, months, orderType)
       const [ticketResults] = await pool.execute(ticketQuery, [userId, startDate]);
       results = ticketResults;
     } else if (orderType === 'merchandise') {
+    
       const merchandiseQuery = `
-        SELECT
-          mo.MerchandiseTransactionID, m.ItemID, m.MName, m.MType, m.SupplierCost, m.SellingCost, mo.TotalCost, DATE_FORMAT(mo.TransactionDate, '%Y-%m-%d') AS merchDate, mo.Size, mo.Quantity
-        FROM merchandise_order_detail mo
-        JOIN merchandise m ON mo.ItemID = m.ItemID
-        WHERE mo.UserID = ? AND mo.TransactionDate >= ?
-        ORDER BY mo.TransactionDate DESC
-      `;
+  SELECT 
+    mo.OrderID as OrderID,
+    DATE_FORMAT(mo.TransactionDate, '%Y-%m-%d') AS merchDate,
+    SUM(TotalCost) as TotalCost
+  FROM merchandise_order_detail mo
+  JOIN merchandise m ON mo.ItemID = m.ItemID
+  WHERE mo.UserID = ? AND mo.TransactionDate >= ?
+  GROUP BY mo.OrderID, merchDate
+  ORDER BY merchDate DESC
+`;
       const [merchandiseResults] = await pool.execute(merchandiseQuery, [userId, startDate]);
       results = merchandiseResults;
+      console.log(results);
     } else if (orderType === 'restaurant') {
       const restaurantQuery = `
         SELECT
@@ -49,16 +54,19 @@ async function getRecentTicketOrdersHandler(req, res, userId, months, orderType)
         ORDER BY t.TPurchaseDate DESC
       `;
       const [ticketResults] = await pool.execute(ticketQuery, [userId, startDate]);
-
+      
       const merchandiseQuery = `
-        SELECT mo.MerchandiseTransactionID, m.ItemID, m.MName, m.MType, m.SupplierCost, m.SellingCost, mo.TotalCost, DATE_FORMAT(mo.TransactionDate, '%Y-%m-%d') AS merchDate, mo.Size, mo.Quantity
-        FROM merchandise_order_detail mo
-        JOIN merchandise m ON mo.ItemID = m.ItemID
-        WHERE mo.UserID = ? AND mo.TransactionDate >= ?
-        ORDER BY mo.TransactionDate DESC
-      `;
+  SELECT 
+    mo.OrderID as OrderID,
+    DATE_FORMAT(mo.TransactionDate, '%Y-%m-%d') AS merchDate,
+    SUM(TotalCost) as TotalCost
+  FROM merchandise_order_detail mo
+  JOIN merchandise m ON mo.ItemID = m.ItemID
+  WHERE mo.UserID = ? AND mo.TransactionDate >= ?
+  GROUP BY mo.OrderID, merchDate
+  ORDER BY merchDate DESC
+`;
       const [merchandiseResults] = await pool.execute(merchandiseQuery, [userId, startDate]);
-
       const restaurantQuery = `
         SELECT rt.RestaurantTransactionID, r.RestaurantID, r.RestaurantName, r.RestaurantType, r.Amount, DATE_FORMAT(rt.TransactionTimeStamp, '%Y-%m-%d ') AS restDate
         FROM restaurant_transaction rt
@@ -70,6 +78,7 @@ async function getRecentTicketOrdersHandler(req, res, userId, months, orderType)
 
 
       results = [...ticketResults, ...merchandiseResults, ...restaurantResults];
+      console.log(results.merchandiseResults);
     }
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
