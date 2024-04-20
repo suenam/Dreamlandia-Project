@@ -21,7 +21,7 @@ npm i
 
 Create .env file in client folder with the following content:
 ```
-REACT_APP_DEV_URI = localhost:3000
+VITE_SERVER_URL = localhost:3000
 ```
 
 Create .env file in server folder with the following content:
